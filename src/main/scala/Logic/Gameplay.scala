@@ -1,0 +1,5 @@
+package Logic
+
+class Gameplay {
+
+}
