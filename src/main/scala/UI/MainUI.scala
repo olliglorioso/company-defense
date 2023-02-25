@@ -1,21 +1,59 @@
 package UI
 
+import scalafx.Includes.*
 import scalafx.application.JFXApp3
 import scalafx.scene.Scene
-import scalafx.scene.layout.Pane
+import scalafx.scene.control.{Button, Label}
+import scalafx.scene.layout._
+import scalafx.geometry._
+import scalafx.stage.Screen
+
 
 class MainUI extends JFXApp3:
+
   override def start(): Unit =
-    print(stage)
+    val visualBounds: Rectangle2D = Screen.primary.visualBounds
+    val (h, w) = (visualBounds.getHeight, visualBounds.getWidth)
 
     stage = new JFXApp3.PrimaryStage:
-      title = "Hello Stage98"
-      width = 600
-      height = 450
+      title = "Company defense"
+      scene = mainmenuScene
 
-    val root = Pane() // Simple pane component
-    val scene = Scene(parent = root) // Scene acts as a container for the scene graph
-    stage.scene = scene
+    lazy val gameplayScene: Scene = new Scene(w, h):
+      root = new VBox {
+        spacing = 20
+        alignment = Pos.Center
+        children = Seq(
+          new Label("This is gameplay scene")
+        )
+      }
+
+    lazy val mainmenuScene: Scene = new Scene(w, h):
+      root = new VBox {
+        spacing = 20
+        alignment = Pos.Center
+        children = Seq(
+          new Label("Main menu"),
+          new Button("Start new game") {
+            onAction = () => {
+              stage.setScene(gameplayScene)
+            }
+          },
+          new Button("Settings") {
+            onAction = () => stage.setScene(settingsScene)
+          }
+        )
+      }
+
+    lazy val settingsScene: Scene = new Scene(w, h):
+      root = new VBox {
+        spacing = 20
+        alignment = Pos.Center
+        children = Seq(
+          new Label("This is settingsscene")
+        )
+      }
+
   end start
 
 @main def start() =
