@@ -9,6 +9,7 @@ import scalafx.geometry._
 import scalafx.stage.Screen
 import UI.*
 
+import UI.Gameplay.GameplayUI
 
 class MainUI extends JFXApp3:
 
