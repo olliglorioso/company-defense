@@ -7,7 +7,7 @@ import scalafx.scene.control.{Button, Label}
 import scalafx.scene.layout._
 import scalafx.geometry._
 import scalafx.stage.Screen
-import UI.MainMenuUI
+import UI.*
 
 
 class MainUI extends JFXApp3:
@@ -20,30 +20,9 @@ class MainUI extends JFXApp3:
       title = "Company defense"
       
 
-    lazy val gameplayScene: Scene = new Scene(w, h):
-      root = new VBox {
-        spacing = 20
-        alignment = Pos.Center
-        children = Seq(
-          new Label("This is gameplay scene")
-        )
-      }
-
+    lazy val gameplayScene: Scene = GameplayUI().gameplayScene(stage, w, h)
     lazy val mainmenuScene: Scene = MainMenuUI().mainMenuScene(stage, gameplayScene, settingsScene, w, h)
-
-    lazy val settingsScene: Scene = new Scene(w, h):
-      root = new VBox {
-        spacing = 20
-        alignment = Pos.Center
-        children = Seq(
-          new Label("This is settingsscene"),
-          new Button("Main menu") {
-            onAction = () => {
-              stage.setScene(mainmenuScene)
-            }
-          }
-        )
-      }
+    lazy val settingsScene: Scene = SettingsUI().settingsScene(stage, mainmenuScene, w, h)
     
     stage.scene = mainmenuScene
 

@@ -10,6 +10,16 @@ import scalafx.stage.Screen
 
 
 class MainMenuUI {
+    /**
+      * 
+      *
+      * @param stage PrimaryStage
+      * @param gameplayScene Gameplay-scene
+      * @param settingsScene Settings-scene
+      * @param w Width of the scene
+      * @param h Height of the scene
+      * @return Mainmenu-scene
+      */
     def mainMenuScene(stage: JFXApp3.PrimaryStage, gameplayScene: Scene, settingsScene: Scene, w: Double, h: Double): Scene =
         lazy val gameplaySceneLazy = gameplayScene
         lazy val settingsSceneLazy = settingsScene
