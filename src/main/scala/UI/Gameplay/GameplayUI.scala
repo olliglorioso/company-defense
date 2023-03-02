@@ -19,9 +19,11 @@ import javafx.scene.Node
 import scalafx.beans.property.ObjectProperty
 import scalafx.scene.shape.Circle
 import scalafx.scene.paint.Color
+import scalafx.scene.shape.Rectangle
 
 
 class GameplayUI {
+    val squareSide = 50
     /**
       * 
       *
@@ -31,11 +33,19 @@ class GameplayUI {
       * @return Gameplay-scene
       */
     def gameplayScene(stage: JFXApp3.PrimaryStage, w: Double, h: Double): Scene =
+        
+        val mapWidth = 20 * squareSide
+        val mapHeight = 12 * squareSide
+        val map = createMap(mapWidth, mapHeight, 20, 12)
         val gameplayScene: Scene = new Scene(w, h) {
                 root = new BorderPane {
                     right = sidebar()
                     center = new BorderPane {
-                        center = new Label("center are")
+                        center = new Pane {
+                            children = map.flatten
+                            prefWidth = mapWidth
+                            prefHeight = mapHeight
+                        }
                     }
                 }
             }
@@ -72,4 +82,24 @@ class GameplayUI {
             minHeight = 60
         }
         button
+    
+    def createMap(mapWidth: Double, mapHeight: Double, numColumns: Int, numRows: Int): Seq[Seq[Rectangle]] = {
+        val cellWidth = squareSide
+        val cellHeight = squareSide
+
+        (0 until numRows).map { row =>
+            (0 until numColumns).map { col =>
+            val rect = new Rectangle {
+                fill = if ((row + col) % 2 == 0) Color.LightGrey else Color.Grey
+                stroke = Color.Black
+                strokeWidth = 1
+                width = squareSide
+                height = squareSide
+            }
+            rect.translateX = col * cellWidth
+            rect.translateY = row * cellHeight
+            rect
+            }
+        }
+    }
 }
