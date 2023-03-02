@@ -31,7 +31,6 @@ class MainMenuUI {
                     new Label("Main menu"),
                     new Button("Start new game") {
                         onAction = () => {
-                            println(stage)
                             stage.setScene(gameplaySceneLazy)
                         }
                     },

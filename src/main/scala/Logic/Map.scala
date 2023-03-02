@@ -19,8 +19,8 @@ class BgTile (coord: Tuple2[Int, Int]) extends Tile(canBuildTower = true, coord 
   override def toString = s"BgTile, c: ${coord}"
 }
 
-val MAP_WIDTH = 32
-val MAP_HEIGHT = 18
+val MAP_WIDTH = 20
+val MAP_HEIGHT = 12
 
 class GameMap(path: String) {
   var map: Array[Array[Tile]] = this.initializeMap(path)
@@ -28,14 +28,19 @@ class GameMap(path: String) {
   var endPoint: Tuple2[Int, Int] = (0, 0)
   
   private def initializeMap (path: String): Array[Array[Tile]] = 
-    val map = Array.ofDim[Tile](MAP_WIDTH, MAP_HEIGHT)
     val lines = Util.FileHandler().readLinesFromFile("test_map.txt")
+    val map = Array.ofDim[Tile](MAP_HEIGHT, MAP_WIDTH)
+    
+    if (lines.length != 12 && lines(0).length != 20) {
+      println("error in map")
+    }
+    
     var y = 0
     for (line <- lines) {
       var x = 0
       for (char <- line) {
         char match {
-          case '0' => map(x)(y) = new BgTile((x, y))
+          case '0' => map(y)(x) = new BgTile((y, x))
           case '1' => {
             try
               var turn = Turn.NoTurn
@@ -44,26 +49,25 @@ class GameMap(path: String) {
                 if (lines(y + 1)(x) == 1) then turn = Turn.TurnRight
                 else if (lines(y - 1)(x) == 1) then turn = Turn.TurnLeft
               }
-              map(x)(y) = new PathTile((x, y), Turn.TurnRight)
+              map(y)(x) = new PathTile((y, x), Turn.TurnRight)
             catch
-              case _: StringIndexOutOfBoundsException => print("Do not place path to the edges of the map.")
+              case _: StringIndexOutOfBoundsException => println("Do not place path to the edges of the map.")
           }
           // Start point > always go straight.
           case '2' => {
-            this.startPoint = (x, y)
-            map(x)(y) = new PathTile((x, y), Turn.NoTurn)
+            this.startPoint = (y, x)
+            map(y)(x) = new PathTile((y, x), Turn.NoTurn)
           }
           // End point > always go straight.
           case '3' => {
-            this.endPoint = (x, y)
-            map(x)(y) = new PathTile((x, y), Turn.NoTurn)
+            this.endPoint = (y, x)
+            map(y)(x) = new PathTile((y, x), Turn.NoTurn)
           }
         }
         x += 1
       }
       y += 1
     }
-    print(map(0)(1))
     map
 }
 

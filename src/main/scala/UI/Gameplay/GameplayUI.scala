@@ -22,8 +22,11 @@ import scalafx.scene.paint.Color
 import scalafx.scene.shape.Rectangle
 
 
+
 class GameplayUI {
-    val squareSide = 50
+    val SIDEBAR_WIDTH = 150
+    val MAP_WIDTH = 20
+    val MAP_HEIGHT = 12
     /**
       * 
       *
@@ -33,18 +36,19 @@ class GameplayUI {
       * @return Gameplay-scene
       */
     def gameplayScene(stage: JFXApp3.PrimaryStage, w: Double, h: Double): Scene =
+        val squareSide = (w - SIDEBAR_WIDTH) / MAP_WIDTH
+        val mapBlocks = new Logic.GameMap("test_map.txt").map
+        val map = createMap(squareSide, mapBlocks)
         
-        val mapWidth = 20 * squareSide
-        val mapHeight = 12 * squareSide
-        val map = createMap(mapWidth, mapHeight, 20, 12)
+        
         val gameplayScene: Scene = new Scene(w, h) {
                 root = new BorderPane {
                     right = sidebar()
                     center = new BorderPane {
                         center = new Pane {
                             children = map.flatten
-                            prefWidth = mapWidth
-                            prefHeight = mapHeight
+                            prefWidth = (w - SIDEBAR_WIDTH)
+                            prefHeight = h
                         }
                     }
                 }
@@ -59,10 +63,11 @@ class GameplayUI {
             padding = Insets(20)
             spacing = 10
             children = Seq(
-                new Label("Towers"),
                 regularTower,
                 slowDownTower
             )
+            // set sidebar width
+            prefWidth = SIDEBAR_WIDTH
             style = "-fx-background-color: grey;"
         }
         sidebar
@@ -83,23 +88,32 @@ class GameplayUI {
         }
         button
     
-    def createMap(mapWidth: Double, mapHeight: Double, numColumns: Int, numRows: Int): Seq[Seq[Rectangle]] = {
-        val cellWidth = squareSide
-        val cellHeight = squareSide
-
-        (0 until numRows).map { row =>
-            (0 until numColumns).map { col =>
-            val rect = new Rectangle {
-                fill = if ((row + col) % 2 == 0) Color.LightGrey else Color.Grey
-                stroke = Color.Black
-                strokeWidth = 1
-                width = squareSide
-                height = squareSide
+    def createMap(squareSide: Double, mapTiles: Array[Array[Logic.Tile]]): Seq[Seq[Rectangle]] = {
+        var mapBlocks: Seq[Seq[Rectangle]] = Seq()
+        var yPlus = 0
+        for (row <- mapTiles) {
+            var rowBlocks: Seq[Rectangle] = Seq()
+            var xPlus = 0
+            for (tile <- row) {
+                val rect = new Rectangle {
+                    // check if tile is Logic.BgTile-class
+                    fill = if (tile.isInstanceOf[Logic.BgTile]) Color.Green else Color.Brown
+                    width = squareSide
+                    height = squareSide
+                }
+                rect.translateX = xPlus * squareSide
+                rect.translateY = yPlus * squareSide
+                rowBlocks = rowBlocks :+ rect
+                xPlus = xPlus + 1
             }
-            rect.translateX = col * cellWidth
-            rect.translateY = row * cellHeight
-            rect
-            }
+            yPlus = yPlus + 1
+            mapBlocks = mapBlocks :+ rowBlocks
         }
+        /* for (i <- mapBlocks) {
+            for (b <- mapBlocks) {
+                println(b)
+            }
+        } */
+        mapBlocks
     }
 }
