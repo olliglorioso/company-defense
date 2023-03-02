@@ -1,5 +1,0 @@
-package Util
-
-class GameFileHandler {
-  
-}
