@@ -3,14 +3,12 @@ package Logic
 import scala.collection.mutable.Queue
 import java.util.LinkedList
 
-object Mode extends Enumeration {
-  type Mode = Value
-  val Easy = Value("Reijon Maansiirto")
-  val Medium = Value("IBM & Nokia & BlackBerry")
-  val Hard = Value("MAGAT")
-}
+sealed abstract class Mode(val value: Int)
+case object Easy extends Mode(1)
+case object Medium extends Mode(2)
+case object Hard extends Mode(3)
 
-class Gameplay(coins: Int, mapPath: String, mode: Mode.Mode) {
+class Gameplay(coins: Int, mapPath: String, mode: Mode) {
   val points = 0
   val map: GameMap = new GameMap(mapPath)
   val towers: Array[Tower] = Array()

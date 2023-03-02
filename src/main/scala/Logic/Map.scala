@@ -4,14 +4,12 @@ import java.util.logging.FileHandler
 
 class Tile(canBuildTower: Boolean, coord: Tuple2[Int, Int])
 
-object Turn extends Enumeration {
-  type Turn = Value
-  val NoTurn = Value
-  val TurnRight = Value
-  val TurnLeft = Value
-}
+sealed abstract class Turn(val value: Int)
+case object NoTurn extends Turn(1)
+case object TurnRight extends Turn(2)
+case object TurnLeft extends Turn(3)
 
-class PathTile(coord: Tuple2[Int, Int], turn: Turn.Turn)
+class PathTile(coord: Tuple2[Int, Int], turn: Turn)
     extends Tile(canBuildTower = false, coord = coord) {
   override def toString = s"PathTile, c: ${coord}, t: ${turn}"
 }
@@ -45,13 +43,13 @@ class GameMap(path: String) {
           case '0' => map(y)(x) = new BgTile((y, x))
           case '1' => {
             try
-              var turn = Turn.NoTurn
+              var turn: Turn = NoTurn
               val pathIsFront = line(x + 1)
               if (pathIsFront != 1) {
-                if (lines(y + 1)(x) == 1) then turn = Turn.TurnRight
-                else if (lines(y - 1)(x) == 1) then turn = Turn.TurnLeft
+                if (lines(y + 1)(x) == 1) then turn = TurnRight
+                else if (lines(y - 1)(x) == 1) then turn = TurnLeft
               }
-              map(y)(x) = new PathTile((y, x), Turn.TurnRight)
+              map(y)(x) = new PathTile((y, x), TurnRight)
             catch
               case _: StringIndexOutOfBoundsException =>
                 println("Do not place path to the edges of the map.")
@@ -59,12 +57,12 @@ class GameMap(path: String) {
           // Start point > always go straight.
           case '2' => {
             this.startPoint = (y, x)
-            map(y)(x) = new PathTile((y, x), Turn.NoTurn)
+            map(y)(x) = new PathTile((y, x), NoTurn)
           }
           // End point > always go straight.
           case '3' => {
             this.endPoint = (y, x)
-            map(y)(x) = new PathTile((y, x), Turn.NoTurn)
+            map(y)(x) = new PathTile((y, x), NoTurn)
           }
         }
         x += 1

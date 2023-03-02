@@ -4,5 +4,14 @@ ThisBuild / scalaVersion := "3.2.1"
 lazy val root = (project in file("."))
   .settings(
     name := "company-defense",
-    libraryDependencies += "org.scalafx" %% "scalafx" % "18.0.1-R28"
+    libraryDependencies += "org.scalafx" %% "scalafx" % "18.0.1-R28",
   )
+
+wartremoverErrors ++= Seq(
+  Wart.NoNeedImport, 
+  Wart.Enumeration,
+  Wart.JavaConversions,
+  Wart.Null,
+  Wart.Return,
+  Wart.StringPlusAny
+)
