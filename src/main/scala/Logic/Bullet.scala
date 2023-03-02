@@ -1,5 +1,3 @@
 package Logic
 
-class Bullet {
-  
-}
+class Bullet {}

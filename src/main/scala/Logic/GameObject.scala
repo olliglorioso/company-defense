@@ -1,5 +1,3 @@
 package Logic
 
-class GameObject {
-  
-}
+class GameObject {}

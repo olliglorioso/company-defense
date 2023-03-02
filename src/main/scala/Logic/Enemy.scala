@@ -1,5 +1,3 @@
 package Logic
 
-class Enemy {
-  
-}
+class Enemy {}

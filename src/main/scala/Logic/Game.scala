@@ -5,7 +5,6 @@ import scalafx.application.JFXApp3
 import scalafx.scene.Scene
 import scalafx.scene.layout.Pane
 
-
 class Game {
   // Start the game and UI.
   def startProgram(): Unit =

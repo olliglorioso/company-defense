@@ -20,12 +20,13 @@ class MainUI extends JFXApp3:
     stage = new JFXApp3.PrimaryStage:
       title = "Company defense"
       resizable = false
-      
 
     lazy val gameplayScene: Scene = GameplayUI().gameplayScene(stage, w, h)
-    lazy val mainmenuScene: Scene = MainMenuUI().mainMenuScene(stage, gameplayScene, settingsScene, w, h)
-    lazy val settingsScene: Scene = SettingsUI().settingsScene(stage, mainmenuScene, w, h)
-    
+    lazy val mainmenuScene: Scene =
+      MainMenuUI().mainMenuScene(stage, gameplayScene, settingsScene, w, h)
+    lazy val settingsScene: Scene =
+      SettingsUI().settingsScene(stage, mainmenuScene, w, h)
+
     stage.scene = mainmenuScene
 
   end start
@@ -34,5 +35,3 @@ class MainUI extends JFXApp3:
   val ui = new MainUI()
   ui.main(Array())
 end start
-
-

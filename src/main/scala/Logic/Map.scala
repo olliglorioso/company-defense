@@ -2,20 +2,22 @@ package Logic
 
 import java.util.logging.FileHandler
 
-class Tile (canBuildTower: Boolean, coord: Tuple2[Int, Int]) 
+class Tile(canBuildTower: Boolean, coord: Tuple2[Int, Int])
 
 object Turn extends Enumeration {
-    type Turn = Value
-    val NoTurn = Value
-    val TurnRight = Value
-    val TurnLeft = Value
+  type Turn = Value
+  val NoTurn = Value
+  val TurnRight = Value
+  val TurnLeft = Value
 }
 
-class PathTile (coord: Tuple2[Int, Int], turn: Turn.Turn) extends Tile(canBuildTower = false, coord = coord) {
+class PathTile(coord: Tuple2[Int, Int], turn: Turn.Turn)
+    extends Tile(canBuildTower = false, coord = coord) {
   override def toString = s"PathTile, c: ${coord}, t: ${turn}"
 }
 
-class BgTile (coord: Tuple2[Int, Int]) extends Tile(canBuildTower = true, coord = coord)  {
+class BgTile(coord: Tuple2[Int, Int])
+    extends Tile(canBuildTower = true, coord = coord) {
   override def toString = s"BgTile, c: ${coord}"
 }
 
@@ -26,15 +28,15 @@ class GameMap(path: String) {
   var map: Array[Array[Tile]] = this.initializeMap(path)
   var startPoint: Tuple2[Int, Int] = (0, 0)
   var endPoint: Tuple2[Int, Int] = (0, 0)
-  
-  private def initializeMap (path: String): Array[Array[Tile]] = 
+
+  private def initializeMap(path: String): Array[Array[Tile]] =
     val lines = Util.FileHandler().readLinesFromFile("test_map.txt")
     val map = Array.ofDim[Tile](MAP_HEIGHT, MAP_WIDTH)
-    
+
     if (lines.length != 12 && lines(0).length != 20) {
       println("error in map")
     }
-    
+
     var y = 0
     for (line <- lines) {
       var x = 0
@@ -51,7 +53,8 @@ class GameMap(path: String) {
               }
               map(y)(x) = new PathTile((y, x), Turn.TurnRight)
             catch
-              case _: StringIndexOutOfBoundsException => println("Do not place path to the edges of the map.")
+              case _: StringIndexOutOfBoundsException =>
+                println("Do not place path to the edges of the map.")
           }
           // Start point > always go straight.
           case '2' => {
@@ -70,6 +73,5 @@ class GameMap(path: String) {
     }
     map
 }
-
 
 @main def koira = GameMap("test_map.txt")
