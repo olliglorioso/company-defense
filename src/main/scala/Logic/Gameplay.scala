@@ -16,4 +16,8 @@ class Gameplay(coins: Int, mapPath: String, mode: Mode) {
   val bullets: LinkedList[Bullet] = LinkedList()
   val enemyQueue: Queue[Queue[Enemy]] = Queue()
 
+  private def spawnEnemy() = {
+    // 
+  }
+
 }

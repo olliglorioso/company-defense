@@ -7,6 +7,7 @@ import scalafx.scene.control.{Button, Label}
 import scalafx.scene.layout._
 import scalafx.geometry._
 import scalafx.stage.Screen
+import Logic.*
 
 class MainMenuUI {
 
@@ -40,6 +41,7 @@ class MainMenuUI {
           new Label("Main menu"),
           new Button("Start new game") {
             onAction = () => {
+              val gp = new Gameplay(0, "test_map.txt", Easy)
               stage.setScene(gameplaySceneLazy)
             }
           },

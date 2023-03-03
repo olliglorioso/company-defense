@@ -1,6 +1,7 @@
 package Logic
 
 import java.util.logging.FileHandler
+import scala.collection.immutable.Queue
 
 class Tile(canBuildTower: Boolean, coord: Tuple2[Int, Int])
 
@@ -70,6 +71,24 @@ class GameMap(path: String) {
       y += 1
     }
     map
+
+  def getTile(coords: Tuple2[Int, Int]): Tile = {
+    val pos = map(coords._1)(coords._2)
+    pos
+  }
+
+  /* def generatePathQueue (): Queue[PathTile] = {
+    var pathQueue: Queue[PathTile] = Queue()
+    var currentTile = this.getTile(this.startPoint)
+    pathQueue = pathQueue.enqueue(currentTile)
+
+    while (currentTile.coord != this.endPoint) {
+      val nextTile = this.getTile(currentTile.coord)
+      currentTile = nextTile
+      pathQueue = pathQueue.enqueue(currentTile)
+    }
+    pathQueue
+  } */
 }
 
 @main def koira = GameMap("test_map.txt")

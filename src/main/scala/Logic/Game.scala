@@ -7,9 +7,11 @@ import scalafx.scene.layout.Pane
 
 class Game {
   // Start the game and UI.
-  def startProgram(): Unit =
+  def startProgram(): Unit = {
     val ui = new MainUI()
     ui.main(Array())
+  }
+  
   end startProgram
 }
 

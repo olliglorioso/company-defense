@@ -9,7 +9,9 @@ import scalafx.geometry._
 import scalafx.stage.Screen
 import UI.*
 
-import UI.Gameplay.GameplayUI
+import UI.GameplayUI
+import scalafx.animation.AnimationTimer
+import java.util.concurrent.TimeUnit
 
 class MainUI extends JFXApp3:
 
@@ -21,17 +23,20 @@ class MainUI extends JFXApp3:
       title = "Company defense"
       resizable = false
 
-    lazy val gameplayScene: Scene = GameplayUI().gameplayScene(stage, w, h)
+
+    
+
+    lazy val gameplayScene: Scene = GameplayUI(stage, w, h).gameplayScene()
     lazy val mainmenuScene: Scene =
       MainMenuUI().mainMenuScene(stage, gameplayScene, settingsScene, w, h)
     lazy val settingsScene: Scene =
       SettingsUI().settingsScene(stage, mainmenuScene, w, h)
 
     stage.scene = mainmenuScene
-
   end start
 
 @main def start() =
   val ui = new MainUI()
   ui.main(Array())
 end start
+

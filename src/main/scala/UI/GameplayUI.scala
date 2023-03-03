@@ -1,4 +1,4 @@
-package UI.Gameplay
+package UI
 
 import scalafx.Includes.*
 import scalafx.application.JFXApp3
@@ -20,11 +20,17 @@ import scalafx.beans.property.ObjectProperty
 import scalafx.scene.shape.Circle
 import scalafx.scene.paint.Color
 import scalafx.scene.shape.Rectangle
+import Util.UIConstants
+import Logic.*
+import scalafx.animation.AnimationTimer
+import java.util.concurrent.TimeUnit
 
-class GameplayUI {
-  val SIDEBAR_WIDTH = 150
+class GameplayUI (stage: JFXApp3.PrimaryStage, w: Double, h: Double) {
+  val SIDEBAR_WIDTH = 130
   val MAP_WIDTH = 20
   val MAP_HEIGHT = 12
+  val squareSide = (w - SIDEBAR_WIDTH) / MAP_WIDTH
+  val mapInst: GameMap = new GameMap("test_map.txt")
 
   /** @param stage
     *   PrimaryStage
@@ -35,28 +41,37 @@ class GameplayUI {
     * @return
     *   Gameplay-scene
     */
-  def gameplayScene(stage: JFXApp3.PrimaryStage, w: Double, h: Double): Scene =
-    val squareSide = (w - SIDEBAR_WIDTH) / MAP_WIDTH
-    val mapBlocks = new Logic.GameMap("test_map.txt").map
-    val map = createMap(squareSide, mapBlocks)
+  def gameplayScene(): Scene =
+    
+    val enemy = spawnEnemy((100, 100))
+    val map = createMap(squareSide, mapInst.map)
+
+    /* lazy val gameLoop = AnimationTimer { time =>
+      val seconds = TimeUnit.MILLISECONDS.toSeconds(time);
+      moveEnemy(enemy)
+    }
+    gameLoop.start() */
 
     val gameplayScene: Scene = new Scene(w, h) {
       root = new BorderPane {
         right = sidebar()
         center = new BorderPane {
           center = new Pane {
-            children = map.flatten
+            children = map.flatten :+ enemy
             prefWidth = (w - SIDEBAR_WIDTH)
             prefHeight = h
           }
         }
       }
     }
+
     gameplayScene
 
+
+
   def sidebar(): VBox =
-    val regularTower = towerButton("file:src/resources/RegularTower.png")
-    val slowDownTower = towerButton("file:src/resources/SlowDownTower.png")
+    val regularTower = UIConstants.towerButton("file:src/resources/RegularTower.png")
+    val slowDownTower = UIConstants.towerButton("file:src/resources/SlowDownTower.png")
 
     val sidebar = new VBox {
       padding = Insets(20)
@@ -71,25 +86,24 @@ class GameplayUI {
     }
     sidebar
 
-  def towerButton(picLoc: String): Button =
-    val image = new Image(picLoc)
-    val imageView = new ImageView(image) {
-      fitWidth = 100
-      fitHeight = 100
-      preserveRatio = true
-    }
+  
 
-    val button = new Button {
-      graphic = imageView
-      minWidth = 60
-      style = "-fx-background-color: grey;"
-      minHeight = 60
-    }
-    button
+  def spawnEnemy(coord: Tuple2[Int, Int]): Enemy = {
+    val enemy = Enemy("file:src/resources/BasicEnemy.jpg", 80, "IBM", 3)
+    println(mapInst.startPoint)
+    enemy.translateX = (mapInst.startPoint._1 + 1) * squareSide
+    enemy.translateY = (mapInst.startPoint._2 + 1) * squareSide
+    
+    enemy
+  }
+
+  def moveEnemy(enemy: Enemy): Unit = {
+    enemy.translateX.value += enemy.speed1
+  }
 
   def createMap(
       squareSide: Double,
-      mapTiles: Array[Array[Logic.Tile]]
+      mapTiles: Array[Array[Tile]]
   ): Seq[Seq[Rectangle]] = {
     var mapBlocks: Seq[Seq[Rectangle]] = Seq()
     var yPlus = 0
@@ -98,9 +112,9 @@ class GameplayUI {
       var xPlus = 0
       for (tile <- row) {
         val rect = new Rectangle {
-          // check if tile is Logic.BgTile-class
+          // check if tile is BgTile-class
           fill =
-            if (tile.isInstanceOf[Logic.BgTile]) Color.Green else Color.Brown
+            if (tile.isInstanceOf[BgTile]) Color.Green else Color.Brown
           width = squareSide
           height = squareSide
         }
@@ -112,11 +126,6 @@ class GameplayUI {
       yPlus = yPlus + 1
       mapBlocks = mapBlocks :+ rowBlocks
     }
-    /* for (i <- mapBlocks) {
-            for (b <- mapBlocks) {
-                println(b)
-            }
-        } */
     mapBlocks
   }
 }
