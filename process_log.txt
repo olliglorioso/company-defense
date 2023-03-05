@@ -1,0 +1,19 @@
+Interim report 6.3.2023 - Project start
+
+Project has been initialized as an sbt project. Scalafmt for formatting, Wartremover for linting have been configured.
+Necessary libraries, such as ScalaFX, have been installed. Mostly GUI elements created. Especially stuff related to maps have
+been created - Map-class, both UI and Logic, have been done. Map-class has initializeMap-method implemented, which can read
+a map file and create a 2D array of Tile-(sub)classes. Simple main menu and gameplay UI have been initialized. Still some
+pondering to do on what classes should be created, for example do we need one Gameplay-class for Logic and UI both, or only
+one unlike in the original plan. Basic Enemy-classes created. Also managed to test with animations (not in remote yet).
+
+No functionality tested yet. Trying to get more grasp on the project before starting to do the tests, as the class structure
+may still change radically.
+
+There was a difficult problem when working with ScalaFX-library and lazy variables - stage and lazy vals weren't working that well.
+In the end there was an easy solution - set stage's scene after defining lazy values seemed to work.
+
+Workload has been about 15 hours.
+
+In my opinion, I am in a decent phase of the project. I have implemented the Gameplay-UI quite well and it's easy to scale it in the 
+future. Testing starts during the next two weeks when the structure of the project is clearer. 
