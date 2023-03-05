@@ -1,11 +1,22 @@
 Interim report 6.3.2023 - Project start
 
 Project has been initialized as an sbt project. Scalafmt for formatting, Wartremover for linting have been configured.
-Necessary libraries, such as ScalaFX, have been installed. Mostly GUI elements created. Especially stuff related to maps have
-been created - Map-class, both UI and Logic, have been done. Map-class has initializeMap-method implemented, which can read
-a map file and create a 2D array of Tile-(sub)classes. Simple main menu and gameplay UI have been initialized. Still some
-pondering to do on what classes should be created, for example do we need one Gameplay-class for Logic and UI both, or only
-one unlike in the original plan. Basic Enemy-classes created. Also managed to test with animations (not in remote yet).
+Necessary libraries, such as ScalaFX, have been installed. 
+
+When it comes to starting the project code, I first created three packages: Logic, UI and Util, each having code related to
+their name. Util will have some helper functions and classes which don't land to neither Logic nor UI. Then I created a
+several files and classe. Bullet, Enemy, Game, GameObject, Gameplay, Map and Tower in Logic. GameplayUI, MainMenuUI,
+MainUI and SettingsUI in UI. In addition, I created resources-folder and added a couple items there. This folder will have all
+the images and sprites. 
+
+Then, I started with UI, MainUI in particular. I created three scenes, and a logic that they can be switched between. Main menu
+has two buttons that lead to either GameplayUI or SettingsUI. SettingsUI has a button that leads back to MainUI. Most of the work
+has been done with Gameplay UI. It has logic that when given a Map-class, it can create a grid of blocks that represent the map.
+Also sidebar has been created and it shows a couple tower buttons already. 
+
+In the Logic-package I have been mostly working with Map-class. It has now initializeMap-method, which can read a map from a file
+and create a 2D Array of Tile-(sub)classes. Util has FileHandler-class which is utilized in the abovementioned. Enemy-class implemented
+and its getHit-function. No use for these yet.
 
 No functionality tested yet. Trying to get more grasp on the project before starting to do the tests, as the class structure
 may still change radically.
