@@ -23,7 +23,7 @@ class MainUI extends JFXApp3:
       title = "Company defense"
       resizable = false
 
-    lazy val gameplayScene: Scene = GameplayUI(w, h)
+    lazy val gameplayScene: GameplayUI = GameplayUI(w, h)
     lazy val mainmenuScene: Scene =
       MainMenuUI().mainMenuScene(stage, gameplayScene, settingsScene, w, h)
     lazy val settingsScene: Scene =

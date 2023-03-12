@@ -28,6 +28,7 @@ import scala.collection.immutable.Queue
 import Util.FileHandler
 import javafx.event.EventHandler
 import javafx.scene.input.MouseEvent
+import scala.collection.mutable.Buffer
 
 sealed abstract class EnemyType(val value: Int)
 case object BasicEnemy extends EnemyType(1)
@@ -45,17 +46,49 @@ class GameplayUI (w: Double, h: Double) extends Scene (w, h) {
   val waves: Array[Array[EnemyType]] = generateWaves("test_wavedata.txt")
   var gameHp = 10
   val map = createMap(squareSide, mapInst.map)
+  val enemiesOnMap = Buffer[Enemy]()
+
+  var timerStarted = false
+  var startTime = 0L
+  var lastTime = 0L
+
+  var pane = new Pane {
+    children = map.flatten
+    prefWidth = (w - SIDEBAR_WIDTH)
+    prefHeight = h
+  }
 
   root = new BorderPane {
     right = sidebar()
     center = new BorderPane {
-      center = new Pane {
-        children = map.flatten
-        prefWidth = (w - SIDEBAR_WIDTH)
-        prefHeight = h
-      }
+      center = pane
     }
   }
+
+  val timer = AnimationTimer { time => {
+    if (timerStarted == false) {
+      startTime = time
+      timerStarted = true
+      lastTime = time
+    } else {
+      if (time - lastTime >= 1000000000L) {
+        val randomValue = Math.random()
+        if (randomValue > 0.5) then
+          val enemy = spawnEnemy(BasicEnemy)
+          lastTime = time
+          pane.children.add(enemy)
+          enemiesOnMap += enemy
+        else 
+          val enemy = spawnEnemy(CamouflagedEnemy)
+          lastTime = time
+          pane.children.add(enemy)
+          enemiesOnMap += enemy
+      }
+      for (a <- enemiesOnMap) {
+        moveEnemy(a)
+      }
+    }
+  }}
 
   private def generateWaves(fileLoc: String): Array[Array[EnemyType]] = {
     val lines = FileHandler().readLinesFromFile("/WaveData/test_wavedata.txt")
@@ -103,6 +136,7 @@ class GameplayUI (w: Double, h: Double) extends Scene (w, h) {
     val enemy = enemyType match
       case BasicEnemy => Enemy(UIConstants.BasicEnemy, squareSide.toInt, "IBM", 2, mapInst.pathQueue)
       case SplittingEnemy => Enemy(UIConstants.SplittingEnemy, squareSide.toInt, "Google", 5, mapInst.pathQueue)
+      case CamouflagedEnemy => Enemy(UIConstants.CamouflagedEnemy, squareSide.toInt, "TSMC", 3, mapInst.pathQueue)
     enemy.translateY = (mapInst.startPoint.coord._1) * squareSide
     enemy.translateX = (mapInst.startPoint.coord._2) * squareSide
     enemy

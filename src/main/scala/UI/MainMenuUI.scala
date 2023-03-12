@@ -8,6 +8,7 @@ import scalafx.scene.layout._
 import scalafx.geometry._
 import scalafx.stage.Screen
 import Logic.*
+import UI.*
 
 class MainMenuUI {
 
@@ -26,7 +27,7 @@ class MainMenuUI {
     */
   def mainMenuScene(
       stage: JFXApp3.PrimaryStage,
-      gameplayScene: Scene,
+      gameplayScene: GameplayUI,
       settingsScene: Scene,
       w: Double,
       h: Double
@@ -42,6 +43,7 @@ class MainMenuUI {
           new Button("Start new game") {
             onAction = () => {
               stage.setScene(gameplaySceneLazy)
+              gameplaySceneLazy.timer.start()
             }
           },
           new Button("Settings") {
