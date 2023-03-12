@@ -46,7 +46,7 @@ class GameplayUI (w: Double, h: Double) extends Scene (w, h) {
   val waves: Array[Queue[EnemyType]] = generateWaves("test_wavedata.txt")
   var gameHp = 10
   val map = createMap(squareSide, mapInst.map)
-  val enemiesOnMap = Buffer[Enemy]()
+  var enemiesOnMap = Buffer[Enemy]()
 
   var waveNo = 0
   var timerStarted = false
@@ -74,15 +74,21 @@ class GameplayUI (w: Double, h: Double) extends Scene (w, h) {
     } else {
       if (time - lastTime >= 1000000000L) {
         val currWave = waves(waveNo)
-        val newEnemyType = currWave.dequeue
-        val enemy = spawnEnemy(newEnemyType)
-        lastTime = time
-        pane.children.add(enemy)
-        enemiesOnMap += enemy
+        if (currWave.length < 1) {
+          if (enemiesOnMap.length < 1) waveNo += 1
+        } else {
+          val newEnemyType = currWave.dequeue
+          val enemy = spawnEnemy(newEnemyType)
+          lastTime = time
+          pane.children.add(enemy)
+          enemiesOnMap += enemy
+        }
       }
+      val newEnemies = Buffer[Enemy]()
       for (a <- enemiesOnMap) {
-        moveEnemy(a)
+        moveEnemy(a, newEnemies)
       }
+      enemiesOnMap = newEnemies
     }
   }}
 
@@ -133,8 +139,10 @@ class GameplayUI (w: Double, h: Double) extends Scene (w, h) {
       case BasicEnemy => Enemy(UIConstants.BasicEnemy, squareSide.toInt, "IBM", 2, mapInst.pathQueue)
       case SplittingEnemy => Enemy(UIConstants.SplittingEnemy, squareSide.toInt, "Google", 5, mapInst.pathQueue)
       case CamouflagedEnemy => Enemy(UIConstants.CamouflagedEnemy, squareSide.toInt, "TSMC", 3, mapInst.pathQueue)
-    enemy.translateY = (mapInst.startPoint.coord._1) * squareSide
-    enemy.translateX = (mapInst.startPoint.coord._2) * squareSide
+    val startY = if (mapInst.startPoint.coord._1 == 0) then -1 else mapInst.startPoint.coord._1
+    val startX = if (mapInst.startPoint.coord._2 == 0) then -1 else mapInst.startPoint.coord._2
+    enemy.translateY = startY * squareSide
+    enemy.translateX = startX * squareSide
     enemy
   }
 
@@ -143,7 +151,7 @@ class GameplayUI (w: Double, h: Double) extends Scene (w, h) {
     *
     * @param enemy
     */
-  def moveEnemy(enemy: Enemy): Unit = {
+  def moveEnemy(enemy: Enemy, newEnemies: Buffer[Enemy]): Unit = {
     val (currY, currX) = (enemy.translateY.value, enemy.translateX.value)
     val (tileY, tileX) = (enemy.previousTile.coord._1 * squareSide, enemy.previousTile.coord._2 * squareSide)
     val (nextTileY, nextTileX) = (enemy.nextTile.coord._1 * squareSide, enemy.nextTile.coord._2 * squareSide)
@@ -154,13 +162,20 @@ class GameplayUI (w: Double, h: Double) extends Scene (w, h) {
     val (vx, vy) = if (distance > 0) (((dx/distance)*enemy.speed1).round.toInt, ((dy/distance)*enemy.speed1).round.toInt) else (0, 0)
     
     if (distance <= enemy.speed1) {
-      enemy.getNextTile()
+      if (enemy.nextTile.getTurn() == End) {
+        pane.children.remove(enemy)
+        return
+      } else {
+        enemy.getNextTile()
+        newEnemies += enemy
+      }
     } else {
       enemy.translateX.value += vx.toInt
       enemy.translateY.value += vy
       val angle = (math.atan2(dy, dx) * 180 / math.Pi).round.toInt
       val roundedAngle = (Math.round(angle / 10.0) * 10).toInt
       enemy.rotate = roundedAngle
+      newEnemies += enemy
     }
   }
 

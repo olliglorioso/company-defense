@@ -14,11 +14,15 @@ case class Enemy (path: String, size: Int, name: String, speed: Int, pathQueue: 
     getNextTile()
 
     def getNextTile(): PathTile = {
-        previousTile = nextTile
-        val (next, queueHelper) = queue.dequeue
-        nextTile = next
-        queue = queueHelper
-        next   
+        try
+            previousTile = nextTile
+            val (next, queueHelper) = queue.dequeue
+            nextTile = next
+            queue = queueHelper
+            next
+        catch 
+            case e: NoSuchElementException => throw Error("No more elements in the queue.")
+
     }
 
     def getHit (damage: Int, slowDown: Int = 0): String = {
