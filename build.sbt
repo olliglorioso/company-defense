@@ -12,6 +12,5 @@ wartremoverErrors ++= Seq(
   Wart.Enumeration,
   Wart.JavaConversions,
   Wart.Null,
-  Wart.Return,
   Wart.StringPlusAny
 )

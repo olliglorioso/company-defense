@@ -24,12 +24,17 @@ import Util.UIConstants
 import Logic.*
 import scalafx.animation.AnimationTimer
 import java.util.concurrent.TimeUnit
+import scala.collection.immutable.Queue
+
+sealed abstract class EnemyType(val value: Int)
+case object BasicEnemy extends EnemyType(1)
+
 
 class GameplayUI (stage: JFXApp3.PrimaryStage, w: Double, h: Double) {
   val SIDEBAR_WIDTH = 130
   val MAP_WIDTH = 20
   val MAP_HEIGHT = 12
-  val squareSide = (w - SIDEBAR_WIDTH) / MAP_WIDTH
+  val squareSide = (w - SIDEBAR_WIDTH) / MAP_WIDTH // 89.5
   val mapInst: GameMap = new GameMap("test_map.txt")
 
   /** @param stage
@@ -42,15 +47,14 @@ class GameplayUI (stage: JFXApp3.PrimaryStage, w: Double, h: Double) {
     *   Gameplay-scene
     */
   def gameplayScene(): Scene =
-    
-    val enemy = spawnEnemy((100, 100))
+    val enemy = spawnEnemy()
     val map = createMap(squareSide, mapInst.map)
 
-    /* lazy val gameLoop = AnimationTimer { time =>
+    lazy val gameLoop = AnimationTimer { time =>
       val seconds = TimeUnit.MILLISECONDS.toSeconds(time);
       moveEnemy(enemy)
     }
-    gameLoop.start() */
+    gameLoop.start()
 
     val gameplayScene: Scene = new Scene(w, h) {
       root = new BorderPane {
@@ -86,21 +90,48 @@ class GameplayUI (stage: JFXApp3.PrimaryStage, w: Double, h: Double) {
     }
     sidebar
 
-  
-
-  def spawnEnemy(coord: Tuple2[Int, Int]): Enemy = {
-    val enemy = Enemy("file:src/resources/BasicEnemy.jpg", 80, "IBM", 3)
-    println(mapInst.startPoint)
-    enemy.translateX = (mapInst.startPoint._1 + 1) * squareSide
-    enemy.translateY = (mapInst.startPoint._2 + 1) * squareSide
-    
+  /**
+    * Spawn an enemy to the start point.
+    *
+    * @return Enemy
+    */
+  def spawnEnemy(): Enemy = {
+    val enemy = Enemy("file:src/resources/BasicEnemy.jpg", squareSide.toInt, "IBM", 10, mapInst.pathQueue)
+    enemy.translateY = (mapInst.startPoint.coord._1) * squareSide
+    enemy.translateX = (mapInst.startPoint.coord._2) * squareSide
     enemy
   }
 
+  /**
+    * Move given enemy in the map towards next tile in the path.
+    *
+    * @param enemy
+    */
   def moveEnemy(enemy: Enemy): Unit = {
-    enemy.translateX.value += enemy.speed1
+    val (currY, currX) = (enemy.translateY.value, enemy.translateX.value)
+    val (tileY, tileX) = (enemy.previousTile.coord._1 * squareSide, enemy.previousTile.coord._2 * squareSide)
+    val (nextTileY, nextTileX) = (enemy.nextTile.coord._1 * squareSide, enemy.nextTile.coord._2 * squareSide)
+    val (vecY, vecX) = (currY - tileY, currX - tileX)
+    val (dy, dx) = (nextTileY - currY, nextTileX - currX)
+    
+    val distance = math.sqrt(dx * dx + dy * dy)
+    val (vx, vy) = if (distance > 0) (((dx/distance)*enemy.speed1).round.toInt, ((dy/distance)*enemy.speed1).round.toInt) else (0, 0)
+    
+    if (distance <= enemy.speed1) {
+      enemy.getNextTile()
+    } else {
+      enemy.translateX.value += vx.toInt
+      enemy.translateY.value += vy
+    }
   }
 
+  /**
+    * Create map UI based on the Map-class's map.
+    *
+    * @param squareSide
+    * @param mapTiles
+    * @return
+    */
   def createMap(
       squareSide: Double,
       mapTiles: Array[Array[Tile]]

@@ -41,7 +41,6 @@ class MainMenuUI {
           new Label("Main menu"),
           new Button("Start new game") {
             onAction = () => {
-              val gp = new Gameplay(0, "test_map.txt", Easy)
               stage.setScene(gameplaySceneLazy)
             }
           },
