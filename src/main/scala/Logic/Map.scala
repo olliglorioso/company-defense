@@ -2,17 +2,21 @@ package Logic
 
 import java.util.logging.FileHandler
 import scala.collection.immutable.Queue
+import scala.util.control.Breaks._
 
-class Tile(canBuildTower: Boolean, coord: Tuple2[Int, Int])
+case class Tile(canBuildTower: Boolean, var coord: Tuple2[Int, Int]) 
 
 sealed abstract class Turn(val value: Int)
 case object NoTurn extends Turn(1)
 case object TurnRight extends Turn(2)
 case object TurnLeft extends Turn(3)
+case object Start extends Turn(4)
+case object End extends Turn(5)
 
 class PathTile(coord: Tuple2[Int, Int], turn: Turn)
     extends Tile(canBuildTower = false, coord = coord) {
   override def toString = s"PathTile, c: ${coord}, t: ${turn}"
+  def getTurn() = turn
 }
 
 class BgTile(coord: Tuple2[Int, Int])
@@ -24,15 +28,16 @@ val MAP_WIDTH = 20
 val MAP_HEIGHT = 12
 
 class GameMap(path: String) {
-  var map: Array[Array[Tile]] = this.initializeMap(path)
-  var startPoint: Tuple2[Int, Int] = (0, 0)
-  var endPoint: Tuple2[Int, Int] = (0, 0)
-
+  var startPoint: PathTile = PathTile((0, 0), Start)
+  var endPoint: PathTile = PathTile((0, 0), End)
+  var map: Array[Array[Tile]] = initializeMap(path)
+  val pathQueue: Queue[PathTile] = generatePathQueue(startPoint)
+  
   private def initializeMap(path: String): Array[Array[Tile]] =
     val lines = Util.FileHandler().readLinesFromFile("test_map.txt")
     val map = Array.ofDim[Tile](MAP_HEIGHT, MAP_WIDTH)
 
-    if (lines.length != 12 && lines(0).length != 20) {
+    if (lines.length != MAP_HEIGHT && lines(0).length != MAP_WIDTH) {
       println("error in map")
     }
 
@@ -57,13 +62,15 @@ class GameMap(path: String) {
           }
           // Start point > always go straight.
           case '2' => {
-            this.startPoint = (y, x)
-            map(y)(x) = new PathTile((y, x), NoTurn)
+            val pt = new PathTile((y, x), Start)
+            startPoint.coord = (y, x)
+            map(y)(x) = pt
           }
           // End point > always go straight.
           case '3' => {
-            this.endPoint = (y, x)
-            map(y)(x) = new PathTile((y, x), NoTurn)
+            val pt = new PathTile((y, x), End)
+            endPoint.coord = (y, x)
+            map(y)(x) = new PathTile((y, x), End)
           }
         }
         x += 1
@@ -72,23 +79,41 @@ class GameMap(path: String) {
     }
     map
 
-  def getTile(coords: Tuple2[Int, Int]): Tile = {
-    val pos = map(coords._1)(coords._2)
-    pos
-  }
-
-  /* def generatePathQueue (): Queue[PathTile] = {
-    var pathQueue: Queue[PathTile] = Queue()
-    var currentTile = this.getTile(this.startPoint)
-    pathQueue = pathQueue.enqueue(currentTile)
-
-    while (currentTile.coord != this.endPoint) {
-      val nextTile = this.getTile(currentTile.coord)
-      currentTile = nextTile
-      pathQueue = pathQueue.enqueue(currentTile)
+  def generatePathQueue (tile: PathTile): Queue[PathTile] = {
+    // All possible next steps from a tile.
+    val searchValues = Array((0, 1), (0, -1), (1, 0), (-1, 0), (1, 1), (-1, 1), (1, -1), (-1, 1), (-1, -1))
+    var currTile = tile
+    var prevTile = tile
+    var queue: Queue[PathTile] = Queue()
+    while (currTile.getTurn() != End) {
+      val (y, x) = currTile.coord
+      breakable {
+        // Go through all possible next tiles
+        // -> if it's a PathTile, add it to the queue and move to it.
+        // -> otherwise, try other tile.
+        for (i <- searchValues) {
+          val (editY, editX) = (y + i._1, x + i._2)
+          if ((editY, editX) == prevTile.coord) print("")
+          else if (editX < 0 || editY < 0 || editX > 19 || editY > 11) print("")
+          else {
+            val currTile2 = map(editY)(editX)
+            if (currTile2.isInstanceOf[PathTile]) {
+              val ptObject = currTile2.asInstanceOf[PathTile]
+              queue = queue.enqueue(ptObject)
+              if (currTile.coord == startPoint.coord) {
+                prevTile = startPoint
+              } else {
+                prevTile = currTile
+              }
+              currTile = ptObject
+              break
+            }
+          }
+        }
+      }
     }
-    pathQueue
-  } */
+    return queue
+  }
 }
 
 @main def koira = GameMap("test_map.txt")
