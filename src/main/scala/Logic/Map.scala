@@ -34,7 +34,7 @@ class GameMap(path: String) {
   val pathQueue: Queue[PathTile] = generatePathQueue(startPoint)
   
   private def initializeMap(path: String): Array[Array[Tile]] =
-    val lines = Util.FileHandler().readLinesFromFile("test_map.txt")
+    val lines = Util.FileHandler().readLinesFromFile("/Maps/" + path)
     val map = Array.ofDim[Tile](MAP_HEIGHT, MAP_WIDTH)
 
     if (lines.length != MAP_HEIGHT && lines(0).length != MAP_WIDTH) {

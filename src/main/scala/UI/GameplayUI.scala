@@ -25,53 +25,57 @@ import Logic.*
 import scalafx.animation.AnimationTimer
 import java.util.concurrent.TimeUnit
 import scala.collection.immutable.Queue
+import Util.FileHandler
+import javafx.event.EventHandler
+import javafx.scene.input.MouseEvent
 
 sealed abstract class EnemyType(val value: Int)
 case object BasicEnemy extends EnemyType(1)
+case object SplittingEnemy extends EnemyType(2)
+case object TankEnemy extends EnemyType(3)
+case object FlockEnemy extends EnemyType(4)
+case object CamouflagedEnemy extends EnemyType(5)
 
-
-class GameplayUI (stage: JFXApp3.PrimaryStage, w: Double, h: Double) {
+class GameplayUI (w: Double, h: Double) extends Scene (w, h) {
   val SIDEBAR_WIDTH = 130
   val MAP_WIDTH = 20
   val MAP_HEIGHT = 12
   val squareSide = (w - SIDEBAR_WIDTH) / MAP_WIDTH // 89.5
   val mapInst: GameMap = new GameMap("test_map.txt")
+  val waves: Array[Array[EnemyType]] = generateWaves("test_wavedata.txt")
+  var gameHp = 10
+  val map = createMap(squareSide, mapInst.map)
 
-  /** @param stage
-    *   PrimaryStage
-    * @param w
-    *   Width of the scene
-    * @param h
-    *   Height of the scene
-    * @return
-    *   Gameplay-scene
-    */
-  def gameplayScene(): Scene =
-    val enemy = spawnEnemy()
-    val map = createMap(squareSide, mapInst.map)
-
-    lazy val gameLoop = AnimationTimer { time =>
-      val seconds = TimeUnit.MILLISECONDS.toSeconds(time);
-      moveEnemy(enemy)
-    }
-    gameLoop.start()
-
-    val gameplayScene: Scene = new Scene(w, h) {
-      root = new BorderPane {
-        right = sidebar()
-        center = new BorderPane {
-          center = new Pane {
-            children = map.flatten :+ enemy
-            prefWidth = (w - SIDEBAR_WIDTH)
-            prefHeight = h
-          }
-        }
+  root = new BorderPane {
+    right = sidebar()
+    center = new BorderPane {
+      center = new Pane {
+        children = map.flatten
+        prefWidth = (w - SIDEBAR_WIDTH)
+        prefHeight = h
       }
     }
+  }
 
-    gameplayScene
-
-
+  private def generateWaves(fileLoc: String): Array[Array[EnemyType]] = {
+    val lines = FileHandler().readLinesFromFile("/WaveData/test_wavedata.txt")
+    var helperArray: Array[Array[EnemyType]] = Array()
+    for (i <- lines) {
+      val stringArray = i.split("")
+      var helperArray2: Array[EnemyType] = Array()
+      for (str <- stringArray) {
+        val enemy = str match
+          case "B" => BasicEnemy
+          case "C" => CamouflagedEnemy
+          case "S" => SplittingEnemy
+          case "T" => TankEnemy
+          case "F" => FlockEnemy
+        helperArray2 = helperArray2 :+ enemy
+      }
+      helperArray = helperArray :+ helperArray2
+    }
+    helperArray
+  }
 
   def sidebar(): VBox =
     val regularTower = UIConstants.towerButton("file:src/resources/RegularTower.png")
@@ -95,8 +99,10 @@ class GameplayUI (stage: JFXApp3.PrimaryStage, w: Double, h: Double) {
     *
     * @return Enemy
     */
-  def spawnEnemy(): Enemy = {
-    val enemy = Enemy("file:src/resources/BasicEnemy.jpg", squareSide.toInt, "IBM", 10, mapInst.pathQueue)
+  def spawnEnemy(enemyType: EnemyType): Enemy = {
+    val enemy = enemyType match
+      case BasicEnemy => Enemy(UIConstants.BasicEnemy, squareSide.toInt, "IBM", 2, mapInst.pathQueue)
+      case SplittingEnemy => Enemy(UIConstants.SplittingEnemy, squareSide.toInt, "Google", 5, mapInst.pathQueue)
     enemy.translateY = (mapInst.startPoint.coord._1) * squareSide
     enemy.translateX = (mapInst.startPoint.coord._2) * squareSide
     enemy
@@ -122,6 +128,9 @@ class GameplayUI (stage: JFXApp3.PrimaryStage, w: Double, h: Double) {
     } else {
       enemy.translateX.value += vx.toInt
       enemy.translateY.value += vy
+      val angle = (math.atan2(dy, dx) * 180 / math.Pi).round.toInt
+      val roundedAngle = (Math.round(angle / 10.0) * 10).toInt
+      enemy.rotate = roundedAngle
     }
   }
 

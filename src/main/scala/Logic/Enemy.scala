@@ -7,7 +7,7 @@ import scala.collection.immutable.Queue
 case class Enemy (path: String, size: Int, name: String, speed: Int, pathQueue: Queue[PathTile]) extends GameObject(path, size, name) {
     var health = 100
     var speed1 = speed
-    var boundBox = 20
+    var boundBox = 19
     var (nextTile, queue) = pathQueue.dequeue // Take start point and create queue class variable.
     var previousTile = nextTile
 

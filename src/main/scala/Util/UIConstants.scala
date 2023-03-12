@@ -20,4 +20,9 @@ object UIConstants {
             minHeight = 80
         }
         button
+    val BasicEnemy = "file:src/resources/Enemies/BasicEnemy.jpg"
+    val SplittingEnemy = "file:src/resources/Enemies/SplittingEnemy.png"
+    val CamouflagedEnemy = "file:src/resources/Enemies/CamouflagedEnemy.png"
+    val SwarmEnemy = "file:src/resources/Enemies/SwarmEnemy.png"
+    val TankEnemy = "file:src/resources/Enemies/TankEnemy.png"
 }
