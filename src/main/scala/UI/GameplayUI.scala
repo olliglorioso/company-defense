@@ -24,7 +24,7 @@ import Util.UIConstants
 import Logic.*
 import scalafx.animation.AnimationTimer
 import java.util.concurrent.TimeUnit
-import scala.collection.immutable.Queue
+import scala.collection.mutable.Queue
 import Util.FileHandler
 import javafx.event.EventHandler
 import javafx.scene.input.MouseEvent
@@ -43,11 +43,12 @@ class GameplayUI (w: Double, h: Double) extends Scene (w, h) {
   val MAP_HEIGHT = 12
   val squareSide = (w - SIDEBAR_WIDTH) / MAP_WIDTH // 89.5
   val mapInst: GameMap = new GameMap("test_map.txt")
-  val waves: Array[Array[EnemyType]] = generateWaves("test_wavedata.txt")
+  val waves: Array[Queue[EnemyType]] = generateWaves("test_wavedata.txt")
   var gameHp = 10
   val map = createMap(squareSide, mapInst.map)
   val enemiesOnMap = Buffer[Enemy]()
 
+  var waveNo = 0
   var timerStarted = false
   var startTime = 0L
   var lastTime = 0L
@@ -72,17 +73,12 @@ class GameplayUI (w: Double, h: Double) extends Scene (w, h) {
       lastTime = time
     } else {
       if (time - lastTime >= 1000000000L) {
-        val randomValue = Math.random()
-        if (randomValue > 0.5) then
-          val enemy = spawnEnemy(BasicEnemy)
-          lastTime = time
-          pane.children.add(enemy)
-          enemiesOnMap += enemy
-        else 
-          val enemy = spawnEnemy(CamouflagedEnemy)
-          lastTime = time
-          pane.children.add(enemy)
-          enemiesOnMap += enemy
+        val currWave = waves(waveNo)
+        val newEnemyType = currWave.dequeue
+        val enemy = spawnEnemy(newEnemyType)
+        lastTime = time
+        pane.children.add(enemy)
+        enemiesOnMap += enemy
       }
       for (a <- enemiesOnMap) {
         moveEnemy(a)
@@ -90,12 +86,12 @@ class GameplayUI (w: Double, h: Double) extends Scene (w, h) {
     }
   }}
 
-  private def generateWaves(fileLoc: String): Array[Array[EnemyType]] = {
+  private def generateWaves(fileLoc: String): Array[Queue[EnemyType]] = {
     val lines = FileHandler().readLinesFromFile("/WaveData/test_wavedata.txt")
-    var helperArray: Array[Array[EnemyType]] = Array()
+    var helperArray: Array[Queue[EnemyType]] = Array()
     for (i <- lines) {
       val stringArray = i.split("")
-      var helperArray2: Array[EnemyType] = Array()
+      var helperQueue: Queue[EnemyType] = Queue()
       for (str <- stringArray) {
         val enemy = str match
           case "B" => BasicEnemy
@@ -103,9 +99,9 @@ class GameplayUI (w: Double, h: Double) extends Scene (w, h) {
           case "S" => SplittingEnemy
           case "T" => TankEnemy
           case "F" => FlockEnemy
-        helperArray2 = helperArray2 :+ enemy
+        helperQueue.enqueue(enemy)
       }
-      helperArray = helperArray :+ helperArray2
+      helperArray = helperArray :+ helperQueue
     }
     helperArray
   }
