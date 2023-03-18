@@ -3,6 +3,7 @@ package Logic
 import java.util.logging.FileHandler
 import scala.collection.immutable.Queue
 import scala.util.control.Breaks._
+import Util.Constants._
 
 case class Tile(canBuildTower: Boolean, var coord: Tuple2[Int, Int]) 
 
@@ -12,6 +13,8 @@ case object TurnRight extends Turn(2)
 case object TurnLeft extends Turn(3)
 case object Start extends Turn(4)
 case object End extends Turn(5)
+
+class InvalidMapError extends Error
 
 class PathTile(coord: Tuple2[Int, Int], turn: Turn)
     extends Tile(canBuildTower = false, coord = coord) {
@@ -24,22 +27,20 @@ class BgTile(coord: Tuple2[Int, Int])
   override def toString = s"BgTile, c: ${coord}"
 }
 
-val MAP_WIDTH = 20
-val MAP_HEIGHT = 12
-
 class GameMap(path: String) {
   var startPoint: PathTile = PathTile((0, 0), Start)
   var endPoint: PathTile = PathTile((0, 0), End)
   var map: Array[Array[Tile]] = initializeMap(path)
   val pathQueue: Queue[PathTile] = generatePathQueue(startPoint)
-  
+
   private def initializeMap(path: String): Array[Array[Tile]] =
     val lines = Util.FileHandler().readLinesFromFile("/Maps/" + path)
+
+    if (lines.length != MAP_HEIGHT && lines(0).length != MAP_WIDTH) then throw InvalidMapError()
+
     val map = Array.ofDim[Tile](MAP_HEIGHT, MAP_WIDTH)
 
-    if (lines.length != MAP_HEIGHT && lines(0).length != MAP_WIDTH) {
-      println("error in map")
-    }
+    
 
     var y = 0
     for (line <- lines) {
@@ -48,6 +49,7 @@ class GameMap(path: String) {
         char match {
           case '0' => map(y)(x) = new BgTile((y, x))
           case '1' => {
+            // If it's a PathTile, then check surrounding tiles and find the next tile, and determine the turn.
             try
               var turn: Turn = NoTurn
               val pathIsFront = line(x + 1)
@@ -79,7 +81,7 @@ class GameMap(path: String) {
     }
     map
 
-  def generatePathQueue (tile: PathTile): Queue[PathTile] = {
+  private def generatePathQueue (tile: PathTile): Queue[PathTile] = {
     // All possible next steps from a tile.
     val searchValues = Array((0, 1), (0, -1), (1, 0), (-1, 0), (1, 1), (-1, 1), (1, -1), (-1, 1), (-1, -1))
     var currTile = tile

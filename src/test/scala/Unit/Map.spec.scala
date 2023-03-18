@@ -1,22 +1,11 @@
 import collection.mutable.Buffer
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
+import Logic.GameMap
 
-class BufferTest extends AnyFlatSpec with Matchers:
-
-  "Buffer" should "store every appended value as its last element." in {
-    val myBuffer = Buffer[String]()
-    assume(myBuffer.isEmpty)
-
-    myBuffer += "Cat"
-    assert("Cat" === myBuffer.last)
-    myBuffer += "Dog"
-    assertResult("Dog") {
-        myBuffer.last
-    }
+class MapTest extends AnyFlatSpec with Matchers:
+  "Map" should "check if the text file for map is correctly formatted." in {
+    val map = new GameMap("test.invalid_map.txt")
   }
-
-  it should "return None from lastOption when it is empty." in {
-    assert(Buffer[String]().lastOption === None)
-  }
-end BufferTest
+  
+end MapTest

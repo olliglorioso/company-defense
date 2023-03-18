@@ -31,7 +31,7 @@ class MainUI extends JFXApp3:
 
     stage.scene = mainmenuScene
   end start
-
+  
 @main def start() =
   val ui = new MainUI()
   ui.main(Array())

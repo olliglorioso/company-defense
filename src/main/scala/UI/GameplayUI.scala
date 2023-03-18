@@ -20,7 +20,7 @@ import scalafx.beans.property.ObjectProperty
 import scalafx.scene.shape.Circle
 import scalafx.scene.paint.Color
 import scalafx.scene.shape.Rectangle
-import Util.UIConstants
+import Util.Constants._
 import Logic.*
 import scalafx.animation.AnimationTimer
 import java.util.concurrent.TimeUnit
@@ -29,6 +29,7 @@ import Util.FileHandler
 import javafx.event.EventHandler
 import javafx.scene.input.MouseEvent
 import scala.collection.mutable.Buffer
+import Util.Constants._
 
 sealed abstract class EnemyType(val value: Int)
 case object BasicEnemy extends EnemyType(1)
@@ -38,13 +39,9 @@ case object FlockEnemy extends EnemyType(4)
 case object CamouflagedEnemy extends EnemyType(5)
 
 class GameplayUI (w: Double, h: Double) extends Scene (w, h) {
-  val SIDEBAR_WIDTH = 130
-  val MAP_WIDTH = 20
-  val MAP_HEIGHT = 12
   val squareSide = (w - SIDEBAR_WIDTH) / MAP_WIDTH // 89.5
   val mapInst: GameMap = new GameMap("test_map.txt")
   val waves: Array[Queue[EnemyType]] = generateWaves("test_wavedata.txt")
-  var gameHp = 10
   val map = createMap(squareSide, mapInst.map)
   var enemiesOnMap = Buffer[Enemy]()
 
@@ -105,6 +102,7 @@ class GameplayUI (w: Double, h: Double) extends Scene (w, h) {
           case "S" => SplittingEnemy
           case "T" => TankEnemy
           case "F" => FlockEnemy
+          case default => BasicEnemy
         helperQueue.enqueue(enemy)
       }
       helperArray = helperArray :+ helperQueue
@@ -113,8 +111,8 @@ class GameplayUI (w: Double, h: Double) extends Scene (w, h) {
   }
 
   def sidebar(): VBox =
-    val regularTower = UIConstants.towerButton("file:src/resources/RegularTower.png")
-    val slowDownTower = UIConstants.towerButton("file:src/resources/SlowDownTower.png")
+    val regularTower = towerButton("file:src/resources/RegularTower.png")
+    val slowDownTower = towerButton("file:src/resources/SlowDownTower.png")
 
     val sidebar = new VBox {
       padding = Insets(20)
@@ -136,9 +134,11 @@ class GameplayUI (w: Double, h: Double) extends Scene (w, h) {
     */
   def spawnEnemy(enemyType: EnemyType): Enemy = {
     val enemy = enemyType match
-      case BasicEnemy => Enemy(UIConstants.BasicEnemy, squareSide.toInt, "IBM", 2, mapInst.pathQueue)
-      case SplittingEnemy => Enemy(UIConstants.SplittingEnemy, squareSide.toInt, "Google", 5, mapInst.pathQueue)
-      case CamouflagedEnemy => Enemy(UIConstants.CamouflagedEnemy, squareSide.toInt, "TSMC", 3, mapInst.pathQueue)
+      case BasicEnemy => Enemy(BASIC_ENEMY_LOC, squareSide.toInt, "IBM", 2, mapInst.pathQueue)
+      case SplittingEnemy => Enemy(SPLITTING_ENEMY_LOC, squareSide.toInt, "Google", 5, mapInst.pathQueue)
+      case CamouflagedEnemy => Enemy(CAMOUFLAGED_ENEMY_LOC, squareSide.toInt, "TSMC", 3, mapInst.pathQueue)
+      case FlockEnemy => Enemy(BASIC_ENEMY_LOC, squareSide.toInt, "TSMC", 3, mapInst.pathQueue)
+      case TankEnemy => Enemy(BASIC_ENEMY_LOC, squareSide.toInt, "TSMC", 3, mapInst.pathQueue)
     val startY = if (mapInst.startPoint.coord._1 == 0) then -1 else mapInst.startPoint.coord._1
     val startX = if (mapInst.startPoint.coord._2 == 0) then -1 else mapInst.startPoint.coord._2
     enemy.translateY = startY * squareSide
