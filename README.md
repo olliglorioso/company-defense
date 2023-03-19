@@ -7,6 +7,10 @@ Documenation in progress.
 ```bash
 sbt scalafmtAll
 ```
+## Testing
+```bash
+sbt test
+```
 
 ## Linting
 
