@@ -33,6 +33,12 @@ class GameMap(path: String) {
   var map: Array[Array[Tile]] = initializeMap(path)
   val pathQueue: Queue[PathTile] = generatePathQueue(startPoint)
 
+  /**
+    * 
+    *
+    * @param path Path to the map file location.
+    * @return 2D Array of BgTiles and PathTiles.
+    */
   private def initializeMap(path: String): Array[Array[Tile]] =
     val lines = Util.FileHandler().readLinesFromFile("/Maps/" + path)
     if (lines.length != MAP_HEIGHT || lines(0).length != MAP_WIDTH) then throw InvalidMapError()
@@ -79,6 +85,12 @@ class GameMap(path: String) {
     }
     map
 
+  /**
+    * 
+    *
+    * @param tile The starting tile.
+    * @return A queue of PathTiles.
+    */
   private def generatePathQueue (tile: PathTile): Queue[PathTile] = {
     // All possible next steps from a tile.
     val searchValues = Array((0, 1), (0, -1), (1, 0), (-1, 0), (1, 1), (-1, 1), (1, -1), (-1, 1), (-1, -1))

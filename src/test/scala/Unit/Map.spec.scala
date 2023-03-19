@@ -5,30 +5,34 @@ import Util.Constants._
 import Logic._
 
 class MapTest extends AnyFlatSpec with Matchers:
-  "Map" should "check if the text file for map is correctly formatted." in {
-    assertThrows[InvalidMapError] {
-      val map = new GameMap("test.invalid_map.txt")
-    }
-    assertThrows[InvalidMapError] {
-      val map = new GameMap("test.invalid_map_char.txt")
-    }
+  val validMap = new GameMap("test.valid_map.txt")
+
+  "Map" should "return an exception if map file is incorrectly formatted." in {
+    assertThrows[InvalidMapError] { val map = new GameMap("test.invalid_map.txt") }
+    assertThrows[InvalidMapError] { val map = new GameMap("test.invalid_map_char.txt") }
   }
 
   "Map" should "create correctly formatted map based on a file." in {
-    val map = new GameMap("test.valid_map.txt")
-
-    for (i <- 0 until map.map.length) {
-      assert(map.map(i).length === MAP_WIDTH)
-      for (b <- 0 until map.map(i).length) {
+    for (i <- 0 until validMap.map.length) {
+      assert(validMap.map(i).length === MAP_WIDTH)
+      for (b <- 0 until validMap.map(i).length) {
         // PathTile and BgTiles in a correct position (check the given file).
-        if (b === 16) assert(map.map(i)(b).isInstanceOf[PathTile])
-        else assert(map.map(i)(b).isInstanceOf[BgTile])
+        if (b === 16) assert(validMap.map(i)(b).isInstanceOf[PathTile])
+        else assert(validMap.map(i)(b).isInstanceOf[BgTile])
       }
     }
-    assert(map.map.length === MAP_HEIGHT)
+    assert(validMap.map.length === MAP_HEIGHT)
     // Check whether end and start points are correct.
-    assert(map.startPoint.coord === (0,16))
-    assert(map.endPoint.coord === (11,16))
+    assert(validMap.startPoint.coord === (0,16))
+    assert(validMap.endPoint.coord === (11,16))
+  }
+  
+  "Map" should "should have a correctly generated path queue." in {
+    var idx = 1
+    val path = validMap.pathQueue.map((elem) => {
+      assert(elem.coord === (idx, 16))
+      idx += 1
+    })
   }
   
 end MapTest
