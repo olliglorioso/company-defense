@@ -21,11 +21,11 @@ object Constants {
             minHeight = 80
         }
         button
-    val BASIC_ENEMY_LOC = "file:src/resources/Enemies/BasicEnemy.jpg"
-    val SPLITTING_ENEMY_LOC = "file:src/resources/Enemies/SplittingEnemy.png"
-    val CAMOUFLAGED_ENEMY_LOC = "file:src/resources/Enemies/CamouflagedEnemy.png"
-    val SWARM_ENEMY_LOC = "file:src/resources/Enemies/SwarmEnemy.png"
-    val TANK_ENEMY_LOC = "file:src/resources/Enemies/TankEnemy.png"
+    val BASIC_ENEMY_LOC = "file:src/main/scala/resources/Enemies/BasicEnemy.jpg"
+    val SPLITTING_ENEMY_LOC = "file:src/main/scala/resources/Enemies/SplittingEnemy.png"
+    val CAMOUFLAGED_ENEMY_LOC = "file:src/main/scala/resources/Enemies/CamouflagedEnemy.png"
+    val SWARM_ENEMY_LOC = "file:src/main/scala/resources/Enemies/SwarmEnemy.png"
+    val TANK_ENEMY_LOC = "file:src/main/scala/resources/Enemies/TankEnemy.png"
     val MAP_HEIGHT = 12
     val MAP_WIDTH = 20
     val SIDEBAR_WIDTH = 130
