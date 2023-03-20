@@ -28,3 +28,46 @@ Workload has been about 15 hours.
 
 In my opinion, I am in a decent phase of the project. I have implemented the Gameplay-UI quite well and it's easy to scale it in the 
 future. Testing starts during the next two weeks when the structure of the project is clearer. 
+
+---------------------------------------------------------------------------------------------------------------------------------------
+Interim report 20.3.2023
+
+Testing has been started by initializing ScalaTest configurations with sbt and necessary folders have been created. System tests will
+be in src/test/scala/System and unit tests in src/test/scala/Unit. Currently, only tests for the Map-class in Logic-package have been
+made. These tests are quite comprehensive and done diligently.
+
+Animations and movement of enemies has been finished, almost. Now, an enemy can be spawn to the start of the path, and it will appear 
+outside the screen smoothly. There are different enemy images used, but they are still basically the same enemies with different healths
+and speed. But because the basic algorithms have now been implemented, such as creating the pathQueue for Map-class (a queue of the path
+ tiles) and enemies movement along this path, adding additional functionality will be quite easy. 
+
+Wave-level-creation is now also automated with a text file. User can create a text file, whose rows are different waves and a particular
+letter in a row indicates a particular enemy. So it's very straightforward to create new levels and waves with this automation. 
+Documentation regarding to the exact structure of these wavedata-files will be written. The wavesdatas are stores in resources/WaveData.
+Also, a new wave will be automatically started after the previous one has completely ended (all the enemies of the previous wave are not
+in the screen anymore), and changing periods/breaks regarding to this automation is very easy. 
+
+Currently, only reading files is implemented. This is done with the Util.FileHandler-class.
+
+Next, let's explain some functions and algorithms written. GeneratePathQueue in the Map-class starts from the starting Path-tile, which 
+is already defined in the initializeMap-function, and check all the tiles near it. If it finds a PathTile, it will be added to the queue
+and we will do the same with this PathTile, and continue the same way until we reach the already-known end tile. Enemies will use this 
+queue to go through the map. InitializeMap-function was already created before the first review, so we won't go through it in this report.
+
+Another essential algorithm is the one in moveEnemy-function, in the GameplayUI-class. First, it will will calculate the difference vector
+between current tile, the one the enemy is currently in, and the next tile in the map.pathQueue. Then, it calculates the distance, also 
+the length of this difference vector, between the tiles (with Pythagoras). Next, the function calculates the speed vector of the enemy with
+this previously calculated information. This is done by dividing difference vector's x-subvector by the distance. This is set as 
+velocity x, and the same way for y-coordinates. We also multiply both with the enemy's own speed. These vx and vy now basically have the 
+amount of pixels the enemy has to move to both directions, y and x directions. So, in every frame change we calculate these values for every 
+enemy, and then finally, we move the enemy according to this (vx, vy)-vector. We also rotate the enemy to the direction of the 
+(dx, dy)-vector, in the end. The ending isn't implemented properly yet, currently if the next tile is End-tile, we just remove the enemy from
+the screen. The enemies shake a little bith when moving in the screen, this is related to rotating them. Will be fixed.
+
+Some error handling has been implemented, especially in the case of wrongly formatted map-file. Currently, an error is thrown if the 
+file is invalid (checked with different indicators, such as row amount and lengths). But nothing is done after throwing these errors,
+so that would be next step. And also throwing errors in different locations as well.
+
+I think I am doing ok progress. Now I will be progressing a bit faster with the enemy side as all the time-taking algorithms have been 
+implemented. Next weeks, I will be concentrating on the tower behaviour and their shooting. And more tests now that I have started to 
+do tests.
