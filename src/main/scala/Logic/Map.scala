@@ -53,17 +53,24 @@ class GameMap(path: String) {
             // If it's a PathTile, then check surrounding tiles and find the next tile, and determine the turn.
             try
               var turn: Turn = NoTurn
-              var hasTileNextTo = True
-              val pathIsFront = line(x + 1)
-              if (pathIsFront != 1) {
-                if (lines(y + 1)(x) == 1) then
-                   turn = TurnRight
-                else if (lines(y - 1)(x) == 1) then turn = TurnLeft
+              var invalidPath = false
+              println(line.charAt(x))
+              val pathIsFront = line.charAt(x + 1)
+              if (pathIsFront != '1') {
+                invalidPath = true
+                if (lines(y + 1).charAt(x) == '1') then
+                  turn = TurnRight
+                  invalidPath = false
+                else if (lines(y - 1).charAt(x) == '1') then 
+                  turn = TurnLeft
+                  invalidPath = false
+                else if (line.charAt(x - 1) == '1') then
+                  invalidPath = false
               }
-              map(y)(x) = new PathTile((y, x), turn)
+              if (invalidPath) then throw InvalidMapError()
+              else map(y)(x) = new PathTile((y, x), turn)
             catch
-              case _: StringIndexOutOfBoundsException =>
-                println("Do not place path to the edges of the map.")
+              case _: StringIndexOutOfBoundsException => throw InvalidMapError()
           }
           // Start point > always go straight.
           case '2' => {
