@@ -7,7 +7,7 @@ import scalafx.scene.control.{Button, Label}
 import scalafx.scene.layout._
 import scalafx.geometry._
 import scalafx.stage.Screen
-import UI.*
+import UI._
 
 import UI.GameplayUI
 import scalafx.animation.AnimationTimer
@@ -18,12 +18,12 @@ class MainUI extends JFXApp3:
   override def start(): Unit =
     val visualBounds: Rectangle2D = Screen.primary.visualBounds
     val (h, w) = (visualBounds.getHeight, visualBounds.getWidth)
-
+    
     stage = new JFXApp3.PrimaryStage:
       title = "Company defense"
       resizable = false
 
-    lazy val gameplayScene: GameplayUI = GameplayUI(w, h)
+    lazy val gameplayScene: GameplayUI = new GameplayUI(w, h)
     lazy val mainmenuScene: Scene =
       MainMenuUI().mainMenuScene(stage, gameplayScene, settingsScene, w, h)
     lazy val settingsScene: Scene =

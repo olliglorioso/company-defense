@@ -54,7 +54,6 @@ class GameMap(path: String) {
             try
               var turn: Turn = NoTurn
               var invalidPath = false
-              println(line.charAt(x))
               val pathIsFront = line.charAt(x + 1)
               if (pathIsFront != '1') {
                 invalidPath = true
@@ -135,4 +134,4 @@ class GameMap(path: String) {
   }
 }
 
-@main def koira = GameMap("test_map.txt")
+@main def moira = GameMap("test_map.txt")
