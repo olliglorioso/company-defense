@@ -41,7 +41,7 @@ class GameMap(path: String) {
     */
   private def initializeMap(path: String): Array[Array[Tile]] =
     val lines = Util.FileHandler().readLinesFromFile("/Maps/" + path)
-    if (lines.length != MAP_HEIGHT || lines.filter(a => a.length == MAP_WIDTH) != lines.length) then throw InvalidMapError()
+    if (lines.length != MAP_HEIGHT || lines.filter(a => a.length == MAP_WIDTH).length != lines.length) then throw InvalidMapError()
     val map = Array.ofDim[Tile](MAP_HEIGHT, MAP_WIDTH)
     var y = 0
     for (line <- lines) {
