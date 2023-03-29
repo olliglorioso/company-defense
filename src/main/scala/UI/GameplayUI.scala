@@ -111,8 +111,8 @@ class GameplayUI (w: Double, h: Double) extends Scene (w, h) {
   }
 
   def sidebar(): VBox =
-    val regularTower = new Tower("file:src/main/scala/resources/RegularTower.png", 80, "RegularTower")
-    val slowDownTower = new Tower("file:src/main/scala/resources/SlowDownTower.png", 80, "SlowDownTower")
+    val regularTower = new Tower(REGULAR_TOWER_LOC, 80, "RegularTower")
+    val slowDownTower = new Tower(SLOW_DOWN_TOWER_LOC, 80, "SlowDownTower")
     val sidebar = new VBox {
       padding = Insets(20)
       spacing = 10
