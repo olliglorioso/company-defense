@@ -5,22 +5,6 @@ import scalafx.scene.image.{Image, ImageView}
 
 
 object Constants {
-    def towerButton(picLoc: String): Button =
-        val image = new Image(picLoc)
-        val imageView = new ImageView(image) {
-            fitWidth = 80
-            fitHeight = 80
-            preserveRatio = true
-        }
-
-        val button = new Button {
-            onDragEntered
-            graphic = imageView
-            minWidth = 80
-            style = "-fx-background-color: grey;"
-            minHeight = 80
-        }
-        button
     val BASIC_ENEMY_LOC = "file:src/main/scala/resources/Enemies/BasicEnemy.jpg"
     val SPLITTING_ENEMY_LOC = "file:src/main/scala/resources/Enemies/SplittingEnemy.png"
     val CAMOUFLAGED_ENEMY_LOC = "file:src/main/scala/resources/Enemies/CamouflagedEnemy.png"
