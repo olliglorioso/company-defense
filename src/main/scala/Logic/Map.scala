@@ -41,7 +41,7 @@ class GameMap(path: String) {
     */
   private def initializeMap(path: String): Array[Array[Tile]] =
     val lines = Util.FileHandler().readLinesFromFile("/Maps/" + path)
-    if (lines.length != MAP_HEIGHT || lines(0).length != MAP_WIDTH) then throw InvalidMapError()
+    if (lines.length != MAP_HEIGHT || lines.reduce((a,b) => a + b.length) != MAP_WIDTH * MAP_HEIGHT) then throw InvalidMapError()
     val map = Array.ofDim[Tile](MAP_HEIGHT, MAP_WIDTH)
     var y = 0
     for (line <- lines) {
@@ -53,12 +53,14 @@ class GameMap(path: String) {
             // If it's a PathTile, then check surrounding tiles and find the next tile, and determine the turn.
             try
               var turn: Turn = NoTurn
+              var hasTileNextTo = True
               val pathIsFront = line(x + 1)
               if (pathIsFront != 1) {
-                if (lines(y + 1)(x) == 1) then turn = TurnRight
+                if (lines(y + 1)(x) == 1) then
+                   turn = TurnRight
                 else if (lines(y - 1)(x) == 1) then turn = TurnLeft
               }
-              map(y)(x) = new PathTile((y, x), TurnRight)
+              map(y)(x) = new PathTile((y, x), turn)
             catch
               case _: StringIndexOutOfBoundsException =>
                 println("Do not place path to the edges of the map.")
