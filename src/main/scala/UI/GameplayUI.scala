@@ -111,8 +111,18 @@ class GameplayUI (w: Double, h: Double) extends Scene (w, h) {
   }
 
   def sidebar(): VBox =
-    val regularTower = new Tower(REGULAR_TOWER_LOC, 80, "RegularTower")
-    val slowDownTower = new Tower(SLOW_DOWN_TOWER_LOC, 80, "SlowDownTower")
+    val regularTower = new TowerButtonUI(REGULAR_TOWER_LOC)
+    val slowDownTower = new TowerButtonUI(SLOW_DOWN_TOWER_LOC)
+    val tower = new Tower(REGULAR_TOWER_LOC, 80, "RegularTower")
+
+    pane.children.add(tower)
+
+    onMouseDragged = (event: scalafx.scene.input.MouseEvent) => {
+      println("moi")
+      tower.setLayoutX(event.getX())
+      tower.setLayoutY(event.getY())
+    }
+
     val sidebar = new VBox {
       padding = Insets(20)
       spacing = 10
