@@ -18,4 +18,8 @@ object Constants {
     val EASY_HP = 100
     val NORMAL_HP = 50
     val HARD_HP = 1
+    val R_COST = 10 // Regular Tower cost
+    val S_COST = 15 // Slow Down Tower cost
+    val R_NAME = "Nerdinator" // Regular Tower name
+    val S_NAME = "Hacktivist" // Slow Down Tower name
 }

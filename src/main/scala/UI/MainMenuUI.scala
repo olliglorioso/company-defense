@@ -9,6 +9,7 @@ import scalafx.geometry._
 import scalafx.stage.Screen
 import Logic.*
 import UI.*
+import scalafx.scene.control.Tooltip
 
 class MainMenuUI {
 
