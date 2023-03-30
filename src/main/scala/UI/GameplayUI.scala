@@ -30,6 +30,8 @@ import javafx.event.EventHandler
 import javafx.scene.input.MouseEvent
 import scala.collection.mutable.Buffer
 import Util.Constants._
+import scalafx.scene.control.Tooltip
+import scalafx.beans.property.DoubleProperty
 
 sealed abstract class EnemyType(val value: Int)
 case object BasicEnemy extends EnemyType(1)
@@ -57,7 +59,7 @@ class GameplayUI (w: Double, h: Double) extends Scene (w, h) {
   }
 
   root = new BorderPane {
-    right = sidebar()
+    right = SidebarUI()
     center = new BorderPane {
       center = pane
     }
@@ -110,31 +112,6 @@ class GameplayUI (w: Double, h: Double) extends Scene (w, h) {
     helperArray
   }
 
-  def sidebar(): VBox =
-    val regularTower = new TowerButtonUI(REGULAR_TOWER_LOC)
-    val slowDownTower = new TowerButtonUI(SLOW_DOWN_TOWER_LOC)
-    val tower = new Tower(REGULAR_TOWER_LOC, 80, "RegularTower")
-
-    pane.children.add(tower)
-
-    onMouseDragged = (event: scalafx.scene.input.MouseEvent) => {
-      println("moi")
-      tower.setLayoutX(event.getX())
-      tower.setLayoutY(event.getY())
-    }
-
-    val sidebar = new VBox {
-      padding = Insets(20)
-      spacing = 10
-      children = Seq(
-        regularTower,
-        slowDownTower
-      )
-      // set sidebar width
-      prefWidth = SIDEBAR_WIDTH
-      style = "-fx-background-color: grey;"
-    }
-    sidebar
 
   /**
     * Spawn an enemy to the start point.
