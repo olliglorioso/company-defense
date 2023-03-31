@@ -34,7 +34,6 @@ class TowerButtonUI(picLoc: String, name: String, price: Int, desc: String) exte
     minWidth = 80
     style = "-fx-background-color: grey;"
     minHeight = 80
-    
     tooltip_=(tt)
 
     onMouseEntered = () => {

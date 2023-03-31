@@ -15,7 +15,6 @@ import scalafx.scene.layout.VBox
 import scalafx.scene.control.{SplitPane, ListView}
 import scalafx.scene.image.Image
 import scalafx.scene.image.ImageView
-import javafx.scene.Node
 import scalafx.beans.property.ObjectProperty
 import scalafx.scene.shape.Circle
 import scalafx.scene.paint.Color
@@ -26,8 +25,6 @@ import scalafx.animation.AnimationTimer
 import java.util.concurrent.TimeUnit
 import scala.collection.mutable.Queue
 import Util.FileHandler
-import javafx.event.EventHandler
-import javafx.scene.input.MouseEvent
 import scala.collection.mutable.Buffer
 import Util.Constants._
 import scalafx.scene.control.Tooltip
@@ -57,12 +54,12 @@ class GameplayUI (w: Double, h: Double) extends Scene (w, h) {
     prefWidth = (w - SIDEBAR_WIDTH)
     prefHeight = h
   }
-
-  root = new BorderPane {
-    right = SidebarUI()
-    center = new BorderPane {
+  val centerElem = new BorderPane {
       center = pane
     }
+  root = new BorderPane {
+    right = SidebarUI(pane, centerElem)
+    center = centerElem
   }
 
   val timer = AnimationTimer { time => {
