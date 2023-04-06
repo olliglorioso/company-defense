@@ -71,3 +71,17 @@ so that would be next step. And also throwing errors in different locations as w
 I think I am doing ok progress. Now I will be progressing a bit faster with the enemy side as all the time-taking algorithms have been 
 implemented. Next weeks, I will be concentrating on the tower behaviour and their shooting. And more tests now that I have started to 
 do tests.
+---------------------------------------------------------------------------------------------------------------------------------------
+Interim report 3.4.2023
+
+Näiden kahden viikon aikana olen ollut kiireinen, minkä vuoksi projekti ei ole edistynyt ainakaan havainnollisesti paljoa. 
+
+Ensinnäkin, korjasin aikaisemmin esiintyneen ongelman, jossa ohjelmaa yritettiin käynnistää viallisella kartalla, jossa jokin pala vastustajien polkua on "yksinäisessä" kohtaa karttaa, eli se ei kosketa yhteenkään muuhun polunpalaan. Nyt tässä tapauksessa heitetään virhe, joka estää sovelluksen käynnistämisyrityksen (virheenkäsittelyä ei ole vielä toteutettu).
+
+Koodin refaktorointia on myös tehty jonkin verran kahden viikon aikana. Tower-buttonit on tehty omaksi classikseen (joka laajentaa Buttonia) sen sijaan, että ne luotaisiin funktioilla. Lisää vakio muuttujia Constants-luokkaan.
+
+Suurin lisäys tämän väliraportin yhteydessä lienee tooltipin lisäys towerbuttoneihin. Nyt, kun sivupalkin nappien päälle laittaa hiiren, ilmestyy "tooltip" hiiren viereen, johon on tällä hetkellä lisätty seuraavat tiedot: Towerin nimi, hinta ja kuvaus. Tähän kohtaan ei tule mitään painikkeita tooltippiin, koska tornit on tarkoitus raahata pelikentille ja hinta veloittaa automaattisesti. Mutta nyt kun tooltip on tehty yhteen paikkaan, on se suhteellisen helppoa lisätä myöhemmin jo paikalleen laitettuihin torneihin, jolloin tooltipissä tulee olemaan Upgrade- ja Sell-nappulat.
+
+Olen myös aloittanut tutkimaan tornien raahausominaisuutta, jossa tornit viedään kartalle, ja tutkiessani olenkin kerennyt kokeilemaan muutamaa eri vaihtoehtoa mutta mitään en ole vielä saanut toimimaan sopivasti.
+
+Olen edelleen ok tahdissa, koska huomisen jälkeen minulla helpottaa työmäärä helposti muilta kursseilta jolloin ehdin keskittää voimavarojani paljon tähän projektiin, ja seuraava kaksi viikkoa tuleekin olemaan huomattavasti intensiivisempi tämän projektin suhteen.
