@@ -16,10 +16,11 @@ import scalafx.scene.text.Text
 import scalafx.scene.shape.Rectangle
 import scalafx.scene.input.TransferMode
 import scalafx.scene.Scene
+import Logic.GameMap
 
-class SidebarUI(pane: Pane, root: BorderPane) extends VBox {
-    val regularTower = new TowerButtonUI(REGULAR_TOWER_LOC, R_NAME, R_COST, "What can a school kid do?", pane)
-    val slowDownTower = new TowerButtonUI(SLOW_DOWN_TOWER_LOC, S_NAME, S_COST, "Slows down profits.", pane)
+class SidebarUI(pane: Pane, root: BorderPane, mapInst: GameMap) extends VBox {
+    val regularTower = new TowerButtonUI(REGULAR_TOWER_LOC, R_NAME, R_COST, "What can a school kid do?", pane, mapInst)
+    val slowDownTower = new TowerButtonUI(SLOW_DOWN_TOWER_LOC, S_NAME, S_COST, "Slows down profits.", pane, mapInst)
 
     // make this node top one in the scene
     var previousMouseX = 0.0

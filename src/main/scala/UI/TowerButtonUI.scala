@@ -15,8 +15,9 @@ import scalafx.scene.layout.StackPane
 import scalafx.scene.layout.HBox
 import scalafx.scene.shape.Circle
 import Util.Constants
+import Logic.GameMap
 
-class TowerButtonUI(picLoc: String, name: String, price: Int, desc: String, pane: Pane) extends Button {
+class TowerButtonUI(picLoc: String, name: String, price: Int, desc: String, pane: Pane, mapInst: GameMap) extends Button {
     val image = new Image(picLoc)
     val originalPos = (layoutX, layoutY)
     val imageView = new ImageView(image) {
@@ -37,7 +38,7 @@ class TowerButtonUI(picLoc: String, name: String, price: Int, desc: String, pane
             new Label(desc)
         )
     })
-    tt.setShowDelay(javafx.util.Duration(500.0))
+    tt.setShowDelay(javafx.util.Duration(650.0))
     style = "-fx-background-color: transparent;"
     graphic = imageView
     minWidth = Constants.TOWER_SIDE
@@ -53,8 +54,14 @@ class TowerButtonUI(picLoc: String, name: String, price: Int, desc: String, pane
         val (x, y, mouseX, mouseY) = userData.asInstanceOf[(Double, Double, Double, Double)]
         val deltaX = mouseX - event.getSceneX()
         val deltaY = mouseY - event.getSceneY()
+        // find the fill color of the square in the current event.getSceneX(). there are rows and columns of squares side length 89.5
         translateX = x - deltaX
         translateY = y - deltaY
+        if (mapInst.isBgTile(event.getSceneY(), event.getSceneX())) {
+            style = "-fx-background-color: green;"
+        } else {
+            style = "-fx-background-color: red;"
+        }
     }
     onMouseReleased = (event: MouseEvent) => {
         // Create a new Tower instance in this position
@@ -70,7 +77,7 @@ class TowerButtonUI(picLoc: String, name: String, price: Int, desc: String, pane
             minHeight = Constants.TOWER_SIDE
         }
         val stackPane = new StackPane()
-        info.style = "-fx-background-color: transparent; -fx-border-color: transparent;" // Make the button transparent
+        info.style = "-fx-background-color: transparent; -fx-border-color: transparent;" // Tooltip button style (transparent)
         stackPane.getChildren().addAll(newTower, info)
         stackPane.translateX = event.getSceneX() - (minWidth() / 2)
         stackPane.translateY = event.getSceneY() - (minHeight() / 2)
@@ -78,5 +85,6 @@ class TowerButtonUI(picLoc: String, name: String, price: Int, desc: String, pane
         translateX = x
         translateY = y
         pane.children.add(stackPane)
+        style = "-fx-background-color: transparent;"
     }
 }

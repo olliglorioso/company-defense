@@ -132,6 +132,26 @@ class GameMap(path: String) {
     }
     return queue
   }
+
+  private def whichTile = (x: Int, y: Int) => map(x)(y)
+  
+  /**
+    * 
+    *
+    * @param coords The coordinates to check, not rounded.
+    * @return True if the tile is BgTile, false otherwise (PathTile / Sidebar area).
+    */
+  def isBgTile = (x: Double, y: Double) => {
+    val xCoord = (x / 89.5).toInt
+    val yCoord = (y / 89.5).toInt
+    if (xCoord < 0 || yCoord < 0 || xCoord > 11 || yCoord > 19) then false
+    else {
+      val tile = whichTile(xCoord, yCoord)
+      
+      if (tile.isInstanceOf[BgTile]) true
+      else false
+    }
+  }
 }
 
 @main def moira = GameMap("test_map.txt")

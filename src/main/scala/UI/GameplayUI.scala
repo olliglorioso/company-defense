@@ -59,7 +59,7 @@ class GameplayUI (w: Double, h: Double) extends Scene (w, h) {
     center = pane
   }
     
-  val sidebar = SidebarUI(pane, centerElem)
+  val sidebar = SidebarUI(pane, centerElem, mapInst)
   sidebar.toFront()
 
   root = new BorderPane {
