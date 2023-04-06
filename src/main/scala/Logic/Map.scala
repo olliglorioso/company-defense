@@ -144,7 +144,7 @@ class GameMap(path: String) {
   def isBgTile = (x: Double, y: Double) => {
     val xCoord = (x / 89.5).toInt
     val yCoord = (y / 89.5).toInt
-    if (xCoord < 0 || yCoord < 0 || xCoord > 11 || yCoord > 19) then false
+    if (xCoord < 0 || yCoord < 0 || xCoord > (MAP_HEIGHT - 1) || yCoord > (MAP_WIDTH - 1)) then false
     else {
       val tile = whichTile(xCoord, yCoord)
       

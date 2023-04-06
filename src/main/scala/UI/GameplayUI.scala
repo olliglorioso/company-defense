@@ -43,8 +43,7 @@ class GameplayUI (w: Double, h: Double) extends Scene (w, h) {
   val waves: Array[Queue[EnemyType]] = generateWaves("test_wavedata.txt")
   val map = createMap(squareSide, mapInst.map)
   var enemiesOnMap = Buffer[Enemy]()
-  val coins = 100
-  val health = 9
+  var variates = Map("money" -> 1000.0, "lives" -> 10.0, "wave" -> 0.0, "score" -> 0.0)
 
   var waveNo = 0
   var timerStarted = false
@@ -59,7 +58,7 @@ class GameplayUI (w: Double, h: Double) extends Scene (w, h) {
     center = pane
   }
     
-  val sidebar = SidebarUI(pane, centerElem, mapInst)
+  val sidebar = SidebarUI(pane, mapInst, variates)
   sidebar.toFront()
 
   root = new BorderPane {

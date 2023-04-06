@@ -17,7 +17,7 @@ import scalafx.scene.shape.Circle
 import Util.Constants
 import Logic.GameMap
 
-class TowerButtonUI(picLoc: String, name: String, price: Int, desc: String, pane: Pane, mapInst: GameMap) extends Button {
+class TowerButtonUI(picLoc: String, name: String, price: Int, desc: String, pane: Pane, mapInst: GameMap, variates: Map[String, Double]) extends Button {
     val image = new Image(picLoc)
     val originalPos = (layoutX, layoutY)
     val imageView = new ImageView(image) {
@@ -48,26 +48,38 @@ class TowerButtonUI(picLoc: String, name: String, price: Int, desc: String, pane
         // Record initial position and mouse position
         userData = (translateX(), translateY(), event.getSceneX(), event.getSceneY())
     }
-    onMouseDragged = (event: MouseEvent) => {
-        // Calculate new position
+
+    def calculateNewPosition(event: MouseEvent, userData: Any): (Double, Double) = {
         val (x, y, mouseX, mouseY) = userData.asInstanceOf[(Double, Double, Double, Double)]
         val deltaX = mouseX - event.getSceneX()
         val deltaY = mouseY - event.getSceneY()
-        // find the fill color of the square in the current event.getSceneX(). there are rows and columns of squares side length 89.5
-        translateX = x - deltaX
-        translateY = y - deltaY
+        (x - deltaX, y - deltaY)
+    }
+
+    def getButtonStyle(event: MouseEvent, mapInst: GameMap): String = {
         if (mapInst.isBgTile(event.getSceneY(), event.getSceneX())) {
-            // just set the theme of the button to green
-            style = "-fx-background-color: green;"
+            "-fx-background-color: green;"
         } else {
-            style = "-fx-background-color: red;"
+            "-fx-background-color: red;"
         }
     }
+    onMouseDragged = (event: MouseEvent) => {
+        if (variates("money") < price) {
+            print("not enough money")
+        } else {
+            val newPos = calculateNewPosition(event, userData)
+            translateX = newPos._1
+            translateY = newPos._2
+            style = getButtonStyle(event, mapInst)
+        }
+    }
+
     onMouseReleased = (event: MouseEvent) => {
         
         val (x, y, mouseX, mouseY) = userData.asInstanceOf[(Double, Double, Double, Double)]
         // Illegal positions not allowed
         if (!mapInst.isBgTile(event.getSceneY(), event.getSceneX())) {
+            println("Illegal position")
             translateX = x
             translateY = y
             style = "-fx-background-color: transparent;"
@@ -75,8 +87,6 @@ class TowerButtonUI(picLoc: String, name: String, price: Int, desc: String, pane
             // Create a new Tower instance in this position
             val newTower = new Tower(picLoc, Constants.TOWER_SIDE, name, price)
             // make tooltip to stay when mouse over it
-            tt.setConsumeAutoHidingEvents(false)
-            tt.setAutoHide(false)
 
             val info = new Button() {
                 tooltip_=(tt)
