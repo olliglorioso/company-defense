@@ -34,10 +34,10 @@ class TowerButtonUI(picLoc: String, name: String, price: Int, desc: String, pane
             new Label(desc)
         )
     })
+    style = "-fx-background-color: transparent;"
     graphic = imageView
     minWidth = 80
     minHeight = 80
-    opacity = 0
     tooltip_=(tt)
     onMousePressed = (event: MouseEvent) => {
         // Record initial position and mouse position
