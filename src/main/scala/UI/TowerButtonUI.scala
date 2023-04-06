@@ -47,7 +47,6 @@ class TowerButtonUI(picLoc: String, name: String, price: Int, desc: String, pane
     onMousePressed = (event: MouseEvent) => {
         // Record initial position and mouse position
         userData = (translateX(), translateY(), event.getSceneX(), event.getSceneY())
-        print(userData)
     }
     onMouseDragged = (event: MouseEvent) => {
         // Calculate new position
@@ -58,33 +57,44 @@ class TowerButtonUI(picLoc: String, name: String, price: Int, desc: String, pane
         translateX = x - deltaX
         translateY = y - deltaY
         if (mapInst.isBgTile(event.getSceneY(), event.getSceneX())) {
+            // just set the theme of the button to green
             style = "-fx-background-color: green;"
         } else {
             style = "-fx-background-color: red;"
         }
     }
     onMouseReleased = (event: MouseEvent) => {
-        // Create a new Tower instance in this position
+        
         val (x, y, mouseX, mouseY) = userData.asInstanceOf[(Double, Double, Double, Double)]
-        val newTower = new Tower(picLoc, Constants.TOWER_SIDE, name, price)
-        // make tooltip to stay when mouse over it
-        tt.setConsumeAutoHidingEvents(false)
-        tt.setAutoHide(false)
+        // Illegal positions not allowed
+        if (!mapInst.isBgTile(event.getSceneY(), event.getSceneX())) {
+            translateX = x
+            translateY = y
+            style = "-fx-background-color: transparent;"
+        } else {
+            // Create a new Tower instance in this position
+            val newTower = new Tower(picLoc, Constants.TOWER_SIDE, name, price)
+            // make tooltip to stay when mouse over it
+            tt.setConsumeAutoHidingEvents(false)
+            tt.setAutoHide(false)
 
-        val info = new Button() {
-            tooltip_=(tt)
-            minWidth = Constants.TOWER_SIDE
-            minHeight = Constants.TOWER_SIDE
+            val info = new Button() {
+                tooltip_=(tt)
+                minWidth = Constants.TOWER_SIDE
+                minHeight = Constants.TOWER_SIDE
+            }
+            val stackPane = new StackPane()
+            info.style = "-fx-background-color: transparent; -fx-border-color: transparent;" // Tooltip button style (transparent)
+            stackPane.getChildren().addAll(newTower, info)
+            stackPane.translateX = event.getSceneX() - (minWidth() / 2)
+            stackPane.translateY = event.getSceneY() - (minHeight() / 2)
+            // Return the button to its original position
+            
+            pane.children.add(stackPane)
+            translateX = x
+            translateY = y
+            style = "-fx-background-color: transparent;"
         }
-        val stackPane = new StackPane()
-        info.style = "-fx-background-color: transparent; -fx-border-color: transparent;" // Tooltip button style (transparent)
-        stackPane.getChildren().addAll(newTower, info)
-        stackPane.translateX = event.getSceneX() - (minWidth() / 2)
-        stackPane.translateY = event.getSceneY() - (minHeight() / 2)
-        // Return the button to its original position
-        translateX = x
-        translateY = y
-        pane.children.add(stackPane)
-        style = "-fx-background-color: transparent;"
+        
     }
 }

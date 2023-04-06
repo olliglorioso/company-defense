@@ -153,5 +153,3 @@ class GameMap(path: String) {
     }
   }
 }
-
-@main def moira = GameMap("test_map.txt")
