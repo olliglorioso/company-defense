@@ -43,12 +43,13 @@ class GameplayUI (w: Double, h: Double) extends Scene (w, h) {
   val waves: Array[Queue[EnemyType]] = generateWaves("test_wavedata.txt")
   val map = createMap(squareSide, mapInst.map)
   var enemiesOnMap = Buffer[Enemy]()
+  val coins = 100
+  val health = 9
 
   var waveNo = 0
   var timerStarted = false
   var startTime = 0L
   var lastTime = 0L
-
   var pane = new Pane {
     children = map.flatten
     prefWidth = (w - SIDEBAR_WIDTH)

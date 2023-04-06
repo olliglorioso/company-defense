@@ -11,6 +11,10 @@ import scalafx.scene.layout.VBox
 import javafx.scene.input.MouseEvent
 import Logic.Tower
 import scalafx.scene.layout.Pane
+import scalafx.scene.layout.StackPane
+import scalafx.scene.layout.HBox
+import scalafx.scene.shape.Circle
+import Util.Constants
 
 class TowerButtonUI(picLoc: String, name: String, price: Int, desc: String, pane: Pane) extends Button {
     val image = new Image(picLoc)
@@ -23,7 +27,6 @@ class TowerButtonUI(picLoc: String, name: String, price: Int, desc: String, pane
     val ttstyle = ("-fx-font: normal bold 20 Langdon; " + "-fx-base: #AE3522; " + "-fx-text-fill: orange;")
     val tt = new Tooltip()
     tt.setStyle(ttstyle)
-    tt.setShowDelay(scalafx.util.Duration.apply(10))
     tt.setGraphic(new VBox {
         spacing = 5
         children = Seq(
@@ -34,10 +37,11 @@ class TowerButtonUI(picLoc: String, name: String, price: Int, desc: String, pane
             new Label(desc)
         )
     })
+    tt.setShowDelay(javafx.util.Duration(500.0))
     style = "-fx-background-color: transparent;"
     graphic = imageView
-    minWidth = 80
-    minHeight = 80
+    minWidth = Constants.TOWER_SIDE
+    minHeight = Constants.TOWER_SIDE
     tooltip_=(tt)
     onMousePressed = (event: MouseEvent) => {
         // Record initial position and mouse position
@@ -55,12 +59,24 @@ class TowerButtonUI(picLoc: String, name: String, price: Int, desc: String, pane
     onMouseReleased = (event: MouseEvent) => {
         // Create a new Tower instance in this position
         val (x, y, mouseX, mouseY) = userData.asInstanceOf[(Double, Double, Double, Double)]
-        val newTower = new Tower(picLoc, minWidth().toInt, name, price)
-        newTower.translateX = event.getSceneX() - (minWidth() / 2)
-        newTower.translateY = event.getSceneY() - (minHeight() / 2)
+        val newTower = new Tower(picLoc, Constants.TOWER_SIDE, name, price)
+        // make tooltip to stay when mouse over it
+        tt.setConsumeAutoHidingEvents(false)
+        tt.setAutoHide(false)
+
+        val info = new Button() {
+            tooltip_=(tt)
+            minWidth = Constants.TOWER_SIDE
+            minHeight = Constants.TOWER_SIDE
+        }
+        val stackPane = new StackPane()
+        info.style = "-fx-background-color: transparent; -fx-border-color: transparent;" // Make the button transparent
+        stackPane.getChildren().addAll(newTower, info)
+        stackPane.translateX = event.getSceneX() - (minWidth() / 2)
+        stackPane.translateY = event.getSceneY() - (minHeight() / 2)
         // Return the button to its original position
         translateX = x
         translateY = y
-        pane.children.add(newTower)
+        pane.children.add(stackPane)
     }
 }
