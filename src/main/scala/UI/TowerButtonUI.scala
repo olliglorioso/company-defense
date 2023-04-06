@@ -8,9 +8,13 @@ import scalafx.event.EventIncludes.eventClosureWrapperWithZeroParam
 import scala.concurrent.duration.Duration
 import scalafx.scene.control.Label
 import scalafx.scene.layout.VBox
+import javafx.scene.input.MouseEvent
+import Logic.Tower
+import scalafx.scene.layout.Pane
 
-class TowerButtonUI(picLoc: String, name: String, price: Int, desc: String) extends Button {
+class TowerButtonUI(picLoc: String, name: String, price: Int, desc: String, pane: Pane) extends Button {
     val image = new Image(picLoc)
+    val originalPos = (layoutX, layoutY)
     val imageView = new ImageView(image) {
         fitWidth = 80
         fitHeight = 80
@@ -32,16 +36,31 @@ class TowerButtonUI(picLoc: String, name: String, price: Int, desc: String) exte
     })
     graphic = imageView
     minWidth = 80
-    style = "-fx-background-color: grey;"
     minHeight = 80
+    opacity = 0
     tooltip_=(tt)
-
-    onMouseEntered = () => {
-        opacity = 0.5
+    onMousePressed = (event: MouseEvent) => {
+        // Record initial position and mouse position
+        userData = (translateX(), translateY(), event.getSceneX(), event.getSceneY())
+        print(userData)
     }
-
-    onMouseExited = () => {
-        opacity = 1
+    onMouseDragged = (event: MouseEvent) => {
+        // Calculate new position
+        val (x, y, mouseX, mouseY) = userData.asInstanceOf[(Double, Double, Double, Double)]
+        val deltaX = mouseX - event.getSceneX()
+        val deltaY = mouseY - event.getSceneY()
+        translateX = x - deltaX
+        translateY = y - deltaY
     }
-    
+    onMouseReleased = (event: MouseEvent) => {
+        // Create a new Tower instance in this position
+        val (x, y, mouseX, mouseY) = userData.asInstanceOf[(Double, Double, Double, Double)]
+        val newTower = new Tower(picLoc, minWidth().toInt, name, price)
+        newTower.translateX = event.getSceneX() - (minWidth() / 2)
+        newTower.translateY = event.getSceneY() - (minHeight() / 2)
+        // Return the button to its original position
+        translateX = x
+        translateY = y
+        pane.children.add(newTower)
+    }
 }

@@ -7,16 +7,24 @@ import Logic.Tower
 import scalafx.scene.control.Tooltip
 import scalafx.scene.layout.Pane
 import scalafx.scene.layout.BorderPane
-import scalafx.scene.input.MouseEvent
-import scalafx.Includes.eventClosureWrapperWithZeroParam
-import scalafx.event.EventIncludes.eventClosureWrapperWithZeroParam
+import javafx.scene.input.MouseEvent
+
+import scalafx.Includes.eventClosureWrapperWithParam
+import scalafx.event.EventIncludes.eventClosureWrapperWithParam
 import scalafx.scene.input.ClipboardContent
+import scalafx.scene.text.Text
+import scalafx.scene.shape.Rectangle
+import scalafx.scene.input.TransferMode
+import scalafx.scene.Scene
 
-class SidebarUI(mapPane: Pane, root: BorderPane) extends VBox {
-    val regularTower = new TowerButtonUI(REGULAR_TOWER_LOC, R_NAME, R_COST, "What can a school kid do?")
-    val slowDownTower = new TowerButtonUI(SLOW_DOWN_TOWER_LOC, S_NAME, S_COST, "Slows down profits.")
-    
+class SidebarUI(pane: Pane, root: BorderPane) extends VBox {
+    val regularTower = new TowerButtonUI(REGULAR_TOWER_LOC, R_NAME, R_COST, "What can a school kid do?", pane)
+    val slowDownTower = new TowerButtonUI(SLOW_DOWN_TOWER_LOC, S_NAME, S_COST, "Slows down profits.", pane)
 
+    // make this node top one in the scene
+    var previousMouseX = 0.0
+    var previousMouseY = 0.0
+    var first = true
 
     padding = Insets(20)
     spacing = 10
