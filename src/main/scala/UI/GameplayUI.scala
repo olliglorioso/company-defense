@@ -55,11 +55,15 @@ class GameplayUI (w: Double, h: Double) extends Scene (w, h) {
     prefHeight = h
   }
   val centerElem = new BorderPane {
-      center = pane
-    }
+    center = pane
+  }
+    
+  val sidebar = SidebarUI(pane, centerElem)
+  sidebar.toFront()
+
   root = new BorderPane {
-    right = SidebarUI(pane, centerElem)
     center = centerElem
+    right = sidebar
   }
 
   val timer = AnimationTimer { time => {
