@@ -11,8 +11,23 @@ case class Tower(path: String, size: Int, name: String, price: Int, range: Int)
     
     // Enemy priority queue
     val enemyPriority = new PriorityQueue[Enemy]()(Ordering.by(enemyPriorityCalc(_)))
-    
-    def canShootEnemyAtPos(x: Double, y: Double) = {
 
-    }        
+    def addEnemyToPriorityQueue(enemy: Enemy) = {
+        enemyPriority.enqueue(enemy)
+    }   
+
+    def clearPriorityQueue() = {
+        enemyPriority.clear()
+    }
+
+    def rotateTowardsPriorityEnemy() = {
+        println(x.value.toString() + " " +  y.value.toString())
+        if (enemyPriority.nonEmpty) {
+            val enemy = enemyPriority.head
+            val angle = math.atan2(enemy.translateY.value - y.value, enemy.translateX.value - x.value)
+            val angleDegrees = math.toDegrees(angle)
+            rotate.value = angleDegrees
+        }
+    }
+
 }

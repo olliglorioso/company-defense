@@ -74,6 +74,16 @@ class GameplayUI(w: Double, h: Double) extends Scene(w, h) {
     right = sidebar // Sidebar area
   }
 
+  def editPriorityQueues() = {
+    for (tower <- towersOnMap.value) {
+      tower.clearPriorityQueue()
+      for (enemy <- enemiesOnMap) {
+        tower.addEnemyToPriorityQueue(enemy)
+        tower.rotateTowardsPriorityEnemy()
+      }
+    }
+  }
+
   /** Creates a basic clock for the game. Started when current gameplay starts.
     *
     * @return
@@ -106,6 +116,7 @@ class GameplayUI(w: Double, h: Double) extends Scene(w, h) {
             moveEnemy(a, newEnemies)
           }
           enemiesOnMap = newEnemies
+          editPriorityQueues()
         }
       }
     }
