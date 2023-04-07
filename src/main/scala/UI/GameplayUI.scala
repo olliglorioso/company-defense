@@ -49,16 +49,12 @@ class GameplayUI (w: Double, h: Double) extends Scene (w, h) {
   val waves: Array[Queue[EnemyType]] = generateWaves("test_wavedata.txt")
   val map = createMap(squareSide, mapInst.map)
   var enemiesOnMap = Buffer[Enemy]()
-  // Bufferproperty which is a seq of towers in the map
   var towersOnMap = BufferProperty[Tower](Seq())
   val variates = ObjectProperty(Map("money" -> 50.0, "lives" -> 10.0, "waveNo" -> 0.0, "score" -> 0.0))
   var timerStarted = false
   var startTime = 0L
   var lastTime = 0L
 
-  towersOnMap.onChange((_, _, valeus) => {
-    println(valeus)
-  })
   var pane = new Pane {
     children = map.flatten
     prefWidth = (w - SIDEBAR_WIDTH)
@@ -118,23 +114,30 @@ class GameplayUI (w: Double, h: Double) extends Scene (w, h) {
    * @param color Color of the text
    */
   def message(text: String, color: Color): Unit = {
-    
-    var startTimeForMessage = 0L
-    val timer2 = AnimationTimer { time => {
-      if (time - startTimeForMessage >= 2000000000L) {
-        pane.children.remove(label)
+    val label = new Label(text) {
+      style = "-fx-font-size: 100pt"
+      textFill = color
+      layoutX = (w - SIDEBAR_WIDTH) / 2 - 100
+      layoutY = h / 2 - 50
+    }
+    label.toFront()
+    pane.children.add(label)
+    var timerStarted = false
+    var startTime = 0L
+    val timer = AnimationTimer { time => {
+      if (timerStarted == false) {
+        startTime = time
+        timerStarted = true
+      } else {
+        if (time - startTime >= 2000000000L) {
+          pane.children.remove(label)
+        }
       }
     }}
-    timer2.start()
+    timer.start()
   }
 
-  val label = new Label("MOIMOIMOIM") {
-    style = "-fx-font-size: 30pt"
-  }
-  label.toFront()
-  pane.getChildren().add(label)
-
-  message("Wave 1", Color.Green)
+  message("koira", Color.Red)
 
   /**
     * Generate enemy waves Array based on a file.
