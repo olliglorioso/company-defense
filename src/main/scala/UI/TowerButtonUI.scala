@@ -9,8 +9,8 @@ import scalafx.scene.layout._
 import scalafx.scene.shape.Circle
 import Util.Constants._
 import Logic.GameMap
-import scalafx.beans.property.ObjectProperty
-import scalafx.beans.property.BufferProperty
+import scalafx.beans.property._
+import scala.util.control.Breaks._
 
 class TowerButtonUI(
     picLoc: String,
@@ -68,12 +68,36 @@ class TowerButtonUI(
   }
 
   def getButtonStyle(event: MouseEvent, mapInst: GameMap): String = {
-    if (mapInst.isBgTile(event.getSceneY(), event.getSceneX())) {
+    if (mapInst.isBgTile(event.getSceneY(), event.getSceneX()) && towerCanBePlaced(event.getSceneX(), event.getSceneY())) {
       "-fx-background-color: green;"
     } else {
       "-fx-background-color: red;"
     }
   }
+
+  /**
+      * 
+      * Does a tower hit a previously placed tower?
+      * @param x
+      * @param y
+      * @return
+      */
+    def towerCanBePlaced(x: Double, y: Double): Boolean = {
+      var broken = false
+      breakable {
+        towersOnMap.value.forall( tower => {
+            val distance = math.sqrt(math.pow(tower.x.value - x, 2) + math.pow(tower.y.value - y, 2))
+            if (distance < (TOWER_SIDE / 2)) then 
+              broken = true
+              break()
+            else
+              true
+          }
+        )
+      }
+      !broken
+    }
+    
   onMouseDragged = (event: MouseEvent) => {
     if (variates.value("money") < price) {
       showMessage(
@@ -90,8 +114,11 @@ class TowerButtonUI(
   }
 
   onMouseReleased = (event: MouseEvent) => {
+    
     val (x, y, mouseX, mouseY) =
       userData.asInstanceOf[(Double, Double, Double, Double)]
+    val towerX = event.getSceneX() - (minWidth() / 2)
+    val towerY = event.getSceneY() - (minHeight() / 2)
     // Illegal positions not allowed
     if (!mapInst.isBgTile(event.getSceneY(), event.getSceneX())) {
       showMessage(
@@ -102,12 +129,19 @@ class TowerButtonUI(
       translateX = x
       translateY = y
       style = "-fx-background-color: transparent;"
+    } else if (!towerCanBePlaced(towerX, towerY)) {
+        showMessage(
+          "You can't place a tower there!",
+          "error",
+          1
+        )
+        translateX = x
+        translateY = y
+        style = "-fx-background-color: transparent;"
     } else {
       if (variates.value("money") >= price) then
-        val towerX = event.getSceneX() - (minWidth() / 2)
-        val towerY = event.getSceneY() - (minHeight() / 2)
         // Create a new Tower instance in this position
-        val newTower = new Tower(picLoc, TOWER_SIDE, name, price)
+        val newTower = new Tower(picLoc, TOWER_SIDE, name, price, 10)
         // make tooltip to stay when mouse over it
         val info = new Button() {
           tooltip_=(tt)
@@ -117,6 +151,7 @@ class TowerButtonUI(
         towersOnMap.value = towersOnMap.value :+ newTower
         newTower.x = towerX
         newTower.y = towerY
+        println(newTower.x.toString() + newTower.y.toString())
         val stackPane = new StackPane()
         info.style =
           "-fx-background-color: transparent; -fx-border-color: transparent;" // Tooltip button style (transparent)
