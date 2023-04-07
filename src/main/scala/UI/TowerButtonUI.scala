@@ -20,7 +20,8 @@ class TowerButtonUI(
     pane: Pane,
     mapInst: GameMap,
     variates: ObjectProperty[Map[String, Double]],
-    towersOnMap: BufferProperty[Tower]
+    towersOnMap: BufferProperty[Tower],
+    showMessage: (String, String, Int) => Unit
 ) extends Button {
   val image = new Image(picLoc)
   val originalPos = (layoutX, layoutY)
@@ -75,7 +76,11 @@ class TowerButtonUI(
   }
   onMouseDragged = (event: MouseEvent) => {
     if (variates.value("money") < price) {
-      print("not enough money")
+      showMessage(
+        "Not enough money!",
+        "error",
+        1
+      )
     } else {
       val newPos = calculateNewPosition(event, userData)
       translateX = newPos._1
@@ -89,7 +94,11 @@ class TowerButtonUI(
       userData.asInstanceOf[(Double, Double, Double, Double)]
     // Illegal positions not allowed
     if (!mapInst.isBgTile(event.getSceneY(), event.getSceneX())) {
-      println("Illegal position")
+      showMessage(
+        "You can't place a tower there!",
+        "error",
+        1
+      )
       translateX = x
       translateY = y
       style = "-fx-background-color: transparent;"

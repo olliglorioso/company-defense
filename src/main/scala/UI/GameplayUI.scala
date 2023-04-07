@@ -119,19 +119,29 @@ class GameplayUI(w: Double, h: Double) extends Scene(w, h) {
     *   Text to be displayed
     * @param color
     *   Color of the text
+    * @param blinks
+    *  Number of blinks
     */
-  def showMessage(text: String, messageType: String, blinks: Int): Unit = {
-    val label = new Label(text) {
+  def showMessage(msg: String, messageType: String, blinks: Int): Unit = {
+    val label = new Label(msg) {
       messageType match {
         case "error" =>
           style =
-            "-fx-font-size: 100pt; -fx-text-fill: red; -fx-background-color: black; -fx-padding: 20px; -fx-border-radius: 10px; -fx-background-radius: 10px;"
+            "-fx-font-size: 50pt; -fx-text-fill: red;;"
         case "info" =>
           style =
-            "-fx-font-size: 100pt; -fx-text-fill: white; -fx-background-color: black; -fx-padding: 20px; -fx-border-radius: 10px; -fx-background-radius: 10px;"
+            "-fx-font-size: 50pt; -fx-text-fill: white; -fx-background-color: black; -fx-padding: 20px; -fx-border-radius: 10px; -fx-background-radius: 10px;"
       }
-      layoutX = (w - SIDEBAR_WIDTH) / 2 - 200
-      layoutY = h / 2 - 200
+      // get the length of the text related to the screen
+      val textLength = msg.length * 50
+      val newLoc = messageType match {
+        case "error" =>
+          ((w - SIDEBAR_WIDTH) / 2 - textLength / 3, 0.0)
+        case "info" =>
+          ((w - SIDEBAR_WIDTH) / 2 - textLength / 3, h / 2)
+      }
+      translateX = newLoc._1
+      translateY = newLoc._2
       opacity = 1.0
     }
     label.toFront()

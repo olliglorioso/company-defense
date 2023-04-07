@@ -24,7 +24,8 @@ class SidebarUI(
     pane: Pane,
     mapInst: GameMap,
     variatesRef: ObjectProperty[Map[String, Double]],
-    towersOnMap: BufferProperty[Tower]
+    towersOnMap: BufferProperty[Tower],
+    showMessage: (String, String, Int) => Unit
 ) extends VBox {
   val regularTower = new TowerButtonUI(
     REGULAR_TOWER_LOC,
@@ -34,7 +35,8 @@ class SidebarUI(
     pane,
     mapInst,
     variatesRef,
-    towersOnMap
+    towersOnMap,
+    showMessage
   )
   val slowDownTower = new TowerButtonUI(
     SLOW_DOWN_TOWER_LOC,
@@ -44,7 +46,8 @@ class SidebarUI(
     pane,
     mapInst,
     variatesRef,
-    towersOnMap
+    towersOnMap,
+    showMessage
   )
   // Label for showing money amount
   val moneyLabel = new Label(variatesRef.value("money").toString()) {
