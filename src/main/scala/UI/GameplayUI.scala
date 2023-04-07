@@ -52,7 +52,7 @@ class GameplayUI(w: Double, h: Double) extends Scene(w, h) {
   var enemiesOnMap = Buffer[Enemy]()
   var towersOnMap = BufferProperty[Tower](Seq())
   val variates = ObjectProperty(
-    Map("money" -> 50.0, "lives" -> 10.0, "waveNo" -> 0.0, "score" -> 0.0)
+    Map("money" -> 50.0, "health" -> 10.0, "waveNo" -> 0.0, "score" -> 0.0)
   )
   var timerStarted = false
   var startTime = 0L

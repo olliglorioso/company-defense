@@ -21,6 +21,8 @@ import scalafx.scene.control.Labeled
 import scalafx.beans.property.BufferProperty
 import scalafx.geometry.Rectangle2D
 import scalafx.stage.Screen
+import scalafx.scene.paint.Color
+import scalafx.scene.image.ImageView
 
 class SidebarUI(
     pane: Pane,
@@ -59,6 +61,31 @@ class SidebarUI(
     style =
       "-fx-font: normal bold 20 Langdon; " + "-fx-base: #AE3522; " + "-fx-text-fill: orange;"
     translateY = h - 100
+    graphic = new ImageView(MONEY_ICON_LOC) {
+      fitWidth = 30.0
+      fitHeight = 30.0
+    }
+  }
+
+  val healthLabel = new Label(variatesRef.value("health").toString()) {
+    style =
+      "-fx-font: normal bold 20 Langdon; " + "-fx-base: #AE3522; " + "-fx-text-fill: orange;"
+    translateY = h - 175
+    graphic = new ImageView(HEALTH_ICON_LOC) {
+      fitWidth = 30.0
+      fitHeight = 30.0
+    }
+  }
+
+  val scoreLabel = new Label(variatesRef.value("score").toString()) {
+    style =
+      "-fx-font: normal bold 20 Langdon; " + "-fx-base: #AE3522; " + "-fx-text-fill: orange;"
+    translateY = h - 250
+    // add an icon to the beginning of this label
+    graphic = new ImageView(SCORE_ICON_LOC) {
+      fitWidth = 30.0
+      fitHeight = 30.0
+    }
   }
 
   // Update money label
@@ -71,6 +98,8 @@ class SidebarUI(
   spacing = 10
   children = Seq(
     moneyLabel,
+    healthLabel,
+    scoreLabel,
     regularTower,
     slowDownTower,
   )
