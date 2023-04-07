@@ -49,20 +49,23 @@ class GameplayUI (w: Double, h: Double) extends Scene (w, h) {
   val waves: Array[Queue[EnemyType]] = generateWaves("test_wavedata.txt")
   val map = createMap(squareSide, mapInst.map)
   var enemiesOnMap = Buffer[Enemy]()
-  val towersOnMap = BufferProperty(Seq[Tower]())
+  // Bufferproperty which is a seq of towers in the map
+  var towersOnMap = BufferProperty[Tower](Seq())
   val variates = ObjectProperty(Map("money" -> 50.0, "lives" -> 10.0, "waveNo" -> 0.0, "score" -> 0.0))
-
   var timerStarted = false
   var startTime = 0L
   var lastTime = 0L
 
+  towersOnMap.onChange((_, _, valeus) => {
+    println(valeus)
+  })
   var pane = new Pane {
     children = map.flatten
     prefWidth = (w - SIDEBAR_WIDTH)
     prefHeight = h
   }
     
-  val sidebar = SidebarUI(pane, mapInst, variates)
+  val sidebar = SidebarUI(pane, mapInst, variates, towersOnMap)
   sidebar.toFront()
 
   root = new BorderPane {

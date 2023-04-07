@@ -10,8 +10,19 @@ import scalafx.scene.shape.Circle
 import Util.Constants._
 import Logic.GameMap
 import scalafx.beans.property.ObjectProperty
+import scalafx.beans.property.BufferProperty
 
-class TowerButtonUI(picLoc: String, name: String, price: Int, desc: String, pane: Pane, mapInst: GameMap, variates: ObjectProperty[Map[String, Double]]) extends Button {
+class TowerButtonUI(
+        picLoc: String, 
+        name: String, 
+        price: Int, 
+        desc: String, 
+        pane: Pane, 
+        mapInst: GameMap, 
+        variates: ObjectProperty[Map[String, Double]],
+        towersOnMap: BufferProperty[Tower]
+    ) 
+extends Button {
     val image = new Image(picLoc)
     val originalPos = (layoutX, layoutY)
     val imageView = new ImageView(image) {
@@ -88,6 +99,7 @@ class TowerButtonUI(picLoc: String, name: String, price: Int, desc: String, pane
                     minWidth = TOWER_SIDE
                     minHeight = TOWER_SIDE
                 }
+                towersOnMap.value = towersOnMap.value :+ newTower
                 newTower.x = towerX
                 newTower.y = towerY
                 val stackPane = new StackPane()

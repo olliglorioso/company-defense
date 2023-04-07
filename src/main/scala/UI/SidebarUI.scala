@@ -18,10 +18,11 @@ import Logic.GameMap
 import scalafx.scene.control.Label
 import scalafx.beans.property.ObjectProperty
 import scalafx.scene.control.Labeled
+import scalafx.beans.property.BufferProperty
 
-class SidebarUI(pane: Pane, mapInst: GameMap, variatesRef: ObjectProperty[Map[String, Double]]) extends VBox {
-    val regularTower = new TowerButtonUI(REGULAR_TOWER_LOC, R_NAME, R_COST, "What can a school kid do?", pane, mapInst, variatesRef)
-    val slowDownTower = new TowerButtonUI(SLOW_DOWN_TOWER_LOC, S_NAME, S_COST, "Slows down profits.", pane, mapInst, variatesRef)
+class SidebarUI(pane: Pane, mapInst: GameMap, variatesRef: ObjectProperty[Map[String, Double]], towersOnMap: BufferProperty[Tower]) extends VBox {
+    val regularTower = new TowerButtonUI(REGULAR_TOWER_LOC, R_NAME, R_COST, "What can a school kid do?", pane, mapInst, variatesRef, towersOnMap)
+    val slowDownTower = new TowerButtonUI(SLOW_DOWN_TOWER_LOC, S_NAME, S_COST, "Slows down profits.", pane, mapInst, variatesRef, towersOnMap)
     // Label for showing money amount
     val moneyLabel = new Label(variatesRef.value("money").toString()) {
         style = "-fx-font: normal bold 20 Langdon; " + "-fx-base: #AE3522; " + "-fx-text-fill: orange;"
