@@ -6,6 +6,7 @@ import scala.collection.immutable.Queue
 import scala.collection.mutable.Buffer
 import Util.Constants.UI_TILE_SIZE
 import scalafx.scene.layout.Pane
+import scalafx.beans.property.ObjectProperty
 
 case class Enemy(
     path: String,
@@ -47,7 +48,7 @@ case class Enemy(
     if (health < 0) "Remove" else "Nothing"
   }
 
-  def move(newEnemies: Buffer[Enemy], pane: Pane): Unit = 
+  def move(newEnemies: Buffer[Enemy], pane: Pane, variates: ObjectProperty[Map[String, Double]]): Unit = 
     val (currY, currX) = (translateY.value, translateX.value)
     val (tileY, tileX) = (
       previousTile.coord._1 * UI_TILE_SIZE,
@@ -72,6 +73,7 @@ case class Enemy(
     if (distance <= speed) {
       if (nextTile.getTurn() == End) {
         pane.children.remove(this)
+        variates.setValue(variates.value.updated("health", variates.value("health") - 1))
         return
       } else {
         getNextTile()

@@ -92,7 +92,6 @@ class GameplayUI(w: Double, h: Double) extends Scene(w, h) {
       val bullet: Bullet = tower.initBullet(time)
       if (bullet != null) then 
         bullet.toFront()
-        println(bullet)
         pane.children.add(bullet)
         bulletsOnMap.value = bulletsOnMap.value :+ bullet
     }
@@ -133,7 +132,7 @@ class GameplayUI(w: Double, h: Double) extends Scene(w, h) {
           }
           val newEnemies = Buffer[Enemy]()
           for (enemy <- enemiesOnMap) {
-            enemy.move(newEnemies, pane)
+            enemy.move(newEnemies, pane, variates)
           }
           enemiesOnMap = newEnemies
           editPriorityQueues()
