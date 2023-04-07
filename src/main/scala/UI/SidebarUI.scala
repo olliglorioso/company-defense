@@ -15,16 +15,29 @@ import scalafx.scene.shape.Rectangle
 import scalafx.scene.input.TransferMode
 import scalafx.scene.Scene
 import Logic.GameMap
+import scalafx.scene.control.Label
+import scalafx.beans.property.ObjectProperty
+import scalafx.scene.control.Labeled
 
-class SidebarUI(pane: Pane, mapInst: GameMap, var variates: Map[String, Double]) extends VBox {
-    val regularTower = new TowerButtonUI(REGULAR_TOWER_LOC, R_NAME, R_COST, "What can a school kid do?", pane, mapInst, variates)
-    val slowDownTower = new TowerButtonUI(SLOW_DOWN_TOWER_LOC, S_NAME, S_COST, "Slows down profits.", pane, mapInst, variates)
+class SidebarUI(pane: Pane, mapInst: GameMap, variatesRef: ObjectProperty[Map[String, Double]]) extends VBox {
+    val regularTower = new TowerButtonUI(REGULAR_TOWER_LOC, R_NAME, R_COST, "What can a school kid do?", pane, mapInst, variatesRef)
+    val slowDownTower = new TowerButtonUI(SLOW_DOWN_TOWER_LOC, S_NAME, S_COST, "Slows down profits.", pane, mapInst, variatesRef)
+    // Label for showing money amount
+    val moneyLabel = new Label(variatesRef.value("money").toString()) {
+        style = "-fx-font: normal bold 20 Langdon; " + "-fx-base: #AE3522; " + "-fx-text-fill: orange;"
+    }
+
+    // Update money label
+    variatesRef.onChange((_, _, newValue) => {
+        moneyLabel.text = newValue("money").toString()
+    })
 
     padding = Insets(20)
     spacing = 10
     children = Seq(
         regularTower,
-        slowDownTower
+        slowDownTower,
+        moneyLabel
     )
     // set sidebar width
     prefWidth = SIDEBAR_WIDTH

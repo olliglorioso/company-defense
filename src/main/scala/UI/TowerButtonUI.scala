@@ -9,8 +9,9 @@ import scalafx.scene.layout._
 import scalafx.scene.shape.Circle
 import Util.Constants._
 import Logic.GameMap
+import scalafx.beans.property.ObjectProperty
 
-class TowerButtonUI(picLoc: String, name: String, price: Int, desc: String, pane: Pane, mapInst: GameMap, var variates: Map[String, Double]) extends Button {
+class TowerButtonUI(picLoc: String, name: String, price: Int, desc: String, pane: Pane, mapInst: GameMap, variates: ObjectProperty[Map[String, Double]]) extends Button {
     val image = new Image(picLoc)
     val originalPos = (layoutX, layoutY)
     val imageView = new ImageView(image) {
@@ -57,7 +58,7 @@ class TowerButtonUI(picLoc: String, name: String, price: Int, desc: String, pane
         }
     }
     onMouseDragged = (event: MouseEvent) => {
-        if (variates("money") < price) {
+        if (variates.value("money") < price) {
             print("not enough money")
         } else {
             val newPos = calculateNewPosition(event, userData)
@@ -90,8 +91,8 @@ class TowerButtonUI(picLoc: String, name: String, price: Int, desc: String, pane
             stackPane.translateX = event.getSceneX() - (minWidth() / 2)
             stackPane.translateY = event.getSceneY() - (minHeight() / 2)
             // Return the button to its original position
-            variates = variates.updated("money", variates("money") - price)
-            println(variates("money"))
+            variates.value = variates.value.updated("money", variates.value("money") - price)
+            println(variates.value("money"))
             pane.children.add(stackPane)
             translateX = x
             translateY = y

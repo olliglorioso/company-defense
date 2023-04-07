@@ -29,6 +29,7 @@ import scala.collection.mutable.Buffer
 import Util.Constants._
 import scalafx.scene.control.Tooltip
 import scalafx.beans.property.DoubleProperty
+import java.sql.Ref
 
 sealed abstract class EnemyType(val value: Int)
 case object BasicEnemy extends EnemyType(1)
@@ -50,6 +51,7 @@ class GameplayUI (w: Double, h: Double) extends Scene (w, h) {
   val map = createMap(squareSide, mapInst.map)
   var enemiesOnMap = Buffer[Enemy]()
   var variates = Map("money" -> 100.0, "lives" -> 10.0, "waveNo" -> 0.0, "score" -> 0.0)
+  val variatesRef = ObjectProperty(variates)
 
   var timerStarted = false
   var startTime = 0L
@@ -61,7 +63,7 @@ class GameplayUI (w: Double, h: Double) extends Scene (w, h) {
     prefHeight = h
   }
     
-  val sidebar = SidebarUI(pane, mapInst, variates)
+  val sidebar = SidebarUI(pane, mapInst, variatesRef)
   sidebar.toFront()
 
   root = new BorderPane {
