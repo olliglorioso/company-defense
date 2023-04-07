@@ -19,6 +19,8 @@ import scalafx.scene.control.Label
 import scalafx.beans.property.ObjectProperty
 import scalafx.scene.control.Labeled
 import scalafx.beans.property.BufferProperty
+import scalafx.geometry.Rectangle2D
+import scalafx.stage.Screen
 
 class SidebarUI(
     pane: Pane,
@@ -49,23 +51,28 @@ class SidebarUI(
     towersOnMap,
     showMessage
   )
+
+  val visualBounds: Rectangle2D = Screen.primary.visualBounds
+  val (h, w) = (visualBounds.getHeight, visualBounds.getWidth)
   // Label for showing money amount
   val moneyLabel = new Label(variatesRef.value("money").toString()) {
     style =
       "-fx-font: normal bold 20 Langdon; " + "-fx-base: #AE3522; " + "-fx-text-fill: orange;"
+    translateY = h - 100
   }
 
   // Update money label
   variatesRef.onChange((_, _, newValue) => {
     moneyLabel.text = newValue("money").toString()
   })
+    
 
   padding = Insets(20)
   spacing = 10
   children = Seq(
+    moneyLabel,
     regularTower,
     slowDownTower,
-    moneyLabel
   )
   // set sidebar width
   prefWidth = SIDEBAR_WIDTH
