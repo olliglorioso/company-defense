@@ -11,7 +11,7 @@ case class Enemy(
     speed1: Int,
     pathQueue: Queue[PathTile],
     health1: Int
-) extends GameObject(path, size, name) {
+) extends GameObject(path, size) {
   var health = health1
   var speed = speed1
   var boundBox = 19

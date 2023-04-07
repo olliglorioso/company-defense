@@ -1,11 +1,12 @@
 package Logic
-import Logic.*
+import Logic._
 import scalafx.Includes.jfxMouseEvent2sfx
 import scalafx.scene.input.InputIncludes.jfxMouseEvent2sfx
 import scala.collection.mutable.PriorityQueue
+import Util.Constants._
 
-case class Tower(path: String, size: Int, name: String, price: Int, range: Int)
-    extends GameObject(path, size, name) {
+abstract class Tower(path: String, price: Int, range: Int)
+    extends GameObject(path, TOWER_SIDE) {
 
     def enemyPriorityCalc(enemy: Enemy): Double = {
         val distToEnemy = enemy.getDistanceToPoint(x.value, y.value)
@@ -26,10 +27,13 @@ case class Tower(path: String, size: Int, name: String, price: Int, range: Int)
     }
 
     def canShootTowardsEnemy(enemy: Enemy): Boolean = {
-        val distToEnemy = enemy.getDistanceToPoint(x.value, y.value)
+        val towerLoc = localToScene(x.value, y.value)
+        val distToEnemy = enemy.getDistanceToPoint(towerLoc.x, towerLoc.y)
         if (distToEnemy <= range) true
         else false
     }
+
+    def initBullet(time: Long): Bullet
 
     def rotateTowardsPriorityEnemy() = {
         if (enemyPriority.nonEmpty) {

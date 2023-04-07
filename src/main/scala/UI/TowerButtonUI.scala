@@ -4,11 +4,10 @@ import scalafx.scene.image._
 import scalafx.scene.control._
 import scala.concurrent.duration.Duration
 import javafx.scene.input.MouseEvent
-import Logic.Tower
+import Logic._
 import scalafx.scene.layout._
 import scalafx.scene.shape.Circle
 import Util.Constants._
-import Logic.GameMap
 import scalafx.beans.property._
 import scala.util.control.Breaks._
 
@@ -98,6 +97,37 @@ class TowerButtonUI(
       "-fx-background-color: red;"
     }
   }
+
+  def placeNewTowerIfMoney(towerX: Double, towerY: Double, x: Double, y: Double) = {
+    if (variates.value("money") >= price) then
+      // Create a new Tower instance in this position
+      val newTower = name match {
+        case R_NAME => new RegularTower()
+        case S_NAME => new SlowDownTower()
+      }
+      // make tooltip to stay when mouse over it
+      val info = new Button() {
+        tooltip_=(tt)
+        minWidth = TOWER_SIDE
+        minHeight = TOWER_SIDE
+      }
+      towersOnMap.value = towersOnMap.value :+ newTower
+      newTower.x = towerX
+      newTower.y = towerY
+      val stackPane = new StackPane()
+      info.style =
+        "-fx-background-color: transparent; -fx-border-color: transparent;" // Tooltip button style (transparent)
+      stackPane.getChildren().addAll(newTower, info)
+      stackPane.translateX = towerX
+      stackPane.translateY = towerY
+      // Return the button to its original position
+      variates.value =
+        variates.value.updated("money", variates.value("money") - price)
+      pane.children.add(stackPane)
+      translateX = x
+      translateY = y
+      style = "-fx-background-color: transparent;"
+  }
     
   onMouseDragged = (event: MouseEvent) => {
     if (variates.value("money") < price) {
@@ -120,6 +150,13 @@ class TowerButtonUI(
       userData.asInstanceOf[(Double, Double, Double, Double)]
     val towerX = event.getSceneX() - (minWidth() / 2)
     val towerY = event.getSceneY() - (minHeight() / 2)
+
+    def setStartPos() = {
+      val transbg = "-fx-background-color: transparent;"
+      translateX = x
+      translateY = y
+      style = transbg
+    }
     // Illegal positions not allowed
     if (!mapInst.isBgTile(event.getSceneY(), event.getSceneX())) {
       showMessage(
@@ -127,45 +164,16 @@ class TowerButtonUI(
         "error",
         1
       )
-      translateX = x
-      translateY = y
-      style = "-fx-background-color: transparent;"
+      setStartPos()
     } else if (!towerCanBePlaced(towerX, towerY)) {
         showMessage(
           "You can't place a tower there!",
           "error",
           1
         )
-        translateX = x
-        translateY = y
-        style = "-fx-background-color: transparent;"
+        setStartPos()
     } else {
-      if (variates.value("money") >= price) then
-        // Create a new Tower instance in this position
-        val newTower = new Tower(picLoc, TOWER_SIDE, name, price, 50)
-        // make tooltip to stay when mouse over it
-        val info = new Button() {
-          tooltip_=(tt)
-          minWidth = TOWER_SIDE
-          minHeight = TOWER_SIDE
-        }
-        towersOnMap.value = towersOnMap.value :+ newTower
-        newTower.x = towerX
-        newTower.y = towerY
-        val stackPane = new StackPane()
-        info.style =
-          "-fx-background-color: transparent; -fx-border-color: transparent;" // Tooltip button style (transparent)
-        stackPane.getChildren().addAll(newTower, info)
-        stackPane.translateX = towerX
-        stackPane.translateY = towerY
-        // Return the button to its original position
-        variates.value =
-          variates.value.updated("money", variates.value("money") - price)
-        pane.children.add(stackPane)
-        translateX = x
-        translateY = y
-        style = "-fx-background-color: transparent;"
+      placeNewTowerIfMoney(towerX, towerY, x, y)
     }
-
   }
 }

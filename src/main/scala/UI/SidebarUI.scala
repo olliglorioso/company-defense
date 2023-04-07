@@ -2,7 +2,6 @@ package UI
 
 import Util.Constants._
 import scalafx.geometry.Insets
-import Logic.Tower
 import scalafx.scene.control.Tooltip
 import scalafx.scene.layout._
 import javafx.scene.input.MouseEvent
@@ -23,7 +22,7 @@ import scalafx.geometry.Rectangle2D
 import scalafx.stage.Screen
 import scalafx.scene.paint.Color
 import scalafx.scene.image.ImageView
-import Logic.Bullet
+import Logic._
 
 class SidebarUI(
     pane: Pane,
@@ -103,8 +102,7 @@ class SidebarUI(
     healthLabel,
     scoreLabel,
     regularTower,
-    slowDownTower,
-    regularBullet
+    slowDownTower
   )
   // set sidebar width
   prefWidth = SIDEBAR_WIDTH

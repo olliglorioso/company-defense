@@ -51,6 +51,7 @@ class GameplayUI(w: Double, h: Double) extends Scene(w, h) {
   val map = createMap(squareSide, mapInst.map)
   var enemiesOnMap = Buffer[Enemy]()
   var towersOnMap = BufferProperty[Tower](Seq())
+  var bulletsOnMap = BufferProperty[Bullet](Seq())
   val variates = ObjectProperty(
     Map("money" -> 500.0, "health" -> 10.0, "waveNo" -> 0.0, "score" -> 0.0)
   )
@@ -87,6 +88,23 @@ class GameplayUI(w: Double, h: Double) extends Scene(w, h) {
     }
   }
 
+  def createBullets(time: Long) = {
+    for (tower <- towersOnMap.value) {
+      val bullet: Bullet = tower.initBullet(time)
+      if (bullet != null) then 
+        bullet.toFront()
+        println(bullet)
+        pane.children.add(bullet)
+        bulletsOnMap.value = bulletsOnMap.value :+ bullet
+    }
+  }
+
+  def moveBullets(time: Long) = {
+    for (bullet <- bulletsOnMap.value) {
+      bullet.move(time)
+    }
+  }
+
   /** Creates a basic clock for the game. Started when current gameplay starts.
     *
     * @return
@@ -120,6 +138,8 @@ class GameplayUI(w: Double, h: Double) extends Scene(w, h) {
           }
           enemiesOnMap = newEnemies
           editPriorityQueues()
+          createBullets(time)
+          moveBullets(time)
         }
       }
     }
