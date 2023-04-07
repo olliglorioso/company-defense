@@ -152,8 +152,8 @@ class GameMap(path: String) {
     *   True if the tile is BgTile, false otherwise (PathTile / Sidebar area).
     */
   def isBgTile = (x: Double, y: Double) => {
-    val xCoord = (x / 89.5).toInt
-    val yCoord = (y / 89.5).toInt
+    val xCoord = (x / UI_TILE_SIZE).toInt
+    val yCoord = (y / UI_TILE_SIZE).toInt
     if (
       xCoord < 0 || yCoord < 0 || xCoord > (MAP_HEIGHT - 1) || yCoord > (MAP_WIDTH - 1)
     ) then false

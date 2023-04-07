@@ -17,8 +17,9 @@ case class Enemy(
   var (nextTile, queue) =
     pathQueue.dequeue // Take start point and create queue class variable.
   var previousTile = nextTile
-
   getNextTile()
+
+  def getDistanceToPoint (towerX: Double, towerY: Double) = math.sqrt(math.pow(x.value - towerX, 2) + math.pow(y.value - towerY, 2))
 
   def getNextTile(): PathTile = {
     try

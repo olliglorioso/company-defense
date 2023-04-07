@@ -29,4 +29,5 @@ object Constants {
   val R_NAME = "Nerdinator" // Regular Tower name
   val S_NAME = "Hacktivist" // Slow Down Tower name
   val TOWER_SIDE = 80
+  val UI_TILE_SIZE = 89.5
 }

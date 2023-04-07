@@ -90,7 +90,9 @@ class SidebarUI(
 
   // Update money label
   variatesRef.onChange((_, _, newValue) => {
-    moneyLabel.text = newValue("money").toString()
+    moneyLabel.text = newValue("money").toInt.toString()
+    scoreLabel.text = newValue("score").toInt.toString()
+    healthLabel.text = newValue("health").toInt.toString()
   })
     
 

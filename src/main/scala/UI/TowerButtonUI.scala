@@ -74,35 +74,30 @@ class TowerButtonUI(
       * @param y
       * @return
       */
-    def towerCanBePlaced(x: Double, y: Double): Boolean = {
-      var broken = false
-      println(x.toString() + " "+  y.toString())
-      breakable {
-        towersOnMap.value.forall( tower => {
-            // Euclidean distance
-            println(tower.x.value.toString() + " "+  tower.y.value.toString())
-            val distance = math.sqrt(math.pow(tower.x.value - x, 2) + math.pow(tower.y.value - y, 2))
-            if (distance < (TOWER_SIDE / 2)) then 
-              broken = true
-              break()
-            else
-              true
-          }
-        )
-      }
-      !broken
+  def towerCanBePlaced(x: Double, y: Double): Boolean = {
+    var broken = false
+    breakable {
+      towersOnMap.value.forall( tower => {
+          // Euclidean distance
+          val distance = math.sqrt(math.pow(tower.x.value - x, 2) + math.pow(tower.y.value - y, 2))
+          if (distance < (TOWER_SIDE / 2)) then 
+            broken = true
+            break()
+          else
+            true
+        }
+      )
     }
+    !broken
+  }
 
   def getButtonStyle(event: MouseEvent, mapInst: GameMap): String = {
-    println(towerCanBePlaced(event.getSceneX(), event.getSceneY()))
     if (mapInst.isBgTile(event.getSceneY(), event.getSceneX()) && towerCanBePlaced(event.getSceneX() - (TOWER_SIDE / 2), event.getSceneY() - (TOWER_SIDE / 2))) {
       "-fx-background-color: green;"
     } else {
       "-fx-background-color: red;"
     }
   }
-
-  
     
   onMouseDragged = (event: MouseEvent) => {
     if (variates.value("money") < price) {
@@ -157,7 +152,6 @@ class TowerButtonUI(
         towersOnMap.value = towersOnMap.value :+ newTower
         newTower.x = towerX
         newTower.y = towerY
-        println(newTower.x.toString() + newTower.y.toString())
         val stackPane = new StackPane()
         info.style =
           "-fx-background-color: transparent; -fx-border-color: transparent;" // Tooltip button style (transparent)
