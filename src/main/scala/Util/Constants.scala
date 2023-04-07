@@ -10,8 +10,8 @@ object Constants {
     val CAMOUFLAGED_ENEMY_LOC = "file:src/main/scala/resources/Enemies/CamouflagedEnemy.png"
     val SWARM_ENEMY_LOC = "file:src/main/scala/resources/Enemies/SwarmEnemy.png"
     val TANK_ENEMY_LOC = "file:src/main/scala/resources/Enemies/TankEnemy.png"
-    val REGULAR_TOWER_LOC = "file:src/main/scala/resources/RegularTower.png"
-    val SLOW_DOWN_TOWER_LOC = "file:src/main/scala/resources/SlowDownTower.png"
+    val REGULAR_TOWER_LOC = "file:src/main/scala/resources/Towers/RegularTower.png"
+    val SLOW_DOWN_TOWER_LOC = "file:src/main/scala/resources/Towers/SlowDownTower.png"
     val MAP_HEIGHT = 12
     val MAP_WIDTH = 20
     val SIDEBAR_WIDTH = 130
