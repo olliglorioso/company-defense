@@ -8,18 +8,22 @@ case class Enemy(
     path: String,
     size: Int,
     name: String,
-    speed: Int,
-    pathQueue: Queue[PathTile]
+    speed1: Int,
+    pathQueue: Queue[PathTile],
+    health1: Int
 ) extends GameObject(path, size, name) {
-  var health = 100
-  var speed1 = speed
+  var health = health1
+  var speed = speed1
   var boundBox = 19
   var (nextTile, queue) =
     pathQueue.dequeue // Take start point and create queue class variable.
   var previousTile = nextTile
   getNextTile()
 
-  def getDistanceToPoint (towerX: Double, towerY: Double) = math.sqrt(math.pow(x.value - towerX, 2) + math.pow(y.value - towerY, 2))
+  def getDistanceToPoint (towerX: Double, towerY: Double) = {
+    val scenevals = localToScene(x.value, y.value)
+    math.sqrt(math.pow(scenevals.x - towerX, 2) + math.pow(scenevals.y - towerY, 2))
+  }
 
   def getNextTile(): PathTile = {
     try
@@ -35,8 +39,10 @@ case class Enemy(
   }
 
   def getHit(damage: Int, slowDown: Int = 0): String = {
-    if (slowDown > 0) speed1 = speed1 - slowDown
+    if (slowDown > 0) speed = speed - slowDown
     health = health - damage
     if (health < 0) "Remove" else "Nothing"
   }
+
+  // add a health bar next to the neemy
 }

@@ -74,9 +74,12 @@ class GameplayUI(w: Double, h: Double) extends Scene(w, h) {
     right = sidebar // Sidebar area
   }
 
+  /**
+    * Creates a new priority queue for each tower on the map.
+    */
   def editPriorityQueues() = {
     for (tower <- towersOnMap.value) {
-      tower.clearPriorityQueue()
+      tower.clearPriorityQueue()  // Clear the whole priority queue every time (have to remove and reinsert enemies anyway)
       for (enemy <- enemiesOnMap) {
         tower.addEnemyToPriorityQueue(enemy)
         tower.rotateTowardsPriorityEnemy()
@@ -217,14 +220,15 @@ class GameplayUI(w: Double, h: Double) extends Scene(w, h) {
   def spawnEnemy(enemyType: EnemyType): Enemy = {
     val enemy = enemyType match
       case BasicEnemy =>
-        Enemy(BASIC_ENEMY_LOC, squareSide.toInt, "IBM", 2, mapInst.pathQueue)
+        Enemy(BASIC_ENEMY_LOC, squareSide.toInt, "IBM", 2, mapInst.pathQueue, 100)
       case SplittingEnemy =>
         Enemy(
           SPLITTING_ENEMY_LOC,
           squareSide.toInt,
           "Google",
           5,
-          mapInst.pathQueue
+          mapInst.pathQueue,
+          200
         )
       case CamouflagedEnemy =>
         Enemy(
@@ -232,12 +236,13 @@ class GameplayUI(w: Double, h: Double) extends Scene(w, h) {
           squareSide.toInt,
           "TSMC",
           3,
-          mapInst.pathQueue
+          mapInst.pathQueue,
+          100
         )
       case FlockEnemy =>
-        Enemy(BASIC_ENEMY_LOC, squareSide.toInt, "TSMC", 3, mapInst.pathQueue)
+        Enemy(BASIC_ENEMY_LOC, squareSide.toInt, "TSMC", 3, mapInst.pathQueue, 100)
       case TankEnemy =>
-        Enemy(BASIC_ENEMY_LOC, squareSide.toInt, "TSMC", 3, mapInst.pathQueue)
+        Enemy(BASIC_ENEMY_LOC, squareSide.toInt, "TSMC", 3, mapInst.pathQueue, 100)
     val startY =
       if (mapInst.startPoint.coord._1 == 0) then -1
       else mapInst.startPoint.coord._1
@@ -270,12 +275,12 @@ class GameplayUI(w: Double, h: Double) extends Scene(w, h) {
     val (vx, vy) =
       if (distance > 0)
         (
-          ((dx / distance) * enemy.speed1).round.toInt,
-          ((dy / distance) * enemy.speed1).round.toInt
+          ((dx / distance) * enemy.speed).round.toInt,
+          ((dy / distance) * enemy.speed).round.toInt
         )
       else (0, 0)
 
-    if (distance <= enemy.speed1) {
+    if (distance <= enemy.speed) {
       if (enemy.nextTile.getTurn() == End) {
         pane.children.remove(enemy)
         return

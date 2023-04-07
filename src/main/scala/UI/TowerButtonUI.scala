@@ -142,7 +142,7 @@ class TowerButtonUI(
     } else {
       if (variates.value("money") >= price) then
         // Create a new Tower instance in this position
-        val newTower = new Tower(picLoc, TOWER_SIDE, name, price, 10)
+        val newTower = new Tower(picLoc, TOWER_SIDE, name, price, 50)
         // make tooltip to stay when mouse over it
         val info = new Button() {
           tooltip_=(tt)
