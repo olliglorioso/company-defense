@@ -28,8 +28,7 @@ import Util.FileHandler
 import scala.collection.mutable.Buffer
 import Util.Constants._
 import scalafx.scene.control.Tooltip
-import scalafx.beans.property.DoubleProperty
-import java.sql.Ref
+import scalafx.beans.property._
 
 sealed abstract class EnemyType(val value: Int)
 case object BasicEnemy extends EnemyType(1)
@@ -50,8 +49,8 @@ class GameplayUI (w: Double, h: Double) extends Scene (w, h) {
   val waves: Array[Queue[EnemyType]] = generateWaves("test_wavedata.txt")
   val map = createMap(squareSide, mapInst.map)
   var enemiesOnMap = Buffer[Enemy]()
-  val variates = Map("money" -> 50.0, "lives" -> 10.0, "waveNo" -> 0.0, "score" -> 0.0)
-  val variatesRef = ObjectProperty(variates)
+  val towersOnMap = BufferProperty(Seq[Tower]())
+  val variates = ObjectProperty(Map("money" -> 50.0, "lives" -> 10.0, "waveNo" -> 0.0, "score" -> 0.0))
 
   var timerStarted = false
   var startTime = 0L
@@ -63,7 +62,7 @@ class GameplayUI (w: Double, h: Double) extends Scene (w, h) {
     prefHeight = h
   }
     
-  val sidebar = SidebarUI(pane, mapInst, variatesRef)
+  val sidebar = SidebarUI(pane, mapInst, variates)
   sidebar.toFront()
 
   root = new BorderPane {
@@ -86,9 +85,9 @@ class GameplayUI (w: Double, h: Double) extends Scene (w, h) {
         lastTime = time
       } else {
         if (time - lastTime >= 1000000000L) {
-          val currWave = waves(variates("waveNo").toInt)
+          val currWave = waves(variates.value("waveNo").toInt)
           if (currWave.length < 1) {
-            if (enemiesOnMap.length < 1) variatesRef.value = variatesRef.value.updated("waveNo", variates("waveNo") + 1)
+            if (enemiesOnMap.length < 1) variates.value = variates.value.updated("waveNo", variates.value("waveNo") + 1)
           } else {
             val newEnemyType = currWave.dequeue
             val enemy = spawnEnemy(newEnemyType)
@@ -115,22 +114,24 @@ class GameplayUI (w: Double, h: Double) extends Scene (w, h) {
    * @param text Text to be displayed
    * @param color Color of the text
    */
-  /*def message(text: String, color: Color): Unit = {
-    val label = new Label(text) {
-      style = "-fx-font-size: 30pt"
-      textFill = color
-      layoutX = (w - SIDEBAR_WIDTH) / 2 - 100
-      layoutY = h / 2 - 50
-    }
-    pane.children.add(label)
+  def message(text: String, color: Color): Unit = {
+    
+    var startTimeForMessage = 0L
     val timer2 = AnimationTimer { time => {
-      if (time - startTime >= 2000000000L) {
+      if (time - startTimeForMessage >= 2000000000L) {
         pane.children.remove(label)
-        timer2.stop()
       }
     }}
     timer2.start()
-  }*/
+  }
+
+  val label = new Label("MOIMOIMOIM") {
+    style = "-fx-font-size: 30pt"
+  }
+  label.toFront()
+  pane.getChildren().add(label)
+
+  message("Wave 1", Color.Green)
 
   /**
     * Generate enemy waves Array based on a file.

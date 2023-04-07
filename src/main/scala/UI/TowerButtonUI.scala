@@ -78,6 +78,8 @@ class TowerButtonUI(picLoc: String, name: String, price: Int, desc: String, pane
             style = "-fx-background-color: transparent;"
         } else {
             if (variates.value("money") >= price) then
+                val towerX = event.getSceneX() - (minWidth() / 2)
+                val towerY = event.getSceneY() - (minHeight() / 2)
                 // Create a new Tower instance in this position
                 val newTower = new Tower(picLoc, TOWER_SIDE, name, price)
                 // make tooltip to stay when mouse over it
@@ -86,14 +88,15 @@ class TowerButtonUI(picLoc: String, name: String, price: Int, desc: String, pane
                     minWidth = TOWER_SIDE
                     minHeight = TOWER_SIDE
                 }
+                newTower.x = towerX
+                newTower.y = towerY
                 val stackPane = new StackPane()
                 info.style = "-fx-background-color: transparent; -fx-border-color: transparent;" // Tooltip button style (transparent)
                 stackPane.getChildren().addAll(newTower, info)
-                stackPane.translateX = event.getSceneX() - (minWidth() / 2)
-                stackPane.translateY = event.getSceneY() - (minHeight() / 2)
+                stackPane.translateX = towerX
+                stackPane.translateY = towerY
                 // Return the button to its original position
                 variates.value = variates.value.updated("money", variates.value("money") - price)
-                println(variates.value("money"))
                 pane.children.add(stackPane)
                 translateX = x
                 translateY = y
