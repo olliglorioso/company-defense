@@ -67,14 +67,6 @@ class TowerButtonUI(
     (x - deltaX, y - deltaY)
   }
 
-  def getButtonStyle(event: MouseEvent, mapInst: GameMap): String = {
-    if (mapInst.isBgTile(event.getSceneY(), event.getSceneX()) && towerCanBePlaced(event.getSceneX(), event.getSceneY())) {
-      "-fx-background-color: green;"
-    } else {
-      "-fx-background-color: red;"
-    }
-  }
-
   /**
       * 
       * Does a tower hit a previously placed tower?
@@ -84,8 +76,11 @@ class TowerButtonUI(
       */
     def towerCanBePlaced(x: Double, y: Double): Boolean = {
       var broken = false
+      println(x.toString() + " "+  y.toString())
       breakable {
         towersOnMap.value.forall( tower => {
+            // Euclidean distance
+            println(tower.x.value.toString() + " "+  tower.y.value.toString())
             val distance = math.sqrt(math.pow(tower.x.value - x, 2) + math.pow(tower.y.value - y, 2))
             if (distance < (TOWER_SIDE / 2)) then 
               broken = true
@@ -97,6 +92,17 @@ class TowerButtonUI(
       }
       !broken
     }
+
+  def getButtonStyle(event: MouseEvent, mapInst: GameMap): String = {
+    println(towerCanBePlaced(event.getSceneX(), event.getSceneY()))
+    if (mapInst.isBgTile(event.getSceneY(), event.getSceneX()) && towerCanBePlaced(event.getSceneX() - (TOWER_SIDE / 2), event.getSceneY() - (TOWER_SIDE / 2))) {
+      "-fx-background-color: green;"
+    } else {
+      "-fx-background-color: red;"
+    }
+  }
+
+  
     
   onMouseDragged = (event: MouseEvent) => {
     if (variates.value("money") < price) {

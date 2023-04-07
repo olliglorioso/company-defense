@@ -57,7 +57,7 @@ class SidebarUI(
   val visualBounds: Rectangle2D = Screen.primary.visualBounds
   val (h, w) = (visualBounds.getHeight, visualBounds.getWidth)
   // Label for showing money amount
-  val moneyLabel = new Label(variatesRef.value("money").toString()) {
+  val moneyLabel = new Label(variatesRef.value("money").toInt.toString()) {
     style =
       "-fx-font: normal bold 20 Langdon; " + "-fx-base: #AE3522; " + "-fx-text-fill: orange;"
     translateY = h - 100
@@ -67,7 +67,7 @@ class SidebarUI(
     }
   }
 
-  val healthLabel = new Label(variatesRef.value("health").toString()) {
+  val healthLabel = new Label(variatesRef.value("health").toInt.toString()) {
     style =
       "-fx-font: normal bold 20 Langdon; " + "-fx-base: #AE3522; " + "-fx-text-fill: orange;"
     translateY = h - 175
@@ -77,7 +77,7 @@ class SidebarUI(
     }
   }
 
-  val scoreLabel = new Label(variatesRef.value("score").toString()) {
+  val scoreLabel = new Label(variatesRef.value("score").toInt.toString()) {
     style =
       "-fx-font: normal bold 20 Langdon; " + "-fx-base: #AE3522; " + "-fx-text-fill: orange;"
     translateY = h - 250
