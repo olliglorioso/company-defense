@@ -45,10 +45,9 @@ case object CamouflagedEnemy extends EnemyType(5)
   *   Scene height
   */
 class GameplayUI(w: Double, h: Double) extends Scene(w, h) {
-  val squareSide = (w - SIDEBAR_WIDTH) / MAP_WIDTH // 89.5
   val mapInst: GameMap = new GameMap("test_map.txt")
   val waves: Array[Queue[EnemyType]] = generateWaves("test_wavedata.txt")
-  val map = createMap(squareSide, mapInst.map)
+  val map = createMap(UI_TILE_SIZE, mapInst.map)
   var enemiesOnMap = Buffer[Enemy]()
   var towersOnMap = BufferProperty[Tower](Seq())
   var bulletsOnMap = BufferProperty[Bullet](Seq())
@@ -133,8 +132,8 @@ class GameplayUI(w: Double, h: Double) extends Scene(w, h) {
             }
           }
           val newEnemies = Buffer[Enemy]()
-          for (a <- enemiesOnMap) {
-            moveEnemy(a, newEnemies)
+          for (enemy <- enemiesOnMap) {
+            enemy.move(newEnemies, pane)
           }
           enemiesOnMap = newEnemies
           editPriorityQueues()
@@ -240,11 +239,11 @@ class GameplayUI(w: Double, h: Double) extends Scene(w, h) {
   def spawnEnemy(enemyType: EnemyType): Enemy = {
     val enemy = enemyType match
       case BasicEnemy =>
-        Enemy(BASIC_ENEMY_LOC, squareSide.toInt, "IBM", 2, mapInst.pathQueue, 100)
+        Enemy(BASIC_ENEMY_LOC, UI_TILE_SIZE.toInt, "IBM", 2, mapInst.pathQueue, 100)
       case SplittingEnemy =>
         Enemy(
           SPLITTING_ENEMY_LOC,
-          squareSide.toInt,
+          UI_TILE_SIZE.toInt,
           "Google",
           5,
           mapInst.pathQueue,
@@ -253,79 +252,35 @@ class GameplayUI(w: Double, h: Double) extends Scene(w, h) {
       case CamouflagedEnemy =>
         Enemy(
           CAMOUFLAGED_ENEMY_LOC,
-          squareSide.toInt,
+          UI_TILE_SIZE.toInt,
           "TSMC",
           3,
           mapInst.pathQueue,
           100
         )
       case FlockEnemy =>
-        Enemy(BASIC_ENEMY_LOC, squareSide.toInt, "TSMC", 3, mapInst.pathQueue, 100)
+        Enemy(BASIC_ENEMY_LOC, UI_TILE_SIZE.toInt, "TSMC", 3, mapInst.pathQueue, 100)
       case TankEnemy =>
-        Enemy(BASIC_ENEMY_LOC, squareSide.toInt, "TSMC", 3, mapInst.pathQueue, 100)
+        Enemy(BASIC_ENEMY_LOC, UI_TILE_SIZE.toInt, "TSMC", 3, mapInst.pathQueue, 100)
     val startY =
       if (mapInst.startPoint.coord._1 == 0) then -1
       else mapInst.startPoint.coord._1
     val startX =
       if (mapInst.startPoint.coord._2 == 0) then -1
       else mapInst.startPoint.coord._2
-    enemy.translateY = startY * squareSide
-    enemy.translateX = startX * squareSide
+    enemy.translateY = startY * UI_TILE_SIZE
+    enemy.translateX = startX * UI_TILE_SIZE
     enemy
-  }
-
-  /** Move given enemy in the map towards next tile in the path.
-    *
-    * @param enemy
-    */
-  def moveEnemy(enemy: Enemy, newEnemies: Buffer[Enemy]): Unit = {
-    val (currY, currX) = (enemy.translateY.value, enemy.translateX.value)
-    val (tileY, tileX) = (
-      enemy.previousTile.coord._1 * squareSide,
-      enemy.previousTile.coord._2 * squareSide
-    )
-    val (nextTileY, nextTileX) = (
-      enemy.nextTile.coord._1 * squareSide,
-      enemy.nextTile.coord._2 * squareSide
-    )
-    val (vecY, vecX) = (currY - tileY, currX - tileX)
-    val (dy, dx) = (nextTileY - currY, nextTileX - currX)
-
-    val distance = math.sqrt(dx * dx + dy * dy)
-    val (vx, vy) =
-      if (distance > 0)
-        (
-          ((dx / distance) * enemy.speed).round.toInt,
-          ((dy / distance) * enemy.speed).round.toInt
-        )
-      else (0, 0)
-
-    if (distance <= enemy.speed) {
-      if (enemy.nextTile.getTurn() == End) {
-        pane.children.remove(enemy)
-        return
-      } else {
-        enemy.getNextTile()
-        newEnemies += enemy
-      }
-    } else {
-      enemy.translateX.value += vx.toInt
-      enemy.translateY.value += vy
-      val angle = (math.atan2(dy, dx) * 180 / math.Pi).round.toInt
-      val roundedAngle = (Math.round(angle / 10.0) * 10).toInt
-      enemy.rotate = roundedAngle
-      newEnemies += enemy
-    }
   }
 
   /** Create map UI based on the Map-class's map.
     *
-    * @param squareSide
+    * @param UI_TILE_SIZE
     * @param mapTiles
     * @return
     */
   def createMap(
-      squareSide: Double,
+      UI_TILE_SIZE: Double,
       mapTiles: Array[Array[Tile]]
   ): Seq[Seq[Rectangle]] = {
     var mapBlocks: Seq[Seq[Rectangle]] = Seq()
@@ -337,11 +292,11 @@ class GameplayUI(w: Double, h: Double) extends Scene(w, h) {
         val rect = new Rectangle {
           // check if tile is BgTile-class
           fill = if (tile.isInstanceOf[BgTile]) Color.Green else Color.Brown
-          width = squareSide
-          height = squareSide
+          width = UI_TILE_SIZE
+          height = UI_TILE_SIZE
         }
-        rect.translateX = xPlus * squareSide
-        rect.translateY = yPlus * squareSide
+        rect.translateX = xPlus * UI_TILE_SIZE
+        rect.translateY = yPlus * UI_TILE_SIZE
         rowBlocks = rowBlocks :+ rect
         xPlus = xPlus + 1
       }
