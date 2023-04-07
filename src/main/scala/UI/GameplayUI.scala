@@ -113,12 +113,15 @@ class GameplayUI (w: Double, h: Double) extends Scene (w, h) {
    * @param text Text to be displayed
    * @param color Color of the text
    */
-  def message(text: String, color: Color): Unit = {
+  def showMessage(text: String, messageType: String, blinks: Int): Unit = {
     val label = new Label(text) {
-      style = "-fx-font-size: 100pt"
-      textFill = color
-      layoutX = (w - SIDEBAR_WIDTH) / 2 - 100
-      layoutY = h / 2 - 100
+      messageType match {
+        case error => style = "-fx-font-size: 100pt; -fx-text-fill: red; -fx-font-weight: bold"
+      }
+      // error message style
+      
+      layoutX = (w - SIDEBAR_WIDTH) / 2 - 200
+      layoutY = h / 2 - 200
       opacity = 1.0
     }
     label.toFront()
@@ -126,16 +129,18 @@ class GameplayUI (w: Double, h: Double) extends Scene (w, h) {
     var timerStarted = false
     var startTime = 0L
     var timer: AnimationTimer = null
+    var count = 0
     timer = AnimationTimer { time => {
-      // make it blinking
-      if ((time - startTime) % 25 == 0) {
-        label.opacity = 1 - label.opacity.value
-      }
       if (timerStarted == false) {
         startTime = time
         timerStarted = true
       } else {
-        if (time - startTime >= 3000000000L) {
+        if (time - startTime >= 500000000L) {
+          label.opacity = 1.0 - label.opacity.value
+          count += 1
+          startTime = time
+        }
+        if (count > blinks) {
           pane.children.remove(label)
           timer.stop()
         }
@@ -143,8 +148,6 @@ class GameplayUI (w: Double, h: Double) extends Scene (w, h) {
     }}
     timer.start()
   }
-
-  message("koira", Color.Red)
 
   /**
     * Generate enemy waves Array based on a file.
