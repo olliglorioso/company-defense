@@ -50,7 +50,7 @@ class GameplayUI (w: Double, h: Double) extends Scene (w, h) {
   val waves: Array[Queue[EnemyType]] = generateWaves("test_wavedata.txt")
   val map = createMap(squareSide, mapInst.map)
   var enemiesOnMap = Buffer[Enemy]()
-  var variates = Map("money" -> 100.0, "lives" -> 10.0, "waveNo" -> 0.0, "score" -> 0.0)
+  val variates = Map("money" -> 50.0, "lives" -> 10.0, "waveNo" -> 0.0, "score" -> 0.0)
   val variatesRef = ObjectProperty(variates)
 
   var timerStarted = false
@@ -73,33 +73,64 @@ class GameplayUI (w: Double, h: Double) extends Scene (w, h) {
     right = sidebar // Sidebar area
   }
 
+  /**
+    * Creates a basic clock for the game. Started when current gameplay starts.
+    *
+    * @return AnimationTimer
+    */
+  def createTimer(): AnimationTimer = {
+    val timer = AnimationTimer { time => {
+      if (timerStarted == false) {
+        startTime = time
+        timerStarted = true
+        lastTime = time
+      } else {
+        if (time - lastTime >= 1000000000L) {
+          val currWave = waves(variates("waveNo").toInt)
+          if (currWave.length < 1) {
+            if (enemiesOnMap.length < 1) variatesRef.value = variatesRef.value.updated("waveNo", variates("waveNo") + 1)
+          } else {
+            val newEnemyType = currWave.dequeue
+            val enemy = spawnEnemy(newEnemyType)
+            lastTime = time
+            pane.children.add(enemy)
+            enemiesOnMap += enemy
+          }
+        }
+        val newEnemies = Buffer[Enemy]()
+        for (a <- enemiesOnMap) {
+          moveEnemy(a, newEnemies)
+        }
+        enemiesOnMap = newEnemies
+      }
+    }}
+    timer
+  }
+
+  val timer = createTimer()
   
 
-  val timer = AnimationTimer { time => {
-    if (timerStarted == false) {
-      startTime = time
-      timerStarted = true
-      lastTime = time
-    } else {
-      if (time - lastTime >= 1000000000L) {
-        val currWave = waves(variates("waveNo").toInt)
-        if (currWave.length < 1) {
-          if (enemiesOnMap.length < 1) variates = variates.updated("waveNo", variates("waveNo") + 1)
-        } else {
-          val newEnemyType = currWave.dequeue
-          val enemy = spawnEnemy(newEnemyType)
-          lastTime = time
-          pane.children.add(enemy)
-          enemiesOnMap += enemy
-        }
-      }
-      val newEnemies = Buffer[Enemy]()
-      for (a <- enemiesOnMap) {
-        moveEnemy(a, newEnemies)
-      }
-      enemiesOnMap = newEnemies
+  /**
+   * Creates a blinking label to the middle of the screen for two seconds.
+   * @param text Text to be displayed
+   * @param color Color of the text
+   */
+  /*def message(text: String, color: Color): Unit = {
+    val label = new Label(text) {
+      style = "-fx-font-size: 30pt"
+      textFill = color
+      layoutX = (w - SIDEBAR_WIDTH) / 2 - 100
+      layoutY = h / 2 - 50
     }
-  }}
+    pane.children.add(label)
+    val timer2 = AnimationTimer { time => {
+      if (time - startTime >= 2000000000L) {
+        pane.children.remove(label)
+        timer2.stop()
+      }
+    }}
+    timer2.start()
+  }*/
 
   /**
     * Generate enemy waves Array based on a file.

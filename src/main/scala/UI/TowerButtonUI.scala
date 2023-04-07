@@ -77,26 +77,27 @@ class TowerButtonUI(picLoc: String, name: String, price: Int, desc: String, pane
             translateY = y
             style = "-fx-background-color: transparent;"
         } else {
-            // Create a new Tower instance in this position
-            val newTower = new Tower(picLoc, TOWER_SIDE, name, price)
-            // make tooltip to stay when mouse over it
-            val info = new Button() {
-                tooltip_=(tt)
-                minWidth = TOWER_SIDE
-                minHeight = TOWER_SIDE
-            }
-            val stackPane = new StackPane()
-            info.style = "-fx-background-color: transparent; -fx-border-color: transparent;" // Tooltip button style (transparent)
-            stackPane.getChildren().addAll(newTower, info)
-            stackPane.translateX = event.getSceneX() - (minWidth() / 2)
-            stackPane.translateY = event.getSceneY() - (minHeight() / 2)
-            // Return the button to its original position
-            variates.value = variates.value.updated("money", variates.value("money") - price)
-            println(variates.value("money"))
-            pane.children.add(stackPane)
-            translateX = x
-            translateY = y
-            style = "-fx-background-color: transparent;"
+            if (variates.value("money") >= price) then
+                // Create a new Tower instance in this position
+                val newTower = new Tower(picLoc, TOWER_SIDE, name, price)
+                // make tooltip to stay when mouse over it
+                val info = new Button() {
+                    tooltip_=(tt)
+                    minWidth = TOWER_SIDE
+                    minHeight = TOWER_SIDE
+                }
+                val stackPane = new StackPane()
+                info.style = "-fx-background-color: transparent; -fx-border-color: transparent;" // Tooltip button style (transparent)
+                stackPane.getChildren().addAll(newTower, info)
+                stackPane.translateX = event.getSceneX() - (minWidth() / 2)
+                stackPane.translateY = event.getSceneY() - (minHeight() / 2)
+                // Return the button to its original position
+                variates.value = variates.value.updated("money", variates.value("money") - price)
+                println(variates.value("money"))
+                pane.children.add(stackPane)
+                translateX = x
+                translateY = y
+                style = "-fx-background-color: transparent;"
         }
         
     }

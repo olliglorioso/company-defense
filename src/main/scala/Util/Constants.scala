@@ -5,13 +5,13 @@ import scalafx.scene.image.{Image, ImageView}
 
 
 object Constants {
-    val BASIC_ENEMY_LOC = "file:src/main/scala/resources/Enemies/BasicEnemy.jpg"
-    val SPLITTING_ENEMY_LOC = "file:src/main/scala/resources/Enemies/SplittingEnemy.png"
-    val CAMOUFLAGED_ENEMY_LOC = "file:src/main/scala/resources/Enemies/CamouflagedEnemy.png"
-    val SWARM_ENEMY_LOC = "file:src/main/scala/resources/Enemies/SwarmEnemy.png"
-    val TANK_ENEMY_LOC = "file:src/main/scala/resources/Enemies/TankEnemy.png"
-    val REGULAR_TOWER_LOC = "file:src/main/scala/resources/Towers/RegularTower.png"
-    val SLOW_DOWN_TOWER_LOC = "file:src/main/scala/resources/Towers/SlowDownTower.png"
+    val BASIC_ENEMY_LOC = "file:src/main/scala/Resources/Enemies/BasicEnemy.jpg"
+    val SPLITTING_ENEMY_LOC = "file:src/main/scala/Resources/Enemies/SplittingEnemy.png"
+    val CAMOUFLAGED_ENEMY_LOC = "file:src/main/scala/Resources/Enemies/CamouflagedEnemy.png"
+    val SWARM_ENEMY_LOC = "file:src/main/scala/Resources/Enemies/SwarmEnemy.png"
+    val TANK_ENEMY_LOC = "file:src/main/scala/Resources/Enemies/TankEnemy.png"
+    val REGULAR_TOWER_LOC = "file:src/main/scala/Resources/Towers/RegularTower.png"
+    val SLOW_DOWN_TOWER_LOC = "file:src/main/scala/Resources/Towers/SlowDownTower.png"
     val MAP_HEIGHT = 12
     val MAP_WIDTH = 20
     val SIDEBAR_WIDTH = 130
