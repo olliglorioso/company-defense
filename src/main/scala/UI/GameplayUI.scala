@@ -118,19 +118,26 @@ class GameplayUI (w: Double, h: Double) extends Scene (w, h) {
       style = "-fx-font-size: 100pt"
       textFill = color
       layoutX = (w - SIDEBAR_WIDTH) / 2 - 100
-      layoutY = h / 2 - 50
+      layoutY = h / 2 - 100
+      opacity = 1.0
     }
     label.toFront()
     pane.children.add(label)
     var timerStarted = false
     var startTime = 0L
-    val timer = AnimationTimer { time => {
+    var timer: AnimationTimer = null
+    timer = AnimationTimer { time => {
+      // make it blinking
+      if ((time - startTime) % 25 == 0) {
+        label.opacity = 1 - label.opacity.value
+      }
       if (timerStarted == false) {
         startTime = time
         timerStarted = true
       } else {
-        if (time - startTime >= 2000000000L) {
+        if (time - startTime >= 3000000000L) {
           pane.children.remove(label)
+          timer.stop()
         }
       }
     }}
