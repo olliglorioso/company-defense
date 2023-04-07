@@ -23,6 +23,7 @@ import scalafx.geometry.Rectangle2D
 import scalafx.stage.Screen
 import scalafx.scene.paint.Color
 import scalafx.scene.image.ImageView
+import Logic.Bullet
 
 class SidebarUI(
     pane: Pane,
@@ -94,7 +95,6 @@ class SidebarUI(
     scoreLabel.text = newValue("score").toInt.toString()
     healthLabel.text = newValue("health").toInt.toString()
   })
-    
 
   padding = Insets(20)
   spacing = 10
@@ -104,6 +104,7 @@ class SidebarUI(
     scoreLabel,
     regularTower,
     slowDownTower,
+    regularBullet
   )
   // set sidebar width
   prefWidth = SIDEBAR_WIDTH
