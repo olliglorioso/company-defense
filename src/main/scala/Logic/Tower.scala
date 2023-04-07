@@ -25,6 +25,12 @@ case class Tower(path: String, size: Int, name: String, price: Int, range: Int)
         enemyPriority.clear()
     }
 
+    def canShootTowardsEnemy(enemy: Enemy): Boolean = {
+        val distToEnemy = enemy.getDistanceToPoint(x.value, y.value)
+        if (distToEnemy <= range) true
+        else false
+    }
+
     def rotateTowardsPriorityEnemy() = {
         if (enemyPriority.nonEmpty) {
             val enemy = enemyPriority.head
