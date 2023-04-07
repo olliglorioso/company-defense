@@ -116,10 +116,9 @@ class GameplayUI (w: Double, h: Double) extends Scene (w, h) {
   def showMessage(text: String, messageType: String, blinks: Int): Unit = {
     val label = new Label(text) {
       messageType match {
-        case error => style = "-fx-font-size: 100pt; -fx-text-fill: red; -fx-font-weight: bold"
+        case "error" => style = "-fx-font-size: 100pt; -fx-text-fill: red; -fx-background-color: black; -fx-padding: 20px; -fx-border-radius: 10px; -fx-background-radius: 10px;"
+        case "info" => style = "-fx-font-size: 100pt; -fx-text-fill: white; -fx-background-color: black; -fx-padding: 20px; -fx-border-radius: 10px; -fx-background-radius: 10px;"
       }
-      // error message style
-      
       layoutX = (w - SIDEBAR_WIDTH) / 2 - 200
       layoutY = h / 2 - 200
       opacity = 1.0
@@ -149,6 +148,7 @@ class GameplayUI (w: Double, h: Double) extends Scene (w, h) {
     timer.start()
   }
 
+  showMessage("Wave 1", "error", 4)
   /**
     * Generate enemy waves Array based on a file.
     *
