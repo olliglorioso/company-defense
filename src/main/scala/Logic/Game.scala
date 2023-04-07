@@ -11,7 +11,7 @@ class Game {
     val ui = new MainUI()
     ui.main(Array())
   }
-  
+
   end startProgram
 }
 

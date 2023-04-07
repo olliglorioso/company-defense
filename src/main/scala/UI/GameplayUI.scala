@@ -37,20 +37,23 @@ case object TankEnemy extends EnemyType(3)
 case object FlockEnemy extends EnemyType(4)
 case object CamouflagedEnemy extends EnemyType(5)
 
-/**
-  * Responsible for the main gameplay scene.
+/** Responsible for the main gameplay scene.
   *
-  * @param w Scene width
-  * @param h Scene height
+  * @param w
+  *   Scene width
+  * @param h
+  *   Scene height
   */
-class GameplayUI (w: Double, h: Double) extends Scene (w, h) {
+class GameplayUI(w: Double, h: Double) extends Scene(w, h) {
   val squareSide = (w - SIDEBAR_WIDTH) / MAP_WIDTH // 89.5
   val mapInst: GameMap = new GameMap("test_map.txt")
   val waves: Array[Queue[EnemyType]] = generateWaves("test_wavedata.txt")
   val map = createMap(squareSide, mapInst.map)
   var enemiesOnMap = Buffer[Enemy]()
   var towersOnMap = BufferProperty[Tower](Seq())
-  val variates = ObjectProperty(Map("money" -> 50.0, "lives" -> 10.0, "waveNo" -> 0.0, "score" -> 0.0))
+  val variates = ObjectProperty(
+    Map("money" -> 50.0, "lives" -> 10.0, "waveNo" -> 0.0, "score" -> 0.0)
+  )
   var timerStarted = false
   var startTime = 0L
   var lastTime = 0L
@@ -60,8 +63,8 @@ class GameplayUI (w: Double, h: Double) extends Scene (w, h) {
     prefWidth = (w - SIDEBAR_WIDTH)
     prefHeight = h
   }
-    
-  val sidebar = SidebarUI(pane, mapInst, variates, towersOnMap)
+
+  val sidebar = SidebarUI(pane, mapInst, variates, towersOnMap, showMessage)
   sidebar.toFront()
 
   root = new BorderPane {
@@ -71,53 +74,61 @@ class GameplayUI (w: Double, h: Double) extends Scene (w, h) {
     right = sidebar // Sidebar area
   }
 
-  /**
-    * Creates a basic clock for the game. Started when current gameplay starts.
+  /** Creates a basic clock for the game. Started when current gameplay starts.
     *
-    * @return AnimationTimer
+    * @return
+    *   AnimationTimer
     */
   def createTimer(): AnimationTimer = {
-    val timer = AnimationTimer { time => {
-      if (timerStarted == false) {
-        startTime = time
-        timerStarted = true
-        lastTime = time
-      } else {
-        if (time - lastTime >= 1000000000L) {
-          val currWave = waves(variates.value("waveNo").toInt)
-          if (currWave.length < 1) {
-            if (enemiesOnMap.length < 1) variates.value = variates.value.updated("waveNo", variates.value("waveNo") + 1)
-          } else {
-            val newEnemyType = currWave.dequeue
-            val enemy = spawnEnemy(newEnemyType)
-            lastTime = time
-            pane.children.add(enemy)
-            enemiesOnMap += enemy
+    val timer = AnimationTimer { time =>
+      {
+        if (timerStarted == false) {
+          startTime = time
+          timerStarted = true
+          lastTime = time
+        } else {
+          if (time - lastTime >= 1000000000L) {
+            val currWave = waves(variates.value("waveNo").toInt)
+            if (currWave.length < 1) {
+              if (enemiesOnMap.length < 1)
+                variates.value =
+                  variates.value.updated("waveNo", variates.value("waveNo") + 1)
+            } else {
+              val newEnemyType = currWave.dequeue
+              val enemy = spawnEnemy(newEnemyType)
+              lastTime = time
+              pane.children.add(enemy)
+              enemiesOnMap += enemy
+            }
           }
+          val newEnemies = Buffer[Enemy]()
+          for (a <- enemiesOnMap) {
+            moveEnemy(a, newEnemies)
+          }
+          enemiesOnMap = newEnemies
         }
-        val newEnemies = Buffer[Enemy]()
-        for (a <- enemiesOnMap) {
-          moveEnemy(a, newEnemies)
-        }
-        enemiesOnMap = newEnemies
       }
-    }}
+    }
     timer
   }
 
   val timer = createTimer()
-  
 
-  /**
-   * Creates a blinking label to the middle of the screen for two seconds.
-   * @param text Text to be displayed
-   * @param color Color of the text
-   */
+  /** Creates a blinking label to the middle of the screen for two seconds.
+    * @param text
+    *   Text to be displayed
+    * @param color
+    *   Color of the text
+    */
   def showMessage(text: String, messageType: String, blinks: Int): Unit = {
     val label = new Label(text) {
       messageType match {
-        case "error" => style = "-fx-font-size: 100pt; -fx-text-fill: red; -fx-background-color: black; -fx-padding: 20px; -fx-border-radius: 10px; -fx-background-radius: 10px;"
-        case "info" => style = "-fx-font-size: 100pt; -fx-text-fill: white; -fx-background-color: black; -fx-padding: 20px; -fx-border-radius: 10px; -fx-background-radius: 10px;"
+        case "error" =>
+          style =
+            "-fx-font-size: 100pt; -fx-text-fill: red; -fx-background-color: black; -fx-padding: 20px; -fx-border-radius: 10px; -fx-background-radius: 10px;"
+        case "info" =>
+          style =
+            "-fx-font-size: 100pt; -fx-text-fill: white; -fx-background-color: black; -fx-padding: 20px; -fx-border-radius: 10px; -fx-background-radius: 10px;"
       }
       layoutX = (w - SIDEBAR_WIDTH) / 2 - 200
       layoutY = h / 2 - 200
@@ -129,30 +140,31 @@ class GameplayUI (w: Double, h: Double) extends Scene (w, h) {
     var startTime = 0L
     var timer: AnimationTimer = null
     var count = 0
-    timer = AnimationTimer { time => {
-      if (timerStarted == false) {
-        startTime = time
-        timerStarted = true
-      } else {
-        if (time - startTime >= 500000000L) {
-          label.opacity = 1.0 - label.opacity.value
-          count += 1
+    timer = AnimationTimer { time =>
+      {
+        if (timerStarted == false) {
           startTime = time
-        }
-        if (count > blinks) {
-          pane.children.remove(label)
-          timer.stop()
+          timerStarted = true
+        } else {
+          if (time - startTime >= 500000000L) {
+            label.opacity = 1.0 - label.opacity.value
+            count += 1
+            startTime = time
+          }
+          if (count > blinks) {
+            pane.children.remove(label)
+            timer.stop()
+          }
         }
       }
-    }}
+    }
     timer.start()
   }
 
-  showMessage("Wave 1", "error", 4)
-  /**
-    * Generate enemy waves Array based on a file.
+  /** Generate enemy waves Array based on a file.
     *
-    * @param fileLoc File location
+    * @param fileLoc
+    *   File location
     * @return
     */
   private def generateWaves(fileLoc: String): Array[Queue[EnemyType]] = {
@@ -163,11 +175,11 @@ class GameplayUI (w: Double, h: Double) extends Scene (w, h) {
       var helperQueue: Queue[EnemyType] = Queue()
       for (str <- stringArray) {
         val enemy = str match
-          case "B" => BasicEnemy
-          case "C" => CamouflagedEnemy
-          case "S" => SplittingEnemy
-          case "T" => TankEnemy
-          case "F" => FlockEnemy
+          case "B"     => BasicEnemy
+          case "C"     => CamouflagedEnemy
+          case "S"     => SplittingEnemy
+          case "T"     => TankEnemy
+          case "F"     => FlockEnemy
           case default => BasicEnemy
         helperQueue.enqueue(enemy)
       }
@@ -176,41 +188,72 @@ class GameplayUI (w: Double, h: Double) extends Scene (w, h) {
     helperArray
   }
 
-
-  /**
-    * Spawn an enemy to the start point.
+  /** Spawn an enemy to the start point.
     *
-    * @return Enemy
+    * @return
+    *   Enemy
     */
   def spawnEnemy(enemyType: EnemyType): Enemy = {
     val enemy = enemyType match
-      case BasicEnemy => Enemy(BASIC_ENEMY_LOC, squareSide.toInt, "IBM", 2, mapInst.pathQueue)
-      case SplittingEnemy => Enemy(SPLITTING_ENEMY_LOC, squareSide.toInt, "Google", 5, mapInst.pathQueue)
-      case CamouflagedEnemy => Enemy(CAMOUFLAGED_ENEMY_LOC, squareSide.toInt, "TSMC", 3, mapInst.pathQueue)
-      case FlockEnemy => Enemy(BASIC_ENEMY_LOC, squareSide.toInt, "TSMC", 3, mapInst.pathQueue)
-      case TankEnemy => Enemy(BASIC_ENEMY_LOC, squareSide.toInt, "TSMC", 3, mapInst.pathQueue)
-    val startY = if (mapInst.startPoint.coord._1 == 0) then -1 else mapInst.startPoint.coord._1
-    val startX = if (mapInst.startPoint.coord._2 == 0) then -1 else mapInst.startPoint.coord._2
+      case BasicEnemy =>
+        Enemy(BASIC_ENEMY_LOC, squareSide.toInt, "IBM", 2, mapInst.pathQueue)
+      case SplittingEnemy =>
+        Enemy(
+          SPLITTING_ENEMY_LOC,
+          squareSide.toInt,
+          "Google",
+          5,
+          mapInst.pathQueue
+        )
+      case CamouflagedEnemy =>
+        Enemy(
+          CAMOUFLAGED_ENEMY_LOC,
+          squareSide.toInt,
+          "TSMC",
+          3,
+          mapInst.pathQueue
+        )
+      case FlockEnemy =>
+        Enemy(BASIC_ENEMY_LOC, squareSide.toInt, "TSMC", 3, mapInst.pathQueue)
+      case TankEnemy =>
+        Enemy(BASIC_ENEMY_LOC, squareSide.toInt, "TSMC", 3, mapInst.pathQueue)
+    val startY =
+      if (mapInst.startPoint.coord._1 == 0) then -1
+      else mapInst.startPoint.coord._1
+    val startX =
+      if (mapInst.startPoint.coord._2 == 0) then -1
+      else mapInst.startPoint.coord._2
     enemy.translateY = startY * squareSide
     enemy.translateX = startX * squareSide
     enemy
   }
 
-  /**
-    * Move given enemy in the map towards next tile in the path.
+  /** Move given enemy in the map towards next tile in the path.
     *
     * @param enemy
     */
   def moveEnemy(enemy: Enemy, newEnemies: Buffer[Enemy]): Unit = {
     val (currY, currX) = (enemy.translateY.value, enemy.translateX.value)
-    val (tileY, tileX) = (enemy.previousTile.coord._1 * squareSide, enemy.previousTile.coord._2 * squareSide)
-    val (nextTileY, nextTileX) = (enemy.nextTile.coord._1 * squareSide, enemy.nextTile.coord._2 * squareSide)
+    val (tileY, tileX) = (
+      enemy.previousTile.coord._1 * squareSide,
+      enemy.previousTile.coord._2 * squareSide
+    )
+    val (nextTileY, nextTileX) = (
+      enemy.nextTile.coord._1 * squareSide,
+      enemy.nextTile.coord._2 * squareSide
+    )
     val (vecY, vecX) = (currY - tileY, currX - tileX)
     val (dy, dx) = (nextTileY - currY, nextTileX - currX)
-    
+
     val distance = math.sqrt(dx * dx + dy * dy)
-    val (vx, vy) = if (distance > 0) (((dx/distance)*enemy.speed1).round.toInt, ((dy/distance)*enemy.speed1).round.toInt) else (0, 0)
-    
+    val (vx, vy) =
+      if (distance > 0)
+        (
+          ((dx / distance) * enemy.speed1).round.toInt,
+          ((dy / distance) * enemy.speed1).round.toInt
+        )
+      else (0, 0)
+
     if (distance <= enemy.speed1) {
       if (enemy.nextTile.getTurn() == End) {
         pane.children.remove(enemy)
@@ -229,8 +272,7 @@ class GameplayUI (w: Double, h: Double) extends Scene (w, h) {
     }
   }
 
-  /**
-    * Create map UI based on the Map-class's map.
+  /** Create map UI based on the Map-class's map.
     *
     * @param squareSide
     * @param mapTiles
@@ -248,8 +290,7 @@ class GameplayUI (w: Double, h: Double) extends Scene (w, h) {
       for (tile <- row) {
         val rect = new Rectangle {
           // check if tile is BgTile-class
-          fill =
-            if (tile.isInstanceOf[BgTile]) Color.Green else Color.Brown
+          fill = if (tile.isInstanceOf[BgTile]) Color.Green else Color.Brown
           width = squareSide
           height = squareSide
         }

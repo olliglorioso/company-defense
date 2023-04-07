@@ -18,7 +18,7 @@ class MainUI extends JFXApp3:
   override def start(): Unit =
     val visualBounds: Rectangle2D = Screen.primary.visualBounds
     val (h, w) = (visualBounds.getHeight, visualBounds.getWidth)
-    
+
     stage = new JFXApp3.PrimaryStage:
       title = "Company defense"
       resizable = false
@@ -31,9 +31,8 @@ class MainUI extends JFXApp3:
 
     stage.scene = mainmenuScene
   end start
-  
+
 @main def start() =
   val ui = new MainUI()
   ui.main(Array())
 end start
-

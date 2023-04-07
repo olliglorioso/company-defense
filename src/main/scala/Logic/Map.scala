@@ -5,7 +5,7 @@ import scala.collection.immutable.Queue
 import scala.util.control.Breaks._
 import Util.Constants._
 
-case class Tile(canBuildTower: Boolean, var coord: Tuple2[Int, Int]) 
+case class Tile(canBuildTower: Boolean, var coord: Tuple2[Int, Int])
 
 sealed abstract class Turn(val value: Int)
 case object NoTurn extends Turn(1)
@@ -33,15 +33,18 @@ class GameMap(path: String) {
   var map: Array[Array[Tile]] = initializeMap(path)
   val pathQueue: Queue[PathTile] = generatePathQueue(startPoint)
 
-  /**
-    * 
-    *
-    * @param path Path to the map file location.
-    * @return 2D Array of BgTiles and PathTiles.
+  /** @param path
+    *   Path to the map file location.
+    * @return
+    *   2D Array of BgTiles and PathTiles.
     */
   private def initializeMap(path: String): Array[Array[Tile]] =
     val lines = Util.FileHandler().readLinesFromFile("/Maps/" + path)
-    if (lines.length != MAP_HEIGHT || lines.filter(a => a.length == MAP_WIDTH).length != lines.length) then throw InvalidMapError()
+    if (
+      lines.length != MAP_HEIGHT || lines
+        .filter(a => a.length == MAP_WIDTH)
+        .length != lines.length
+    ) then throw InvalidMapError()
     val map = Array.ofDim[Tile](MAP_HEIGHT, MAP_WIDTH)
     var y = 0
     for (line <- lines) {
@@ -60,11 +63,10 @@ class GameMap(path: String) {
                 if (lines(y + 1).charAt(x) == '1') then
                   turn = TurnRight
                   invalidPath = false
-                else if (lines(y - 1).charAt(x) == '1') then 
+                else if (lines(y - 1).charAt(x) == '1') then
                   turn = TurnLeft
                   invalidPath = false
-                else if (line.charAt(x - 1) == '1') then
-                  invalidPath = false
+                else if (line.charAt(x - 1) == '1') then invalidPath = false
               }
               if (invalidPath) then throw InvalidMapError()
               else map(y)(x) = new PathTile((y, x), turn)
@@ -91,15 +93,24 @@ class GameMap(path: String) {
     }
     map
 
-  /**
-    * 
-    *
-    * @param tile The starting tile.
-    * @return A queue of PathTiles.
+  /** @param tile
+    *   The starting tile.
+    * @return
+    *   A queue of PathTiles.
     */
-  private def generatePathQueue (tile: PathTile): Queue[PathTile] = {
+  private def generatePathQueue(tile: PathTile): Queue[PathTile] = {
     // All possible next steps from a tile.
-    val searchValues = Array((0, 1), (0, -1), (1, 0), (-1, 0), (1, 1), (-1, 1), (1, -1), (-1, 1), (-1, -1))
+    val searchValues = Array(
+      (0, 1),
+      (0, -1),
+      (1, 0),
+      (-1, 0),
+      (1, 1),
+      (-1, 1),
+      (1, -1),
+      (-1, 1),
+      (-1, -1)
+    )
     var currTile = tile
     var prevTile = tile
     var queue: Queue[PathTile] = Queue()
@@ -134,20 +145,21 @@ class GameMap(path: String) {
   }
 
   private def whichTile = (x: Int, y: Int) => map(x)(y)
-  
-  /**
-    * 
-    *
-    * @param coords The coordinates to check, not rounded.
-    * @return True if the tile is BgTile, false otherwise (PathTile / Sidebar area).
+
+  /** @param coords
+    *   The coordinates to check, not rounded.
+    * @return
+    *   True if the tile is BgTile, false otherwise (PathTile / Sidebar area).
     */
   def isBgTile = (x: Double, y: Double) => {
     val xCoord = (x / 89.5).toInt
     val yCoord = (y / 89.5).toInt
-    if (xCoord < 0 || yCoord < 0 || xCoord > (MAP_HEIGHT - 1) || yCoord > (MAP_WIDTH - 1)) then false
+    if (
+      xCoord < 0 || yCoord < 0 || xCoord > (MAP_HEIGHT - 1) || yCoord > (MAP_WIDTH - 1)
+    ) then false
     else {
       val tile = whichTile(xCoord, yCoord)
-      
+
       if (tile.isInstanceOf[BgTile]) true
       else false
     }

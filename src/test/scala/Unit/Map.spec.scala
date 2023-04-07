@@ -8,9 +8,15 @@ class MapTest extends AnyFlatSpec with Matchers:
   val validMap = new GameMap("test.valid_map.txt")
 
   "Map" should "return an exception if map file is incorrectly formatted." in {
-    assertThrows[InvalidMapError] { val map = new GameMap("test.invalid_map.txt") }
-    assertThrows[InvalidMapError] { val map = new GameMap("test.invalid_map_char.txt") }
-    assertThrows[InvalidMapError] { val map = new GameMap("test.invalid_map_path.txt")}
+    assertThrows[InvalidMapError] {
+      val map = new GameMap("test.invalid_map.txt")
+    }
+    assertThrows[InvalidMapError] {
+      val map = new GameMap("test.invalid_map_char.txt")
+    }
+    assertThrows[InvalidMapError] {
+      val map = new GameMap("test.invalid_map_path.txt")
+    }
   }
 
   "Map" should "create correctly formatted map based on a file." in {
@@ -24,10 +30,10 @@ class MapTest extends AnyFlatSpec with Matchers:
     }
     assert(validMap.map.length === MAP_HEIGHT)
     // Check whether end and start points are correct.
-    assert(validMap.startPoint.coord === (0,16))
-    assert(validMap.endPoint.coord === (11,16))
+    assert(validMap.startPoint.coord === (0, 16))
+    assert(validMap.endPoint.coord === (11, 16))
   }
-  
+
   "Map" should "should have a correctly generated path queue." in {
     var idx = 1
     val path = validMap.pathQueue.map((elem) => {
@@ -35,5 +41,5 @@ class MapTest extends AnyFlatSpec with Matchers:
       idx += 1
     })
   }
-  
+
 end MapTest
