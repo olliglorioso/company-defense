@@ -1,23 +1,16 @@
 package UI
 
-import scalafx.scene.control.Button
 import scalafx.scene.image._
-import scalafx.scene.control.Tooltip
-import scalafx.Includes.eventClosureWrapperWithZeroParam
-import scalafx.event.EventIncludes.eventClosureWrapperWithZeroParam
+import scalafx.scene.control._
 import scala.concurrent.duration.Duration
-import scalafx.scene.control.Label
-import scalafx.scene.layout.VBox
 import javafx.scene.input.MouseEvent
 import Logic.Tower
-import scalafx.scene.layout.Pane
-import scalafx.scene.layout.StackPane
-import scalafx.scene.layout.HBox
+import scalafx.scene.layout._
 import scalafx.scene.shape.Circle
-import Util.Constants
+import Util.Constants._
 import Logic.GameMap
 
-class TowerButtonUI(picLoc: String, name: String, price: Int, desc: String, pane: Pane, mapInst: GameMap, variates: Map[String, Double]) extends Button {
+class TowerButtonUI(picLoc: String, name: String, price: Int, desc: String, pane: Pane, mapInst: GameMap, var variates: Map[String, Double]) extends Button {
     val image = new Image(picLoc)
     val originalPos = (layoutX, layoutY)
     val imageView = new ImageView(image) {
@@ -41,8 +34,8 @@ class TowerButtonUI(picLoc: String, name: String, price: Int, desc: String, pane
     tt.setShowDelay(javafx.util.Duration(650.0))
     style = "-fx-background-color: transparent;"
     graphic = imageView
-    minWidth = Constants.TOWER_SIDE
-    minHeight = Constants.TOWER_SIDE
+    minWidth = TOWER_SIDE
+    minHeight = TOWER_SIDE
     tooltip_=(tt)
     onMousePressed = (event: MouseEvent) => {
         // Record initial position and mouse position
@@ -75,7 +68,6 @@ class TowerButtonUI(picLoc: String, name: String, price: Int, desc: String, pane
     }
 
     onMouseReleased = (event: MouseEvent) => {
-        
         val (x, y, mouseX, mouseY) = userData.asInstanceOf[(Double, Double, Double, Double)]
         // Illegal positions not allowed
         if (!mapInst.isBgTile(event.getSceneY(), event.getSceneX())) {
@@ -85,13 +77,12 @@ class TowerButtonUI(picLoc: String, name: String, price: Int, desc: String, pane
             style = "-fx-background-color: transparent;"
         } else {
             // Create a new Tower instance in this position
-            val newTower = new Tower(picLoc, Constants.TOWER_SIDE, name, price)
+            val newTower = new Tower(picLoc, TOWER_SIDE, name, price)
             // make tooltip to stay when mouse over it
-
             val info = new Button() {
                 tooltip_=(tt)
-                minWidth = Constants.TOWER_SIDE
-                minHeight = Constants.TOWER_SIDE
+                minWidth = TOWER_SIDE
+                minHeight = TOWER_SIDE
             }
             val stackPane = new StackPane()
             info.style = "-fx-background-color: transparent; -fx-border-color: transparent;" // Tooltip button style (transparent)
@@ -99,7 +90,8 @@ class TowerButtonUI(picLoc: String, name: String, price: Int, desc: String, pane
             stackPane.translateX = event.getSceneX() - (minWidth() / 2)
             stackPane.translateY = event.getSceneY() - (minHeight() / 2)
             // Return the button to its original position
-            
+            variates = variates.updated("money", variates("money") - price)
+            println(variates("money"))
             pane.children.add(stackPane)
             translateX = x
             translateY = y

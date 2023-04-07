@@ -13,7 +13,7 @@ import scalafx.scene.Scene
 import scalafx.scene.control.{Label, TitledPane}
 import scalafx.scene.layout.VBox
 import scalafx.scene.control.{SplitPane, ListView}
-import scalafx.scene.image.Image
+import scalafx.scene.image._
 import scalafx.scene.image.ImageView
 import scalafx.beans.property.ObjectProperty
 import scalafx.scene.shape.Circle
@@ -37,34 +37,41 @@ case object TankEnemy extends EnemyType(3)
 case object FlockEnemy extends EnemyType(4)
 case object CamouflagedEnemy extends EnemyType(5)
 
+/**
+  * Responsible for the main gameplay scene.
+  *
+  * @param w Scene width
+  * @param h Scene height
+  */
 class GameplayUI (w: Double, h: Double) extends Scene (w, h) {
   val squareSide = (w - SIDEBAR_WIDTH) / MAP_WIDTH // 89.5
   val mapInst: GameMap = new GameMap("test_map.txt")
   val waves: Array[Queue[EnemyType]] = generateWaves("test_wavedata.txt")
   val map = createMap(squareSide, mapInst.map)
   var enemiesOnMap = Buffer[Enemy]()
-  var variates = Map("money" -> 1000.0, "lives" -> 10.0, "wave" -> 0.0, "score" -> 0.0)
+  var variates = Map("money" -> 100.0, "lives" -> 10.0, "waveNo" -> 0.0, "score" -> 0.0)
 
-  var waveNo = 0
   var timerStarted = false
   var startTime = 0L
   var lastTime = 0L
+
   var pane = new Pane {
     children = map.flatten
     prefWidth = (w - SIDEBAR_WIDTH)
     prefHeight = h
-  }
-  val centerElem = new BorderPane {
-    center = pane
   }
     
   val sidebar = SidebarUI(pane, mapInst, variates)
   sidebar.toFront()
 
   root = new BorderPane {
-    center = centerElem
-    right = sidebar
+    center = new BorderPane { // Map area
+      center = pane
+    }
+    right = sidebar // Sidebar area
   }
+
+  
 
   val timer = AnimationTimer { time => {
     if (timerStarted == false) {
@@ -73,9 +80,9 @@ class GameplayUI (w: Double, h: Double) extends Scene (w, h) {
       lastTime = time
     } else {
       if (time - lastTime >= 1000000000L) {
-        val currWave = waves(waveNo)
+        val currWave = waves(variates("waveNo").toInt)
         if (currWave.length < 1) {
-          if (enemiesOnMap.length < 1) waveNo += 1
+          if (enemiesOnMap.length < 1) variates = variates.updated("waveNo", variates("waveNo") + 1)
         } else {
           val newEnemyType = currWave.dequeue
           val enemy = spawnEnemy(newEnemyType)
@@ -92,6 +99,12 @@ class GameplayUI (w: Double, h: Double) extends Scene (w, h) {
     }
   }}
 
+  /**
+    * Generate enemy waves Array based on a file.
+    *
+    * @param fileLoc File location
+    * @return
+    */
   private def generateWaves(fileLoc: String): Array[Queue[EnemyType]] = {
     val lines = FileHandler().readLinesFromFile("/WaveData/test_wavedata.txt")
     var helperArray: Array[Queue[EnemyType]] = Array()
