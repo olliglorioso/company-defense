@@ -9,6 +9,7 @@ import scalafx.scene.layout.Pane
 import scalafx.beans.property.ObjectProperty
 import scalafx.scene.shape.Rectangle
 import scalafx.scene.paint.Color
+import Util.Constants.BASIC_ENEMY_2_LOC
 
 case class Enemy(
     path: String,
@@ -17,15 +18,13 @@ case class Enemy(
     pathQueue: Queue[PathTile],
     var health: Int
 ) extends GameObject(path, size) {
-  var boundBox = 19
+  val origHealth = health
+  var boundBox = 100
   var (nextTile, queue) =
     pathQueue.dequeue // Take start point and create queue class variable.
   var previousTile = nextTile
   var tilesTraversed = 0
   getNextTile()
-
-  val redHealthTank = Rectangle(100.0, 50.0, Color.Red)
-  val greenHealthTank = Rectangle(200.0, 50.0, Color.Green)
 
   def getDistanceToPoint (towerX: Double, towerY: Double) = {
     val scenevals = localToScene(x.value, y.value)
@@ -46,10 +45,13 @@ case class Enemy(
 
   }
 
-  def getHit(damage: Int, slowDown: Int = 0): String = {
+  def getHit(damage: Int, slowDown: Int = 0) = {
+    println(damage)
     if (slowDown > 0) speed = speed - slowDown
     health = health - damage
-    if (health < 0) "Remove" else "Nothing"
+    if (health >= 0 && health <= origHealth / 2) {
+      image = new Image(BASIC_ENEMY_2_LOC)
+    }
   }
 
   def move(newEnemies: Buffer[Enemy], pane: Pane, variates: ObjectProperty[Map[String, Double]]): Unit = 

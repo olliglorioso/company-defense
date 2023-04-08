@@ -107,13 +107,29 @@ class GameplayUI(w: Double, h: Double) extends Scene(w, h) {
     }
   }
 
+  def checkHits() = {
+    for (bullet <- bulletsOnMap.value) {
+      for (enemy <- enemiesOnMap) {
+        if (enemy.getDistanceToPoint(bullet.target._1, bullet.target._2) <= enemy.boundBox) {
+          pane.children.remove(bullet)
+          bulletsOnMap.value = bulletsOnMap.value.filter(_ != bullet)
+          enemy.getHit(bullet.damage)
+          if (enemy.health <= 0) {
+            pane.children.remove(enemy)
+            enemiesOnMap = enemiesOnMap.filter(_ != enemy)
+          }
+        }
+      }
+    }
+  }
+
   /** Creates a basic clock for the game. Started when current gameplay starts.
     *
     * @return
     *   AnimationTimer
     */
   def createTimer(): AnimationTimer = {
-    val timer = AnimationTimer { time =>
+    AnimationTimer { time =>
       {
         if (timerStarted == false) {
           startTime = time
@@ -129,7 +145,6 @@ class GameplayUI(w: Double, h: Double) extends Scene(w, h) {
             } else {
               val newEnemyType = currWave.dequeue
               val enemy = spawnEnemy(newEnemyType)
-              // create a red square to enemy's center
               lastTime = time
               pane.children.add(enemy)
               enemiesOnMap += enemy
@@ -142,10 +157,10 @@ class GameplayUI(w: Double, h: Double) extends Scene(w, h) {
           enemiesOnMap = newEnemies
           editPriorityQueuesAndCreateBullets(time)
           moveBullets(time)
+          checkHits()
         }
       }
     }
-    timer
   }
 
   val timer = createTimer()

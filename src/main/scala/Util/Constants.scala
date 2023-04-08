@@ -11,6 +11,7 @@ object Constants {
     "file:src/main/scala/Resources/Enemies/CamouflagedEnemy.png"
   val SWARM_ENEMY_LOC = "file:src/main/scala/Resources/Enemies/SwarmEnemy.png"
   val TANK_ENEMY_LOC = "file:src/main/scala/Resources/Enemies/TankEnemy.png"
+  val BASIC_ENEMY_2_LOC = "file:src/main/scala/Resources/Enemies/BasicEnemy2.png"
   val REGULAR_TOWER_LOC =
     "file:src/main/scala/Resources/Towers/RegularTower.png"
   val SLOW_DOWN_TOWER_LOC =
@@ -31,12 +32,15 @@ object Constants {
   val S_COST = 15 // Slow Down Tower cost
   val R_NAME = "Nerdinator" // Regular Tower name
   val S_NAME = "Hacktivist" // Slow Down Tower name
+  val R_RANGE = 200 // Regular Tower range
+  val S_RANGE = 200 // Slow Down Tower range
+  val R_DAMAGE = 5
+  val S_DAMAGE = 7
   val TOWER_SIDE = 80
   val UI_TILE_SIZE = 89.5
-  val R_RANGE = 200
-  val S_RANGE = 200
+  
   val CAMOUFLAGED_ENEMY_HEALTH = 75
-  val BASIC_ENEMY_HEALTH = 50
+  val BASIC_ENEMY_HEALTH = 100
   val SPLITTING_ENEMY_HEALTH = 100
   val CAMOUFLAGED_ENEMY_SIZE = 89.5
   val BASIC_ENEMY_SIZE = 89.5
