@@ -12,13 +12,11 @@ import scalafx.scene.paint.Color
 
 case class Enemy(
     path: String,
-    size: Int,
-    speed1: Int,
+    size: Double,
+    var speed: Int,
     pathQueue: Queue[PathTile],
-    health1: Int
+    var health: Int
 ) extends GameObject(path, size) {
-  var health = health1
-  var speed = speed1
   var boundBox = 19
   var (nextTile, queue) =
     pathQueue.dequeue // Take start point and create queue class variable.
