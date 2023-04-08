@@ -11,7 +11,6 @@ import scalafx.beans.property.ObjectProperty
 case class Enemy(
     path: String,
     size: Int,
-    name: String,
     speed1: Int,
     pathQueue: Queue[PathTile],
     health1: Int

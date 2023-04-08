@@ -15,6 +15,8 @@ abstract class Tower(path: String, price: Int, range: Int)
     val damage = 1
     val slowDown = 0
     val bulletSpeed = 10
+    // Enemy priority queue
+    val enemyPriority = new PriorityQueue[Enemy]()(Ordering.by(enemyPriorityCalc(_)))
 
     def enemyPriorityCalc(enemy: Enemy): Double = {
         val distToEnemy = enemy.getDistanceToPoint(x.value, y.value)
@@ -22,9 +24,6 @@ abstract class Tower(path: String, price: Int, range: Int)
         if (distToEnemy > range) (generalPrio - 1000)
         else generalPrio
     }
-    
-    // Enemy priority queue
-    val enemyPriority = new PriorityQueue[Enemy]()(Ordering.by(enemyPriorityCalc(_)))
 
     def addEnemyToPriorityQueue(enemy: Enemy) = {
         enemyPriority.enqueue(enemy)
@@ -53,8 +52,8 @@ abstract class Tower(path: String, price: Int, range: Int)
             val enemyLoc = closestEnemy.localToScene(closestEnemy.x.value, closestEnemy.y.value)
 
             val bullet = Bullet(bulletLoc, (enemyLoc.x, enemyLoc.y), bulletSpeed, slowDown, damage)
-            bullet.x.value = towerLoc.x + TOWER_SIDE / 4
-            bullet.y.value = towerLoc.y + TOWER_SIDE / 4
+            bullet.x.value = towerLoc.x - TOWER_SIDE/4
+            bullet.y.value = towerLoc.y - TOWER_SIDE/4
             lastBulletInit = time
             bullet
         else null

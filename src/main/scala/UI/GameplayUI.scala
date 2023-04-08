@@ -20,7 +20,8 @@ import scalafx.scene.shape.Circle
 import scalafx.scene.paint.Color
 import scalafx.scene.shape.Rectangle
 import Util.Constants._
-import Logic.*
+import Logic.{BasicEnemy => BasicEnemyClass, CamouflagedEnemy => CamouflagedEnemyClass, SplittingEnemy => SplittingEnemyClass}
+import Logic._
 import scalafx.animation.AnimationTimer
 import java.util.concurrent.TimeUnit
 import scala.collection.mutable.Queue
@@ -78,17 +79,16 @@ class GameplayUI(w: Double, h: Double) extends Scene(w, h) {
     * Creates a new priority queue for each tower on the map.
     */
   def editPriorityQueues() = {
+    
+  }
+
+  def editPriorityQueuesAndCreateBullets(time: Long) = {
     for (tower <- towersOnMap.value) {
       tower.clearPriorityQueue()  // Clear the whole priority queue every time (have to remove and reinsert enemies anyway)
       for (enemy <- enemiesOnMap) {
         tower.addEnemyToPriorityQueue(enemy)
         tower.rotateTowardsPriorityEnemy()
       }
-    }
-  }
-
-  def createBullets(time: Long) = {
-    for (tower <- towersOnMap.value) {
       val bullet: Bullet = tower.initBullet(time)
       if (bullet != null) then 
         bullet.toFront()
@@ -139,8 +139,7 @@ class GameplayUI(w: Double, h: Double) extends Scene(w, h) {
             enemy.move(newEnemies, pane, variates)
           }
           enemiesOnMap = newEnemies
-          editPriorityQueues()
-          createBullets(time)
+          editPriorityQueuesAndCreateBullets(time)
           moveBullets(time)
         }
       }
@@ -241,30 +240,11 @@ class GameplayUI(w: Double, h: Double) extends Scene(w, h) {
     */
   def spawnEnemy(enemyType: EnemyType): Enemy = {
     val enemy = enemyType match
-      case BasicEnemy =>
-        Enemy(BASIC_ENEMY_LOC, UI_TILE_SIZE.toInt, "IBM", 2, mapInst.pathQueue, 100)
-      case SplittingEnemy =>
-        Enemy(
-          SPLITTING_ENEMY_LOC,
-          UI_TILE_SIZE.toInt,
-          "Google",
-          5,
-          mapInst.pathQueue,
-          200
-        )
-      case CamouflagedEnemy =>
-        Enemy(
-          CAMOUFLAGED_ENEMY_LOC,
-          UI_TILE_SIZE.toInt,
-          "TSMC",
-          3,
-          mapInst.pathQueue,
-          100
-        )
-      case FlockEnemy =>
-        Enemy(BASIC_ENEMY_LOC, UI_TILE_SIZE.toInt, "TSMC", 3, mapInst.pathQueue, 100)
-      case TankEnemy =>
-        Enemy(BASIC_ENEMY_LOC, UI_TILE_SIZE.toInt, "TSMC", 3, mapInst.pathQueue, 100)
+      case BasicEnemy => BasicEnemyClass(mapInst.pathQueue)
+      case SplittingEnemy => SplittingEnemyClass(mapInst.pathQueue)
+      case CamouflagedEnemy => CamouflagedEnemyClass(mapInst.pathQueue)
+      case FlockEnemy => BasicEnemyClass(mapInst.pathQueue)
+      case TankEnemy => BasicEnemyClass(mapInst.pathQueue)
     val startY =
       if (mapInst.startPoint.coord._1 == 0) then -1
       else mapInst.startPoint.coord._1
