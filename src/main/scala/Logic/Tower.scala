@@ -14,7 +14,7 @@ abstract class Tower(path: String, price: Int, range: Int)
     val bulletLoc = REGULAR_BULLET_LOC
     val damage = 1
     val slowDown = 0
-    val bulletSpeed = 10
+    val bulletSpeed = 20
     // Enemy priority queue
     val enemyPriority = new PriorityQueue[Enemy]()(Ordering.by(enemyPriorityCalc(_)))
 
@@ -44,16 +44,16 @@ abstract class Tower(path: String, price: Int, range: Int)
         (enemyPriority.nonEmpty && canShootTowardsEnemy(enemyPriority.head) && (lastBulletInit == 0L || time - lastBulletInit >= attackSpeed * 100000000L))
     }
 
+
     def initBullet(time: Long): Bullet = {
         
         if (canInitNewBullet(time, lastBulletInit)) then 
             val closestEnemy = enemyPriority.head
-            val towerLoc = localToScene(x.value, y.value)
             val enemyLoc = closestEnemy.localToScene(closestEnemy.x.value, closestEnemy.y.value)
 
             val bullet = Bullet(bulletLoc, (enemyLoc.x, enemyLoc.y), bulletSpeed, slowDown, damage)
-            bullet.x.value = towerLoc.x - TOWER_SIDE/4
-            bullet.y.value = towerLoc.y - TOWER_SIDE/4
+            bullet.x.value = x.value + 0.25*TOWER_SIDE
+            bullet.y.value = y.value + 0.25*TOWER_SIDE
             lastBulletInit = time
             bullet
         else null
@@ -63,7 +63,7 @@ abstract class Tower(path: String, price: Int, range: Int)
         if (enemyPriority.nonEmpty) {
             val enemy = enemyPriority.head
             val angle = math.atan2(enemy.translateY.value - y.value, enemy.translateX.value - x.value)
-            rotate.value = math.toDegrees(angle) + 90.0 // Make the head towards the enemy (shooting happens from the "head" of tower)
+            rotate.value = math.toDegrees(angle) + 90 // Make the head towards the enemy (shooting happens from the "head" of tower)
         }
     }
 
