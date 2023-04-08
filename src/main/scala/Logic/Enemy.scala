@@ -7,6 +7,8 @@ import scala.collection.mutable.Buffer
 import Util.Constants.UI_TILE_SIZE
 import scalafx.scene.layout.Pane
 import scalafx.beans.property.ObjectProperty
+import scalafx.scene.shape.Rectangle
+import scalafx.scene.paint.Color
 
 case class Enemy(
     path: String,
@@ -21,7 +23,11 @@ case class Enemy(
   var (nextTile, queue) =
     pathQueue.dequeue // Take start point and create queue class variable.
   var previousTile = nextTile
+  var tilesTraversed = 0
   getNextTile()
+
+  val redHealthTank = Rectangle(100.0, 50.0, Color.Red)
+  val greenHealthTank = Rectangle(200.0, 50.0, Color.Green)
 
   def getDistanceToPoint (towerX: Double, towerY: Double) = {
     val scenevals = localToScene(x.value, y.value)
@@ -34,6 +40,7 @@ case class Enemy(
       val (next, queueHelper) = queue.dequeue
       nextTile = next
       queue = queueHelper
+      tilesTraversed += 1
       next
     catch
       case e: NoSuchElementException =>

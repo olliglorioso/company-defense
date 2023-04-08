@@ -20,7 +20,7 @@ abstract class Tower(path: String, price: Int, range: Int)
 
     def enemyPriorityCalc(enemy: Enemy): Double = {
         val distToEnemy = enemy.getDistanceToPoint(x.value, y.value)
-        val generalPrio = enemy.health * 0.2 + enemy.speed * 0.1 + -distToEnemy * 0.7
+        val generalPrio = enemy.health * 0.4 + enemy.speed * 0.01 + -distToEnemy * 0.25 + enemy.tilesTraversed * 0.70
         if (distToEnemy > range) (generalPrio - 1000)
         else generalPrio
     }
@@ -50,7 +50,6 @@ abstract class Tower(path: String, price: Int, range: Int)
         if (canInitNewBullet(time, lastBulletInit)) then 
             val closestEnemy = enemyPriority.head
             val enemyLoc = closestEnemy.localToScene(closestEnemy.x.value, closestEnemy.y.value)
-            println(closestEnemy.rotate.value.toString() + " rotate, " + enemyLoc.x.toString() + " x, " + enemyLoc.y.toString() + " y")
             val enemyLocCoeff: (Double, Double) = closestEnemy.rotate.value match
                 case 180.0 => (-1.5, -1.5)
                 case 0 => (-1.5, -1.5)
