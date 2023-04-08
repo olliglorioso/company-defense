@@ -52,12 +52,12 @@ abstract class Tower(path: String, price: Int, range: Int)
             val enemyLoc = closestEnemy.localToScene(closestEnemy.x.value, closestEnemy.y.value)
             val enemyLocCoeff: (Double, Double) = closestEnemy.rotate.value match
                 case 180.0 => (-1.5, -1.5)
-                case 0 => (1.5, 1)
+                case 0 => (1, 1)
                 case 90 => (-1.5, 1)
                 case 270 => (-1.5, 1)
                 case _ => (0.0, 0.0)
             
-            val target = (enemyLoc.x + enemyLocCoeff._1 * BASIC_ENEMY_SIZE, enemyLoc.y + enemyLocCoeff._2 * BASIC_ENEMY_SIZE)
+            val target = (enemyLoc.x + enemyLocCoeff._1 * 50, enemyLoc.y + enemyLocCoeff._2 * 50)
             val bullet = Bullet(bulletLoc, target, bulletSpeed, slowDown, damage)
             bullet.x.value = x.value + 0.25 * TOWER_SIDE
             bullet.y.value = y.value + 0.25 * TOWER_SIDE
