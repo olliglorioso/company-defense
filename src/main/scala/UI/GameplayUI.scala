@@ -100,6 +100,10 @@ class GameplayUI(w: Double, h: Double) extends Scene(w, h) {
   def moveBullets(time: Long) = {
     for (bullet <- bulletsOnMap.value) {
       bullet.move(time)
+      if (bullet.isOnTarget()) {
+        pane.children.remove(bullet)
+        bulletsOnMap.value = bulletsOnMap.value.filter(_ != bullet)
+      }
     }
   }
 

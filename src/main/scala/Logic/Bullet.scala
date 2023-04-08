@@ -14,10 +14,13 @@ class Bullet (fileLoc: String, target: (Double, Double), speed: Int, slowDown: I
             val angle = math.atan2(target._2 - y.value, target._1 - x.value)
             translateX.value += math.cos(angle) * speed
             translateY.value += math.sin(angle) * speed
-        }
-        else {
+        } else {
             translateX = target._1
             translateY = target._2
         }
+    }
+    def isOnTarget() = {
+        val distToTarget = getDistanceToPoint(target._1, target._2)
+        distToTarget <= speed
     }
 }

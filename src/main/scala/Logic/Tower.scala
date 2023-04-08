@@ -4,9 +4,12 @@ import scalafx.Includes.jfxMouseEvent2sfx
 import scalafx.scene.input.InputIncludes.jfxMouseEvent2sfx
 import scala.collection.mutable.PriorityQueue
 import Util.Constants._
+import scalafx.geometry.Point2D
 
 abstract class Tower(path: String, price: Int, range: Int)
     extends GameObject(path, TOWER_SIDE) {
+    
+    val attackSpeed = 1000000000L
 
     def enemyPriorityCalc(enemy: Enemy): Double = {
         val distToEnemy = enemy.getDistanceToPoint(x.value, y.value)
@@ -33,7 +36,28 @@ abstract class Tower(path: String, price: Int, range: Int)
         else false
     }
 
-    def initBullet(time: Long): Bullet
+    def createNewBullet(enemyLoc: Point2D): Bullet = {
+        val bulletLoc = path match {
+            case SLOW_DOWN_TOWER_LOC => SLOW_DOWN_BULLET_LOC
+            case REGULAR_TOWER_LOC => REGULAR_BULLET_LOC
+        }
+        Bullet(bulletLoc, (enemyLoc.x - (TOWER_SIDE), enemyLoc.y - (TOWER_SIDE)), 10, 0, 1)
+    }
+
+    def initBullet(time: Long): Bullet = {
+        var lastInit = 0L
+        if (enemyPriority.nonEmpty && canShootTowardsEnemy(enemyPriority.head) && (lastInit == 0 || time - lastInit >= attackSpeed)) then 
+            val closestEnemy = enemyPriority.head
+            val towerLoc = localToScene(x.value, y.value)
+            val enemyLoc = closestEnemy.localToScene(closestEnemy.x.value, closestEnemy.y.value)
+
+            val bullet = createNewBullet(enemyLoc)
+            bullet.x.value = towerLoc.x
+            bullet.y.value = towerLoc.y
+            lastInit = time
+            bullet
+        else null
+    }
 
     def rotateTowardsPriorityEnemy() = {
         if (enemyPriority.nonEmpty) {
