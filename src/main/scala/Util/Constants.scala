@@ -20,6 +20,7 @@ object Constants {
   val SCORE_ICON_LOC = "file:src/main/scala/Resources/Other/ScoreIcon.png"
   val REGULAR_BULLET_LOC = "file:src/main/scala/Resources/Bullets/RegularBullet.png"
   val SLOW_DOWN_BULLET_LOC = "file:src/main/scala/Resources/Bullets/SlowDownBullet.png"
+  val MAINMENU_BG_LOC = "file:src/main/scala/Resources/Other/MainMenuBackground.png"
   val MAP_HEIGHT = 12
   val MAP_WIDTH = 20
   val SIDEBAR_WIDTH = 130

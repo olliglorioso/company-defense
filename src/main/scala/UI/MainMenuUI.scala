@@ -10,6 +10,10 @@ import scalafx.stage.Screen
 import Logic.*
 import UI.*
 import scalafx.scene.control.Tooltip
+import javafx.scene.image.ImageView
+import Util.Constants.MAINMENU_BG_LOC
+import scalafx.scene.image.Image
+import scalafx.scene.paint.Paint
 
 class MainMenuUI {
 
@@ -37,6 +41,24 @@ class MainMenuUI {
     lazy val settingsSceneLazy = settingsScene
     val mainmenuScene: Scene = new Scene(w, h):
       root = new VBox {
+        background = new Background(
+          fills = Seq(
+            new BackgroundFill(
+              fill = Paint.valueOf("#000000"),
+              radii = new CornerRadii(0),
+              insets = Insets.Empty
+            )
+          ),
+          images = Seq(
+            new BackgroundImage(
+              image = new Image(MAINMENU_BG_LOC),
+              repeatX = BackgroundRepeat.NoRepeat,
+              repeatY = BackgroundRepeat.NoRepeat,
+              position = BackgroundPosition.Center,
+              size = BackgroundSize.Default
+            )
+          )
+        )
         spacing = 20
         alignment = Pos.Center
         children = Seq(
