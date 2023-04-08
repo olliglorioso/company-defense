@@ -37,6 +37,7 @@ class MainMenuUI {
       w: Double,
       h: Double
   ): Scene =
+    val buttonStyle = "-fx-background-color: red; -fx-text-fill: black; -fx-font-size: 24pt; -fx-font-family: 'Arial Black', sans-serif; -fx-padding: 10px 20px; -fx-background-radius: 50px; -fx-border-radius: 50px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 3);"
     lazy val gameplaySceneLazy = gameplayScene
     lazy val settingsSceneLazy = settingsScene
     val mainmenuScene: Scene = new Scene(w, h):
@@ -62,14 +63,19 @@ class MainMenuUI {
         spacing = 20
         alignment = Pos.Center
         children = Seq(
-          new Label("Main menu"),
+          new Label("Company Defense") {
+            style = "-fx-font-size: 72pt; -fx-text-fill: red; -fx-font-weight: bold; -fx-font-family: 'Impact', sans-serif; -fx-background-color: black; -fx-padding: 0 10px 0 10px; -fx-border-color: red; -fx-border-width: 3px; -fx-border-radius: 10px;"
+          },
           new Button("Start new game") {
+            style = buttonStyle
+
             onAction = () => {
               stage.setScene(gameplaySceneLazy)
               gameplaySceneLazy.timer.start()
             }
           },
           new Button("Settings") {
+            style = buttonStyle
             onAction = () => stage.setScene(settingsSceneLazy)
           }
         )
