@@ -38,3 +38,14 @@ Contains information about the upcoming enemies. One row is one wave. So basical
 - T: Tank enemy (Twitter)
 - C: Camouflaged enemy (TSMC)
 - F: Flock enemy (Huawei)
+
+### Maps
+
+Contains only information about the initial map, hence the locations of different tiles. Start tile is marked
+with number two, and end tile with number three. The rest of the tiles are marked with number one (regular path tiles).
+Background tiles are marked with number zero.
+
+### SavedGame
+
+This will contain a saved game data, e.g. tower positions and last finished wave. No enemy locations saved as only the
+last wave is saved. To be finished.
