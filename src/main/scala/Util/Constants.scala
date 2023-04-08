@@ -32,6 +32,6 @@ object Constants {
   val S_NAME = "Hacktivist" // Slow Down Tower name
   val TOWER_SIDE = 80
   val UI_TILE_SIZE = 89.5
-  val R_RANGE = 100
-  val S_RANGE = 100
+  val R_RANGE = 200
+  val S_RANGE = 200
 }

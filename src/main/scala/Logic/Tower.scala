@@ -9,8 +9,12 @@ import scalafx.geometry.Point2D
 abstract class Tower(path: String, price: Int, range: Int)
     extends GameObject(path, TOWER_SIDE) {
     
-    val attackSpeed = 2 // is a good basic speed. Adjusting between 0.5-5 is ok ig.
+    val attackSpeed = 2 // is a good basic speed. Adjusting between 0.5-5 is ok
     var lastBulletInit = 0L
+    val bulletLoc = REGULAR_BULLET_LOC
+    val damage = 1
+    val slowDown = 0
+    val bulletSpeed = 10
 
     def enemyPriorityCalc(enemy: Enemy): Double = {
         val distToEnemy = enemy.getDistanceToPoint(x.value, y.value)
@@ -37,16 +41,8 @@ abstract class Tower(path: String, price: Int, range: Int)
         else false
     }
 
-    def createNewBullet(enemyLoc: Point2D): Bullet = {
-        val bulletLoc = path match {
-            case SLOW_DOWN_TOWER_LOC => SLOW_DOWN_BULLET_LOC
-            case REGULAR_TOWER_LOC => REGULAR_BULLET_LOC
-        }
-        Bullet(bulletLoc, (enemyLoc.x - (TOWER_SIDE), enemyLoc.y - (TOWER_SIDE)), 10, 0, 1)
-    }
-
     def canInitNewBullet(time: Long, lastBulletInit: Long): Boolean = {
-        (enemyPriority.nonEmpty && canShootTowardsEnemy(enemyPriority.head) && (lastBulletInit == 0 || time - lastBulletInit >= attackSpeed * 100000000L))
+        (enemyPriority.nonEmpty && canShootTowardsEnemy(enemyPriority.head) && (lastBulletInit == 0L || time - lastBulletInit >= attackSpeed * 100000000L))
     }
 
     def initBullet(time: Long): Bullet = {
@@ -56,9 +52,9 @@ abstract class Tower(path: String, price: Int, range: Int)
             val towerLoc = localToScene(x.value, y.value)
             val enemyLoc = closestEnemy.localToScene(closestEnemy.x.value, closestEnemy.y.value)
 
-            val bullet = createNewBullet(enemyLoc)
-            bullet.x.value = towerLoc.x
-            bullet.y.value = towerLoc.y
+            val bullet = Bullet(bulletLoc, (enemyLoc.x, enemyLoc.y), bulletSpeed, slowDown, damage)
+            bullet.x.value = towerLoc.x + TOWER_SIDE / 4
+            bullet.y.value = towerLoc.y + TOWER_SIDE / 4
             lastBulletInit = time
             bullet
         else null
