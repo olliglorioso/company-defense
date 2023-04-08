@@ -129,6 +129,7 @@ class GameplayUI(w: Double, h: Double) extends Scene(w, h) {
             } else {
               val newEnemyType = currWave.dequeue
               val enemy = spawnEnemy(newEnemyType)
+              // create a red square to enemy's center
               lastTime = time
               pane.children.add(enemy)
               enemiesOnMap += enemy

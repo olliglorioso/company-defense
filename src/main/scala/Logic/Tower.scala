@@ -50,10 +50,18 @@ abstract class Tower(path: String, price: Int, range: Int)
         if (canInitNewBullet(time, lastBulletInit)) then 
             val closestEnemy = enemyPriority.head
             val enemyLoc = closestEnemy.localToScene(closestEnemy.x.value, closestEnemy.y.value)
-
-            val bullet = Bullet(bulletLoc, (enemyLoc.x, enemyLoc.y), bulletSpeed, slowDown, damage)
-            bullet.x.value = x.value + 0.25*TOWER_SIDE
-            bullet.y.value = y.value + 0.25*TOWER_SIDE
+            println(closestEnemy.rotate.value.toString() + " rotate, " + enemyLoc.x.toString() + " x, " + enemyLoc.y.toString() + " y")
+            val enemyLocCoeff: (Double, Double) = closestEnemy.rotate.value match
+                case 180.0 => (-1.5, -1.5)
+                case 0 => (-1.5, -1.5)
+                case 90 => (-1.5, 1)
+                case 270 => (-1.5, 1)
+                case _ => (0.0, 0.0)
+            
+            val target = (enemyLoc.x + enemyLocCoeff._1 * BASIC_ENEMY_SIZE, enemyLoc.y + enemyLocCoeff._2 * BASIC_ENEMY_SIZE)
+            val bullet = Bullet(bulletLoc, target, bulletSpeed, slowDown, damage)
+            bullet.x.value = x.value + 0.25 * TOWER_SIDE
+            bullet.y.value = y.value + 0.25 * TOWER_SIDE
             lastBulletInit = time
             bullet
         else null
