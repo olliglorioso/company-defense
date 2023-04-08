@@ -14,7 +14,7 @@ abstract class Tower(path: String, price: Int, range: Int)
     val bulletLoc = REGULAR_BULLET_LOC
     val damage = 1
     val slowDown = 0
-    val bulletSpeed = 20
+    val bulletSpeed = 30
     // Enemy priority queue
     val enemyPriority = new PriorityQueue[Enemy]()(Ordering.by(enemyPriorityCalc(_)))
 
@@ -52,7 +52,7 @@ abstract class Tower(path: String, price: Int, range: Int)
             val enemyLoc = closestEnemy.localToScene(closestEnemy.x.value, closestEnemy.y.value)
             val enemyLocCoeff: (Double, Double) = closestEnemy.rotate.value match
                 case 180.0 => (-1.5, -1.5)
-                case 0 => (-1.5, -1.5)
+                case 0 => (1.5, 1)
                 case 90 => (-1.5, 1)
                 case 270 => (-1.5, 1)
                 case _ => (0.0, 0.0)
