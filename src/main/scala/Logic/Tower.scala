@@ -9,7 +9,8 @@ import scalafx.geometry.Point2D
 abstract class Tower(path: String, price: Int, range: Int)
     extends GameObject(path, TOWER_SIDE) {
     
-    val attackSpeed = 1000000000L
+    val attackSpeed = 2 // is a good basic speed. Adjusting between 0.5-5 is ok ig.
+    var lastBulletInit = 0L
 
     def enemyPriorityCalc(enemy: Enemy): Double = {
         val distToEnemy = enemy.getDistanceToPoint(x.value, y.value)
@@ -44,9 +45,13 @@ abstract class Tower(path: String, price: Int, range: Int)
         Bullet(bulletLoc, (enemyLoc.x - (TOWER_SIDE), enemyLoc.y - (TOWER_SIDE)), 10, 0, 1)
     }
 
+    def canInitNewBullet(time: Long, lastBulletInit: Long): Boolean = {
+        (enemyPriority.nonEmpty && canShootTowardsEnemy(enemyPriority.head) && (lastBulletInit == 0 || time - lastBulletInit >= attackSpeed * 100000000L))
+    }
+
     def initBullet(time: Long): Bullet = {
-        var lastInit = 0L
-        if (enemyPriority.nonEmpty && canShootTowardsEnemy(enemyPriority.head) && (lastInit == 0 || time - lastInit >= attackSpeed)) then 
+        
+        if (canInitNewBullet(time, lastBulletInit)) then 
             val closestEnemy = enemyPriority.head
             val towerLoc = localToScene(x.value, y.value)
             val enemyLoc = closestEnemy.localToScene(closestEnemy.x.value, closestEnemy.y.value)
@@ -54,7 +59,7 @@ abstract class Tower(path: String, price: Int, range: Int)
             val bullet = createNewBullet(enemyLoc)
             bullet.x.value = towerLoc.x
             bullet.y.value = towerLoc.y
-            lastInit = time
+            lastBulletInit = time
             bullet
         else null
     }
