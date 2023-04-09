@@ -69,6 +69,15 @@ class MainMenuUI {
           new Button("Start new game") {
             style = buttonStyle
 
+            onMouseEntered = () => {
+              style = "-fx-background-color: red; -fx-text-fill: white; -fx-font-size: 30pt; -fx-font-family: 'Arial Black', sans-serif; -fx-padding: 10px 20px; -fx-background-radius: 50px; -fx-border-radius: 50px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 3);"
+            }
+
+            onMouseExited = () => {
+              style = buttonStyle
+            }
+
+
             onAction = () => {
               stage.setScene(gameplaySceneLazy)
               gameplaySceneLazy.timer.start()
@@ -77,6 +86,13 @@ class MainMenuUI {
           new Button("Settings") {
             style = buttonStyle
             onAction = () => stage.setScene(settingsSceneLazy)
+            onMouseEntered = () => {
+              style = "-fx-background-color: red; -fx-text-fill: white; -fx-font-size: 30pt; -fx-font-family: 'Arial Black', sans-serif; -fx-padding: 10px 20px; -fx-background-radius: 50px; -fx-border-radius: 50px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 3);"
+            }
+
+            onMouseExited = () => {
+              style = buttonStyle
+            }
           }
         )
       }

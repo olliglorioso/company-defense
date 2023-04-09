@@ -24,6 +24,7 @@ case class Enemy(
     pathQueue.dequeue // Take start point and create queue class variable.
   var previousTile = nextTile
   var tilesTraversed = 0
+  var imageChanged = false
   getNextTile()
 
   def getDistanceToPoint (towerX: Double, towerY: Double) = {
@@ -46,10 +47,10 @@ case class Enemy(
   }
 
   def getHit(damage: Int, slowDown: Int = 0) = {
-    println(damage)
     if (slowDown > 0) speed = speed - slowDown
     health = health - damage
-    if (health >= 0 && health <= origHealth / 2) {
+    if (health >= 0 && health <= origHealth / 2 && !imageChanged) {
+      imageChanged = true
       image = new Image(BASIC_ENEMY_2_LOC)
     }
   }

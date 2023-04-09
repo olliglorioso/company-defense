@@ -75,12 +75,6 @@ class GameplayUI(w: Double, h: Double) extends Scene(w, h) {
     right = sidebar // Sidebar area
   }
 
-  /**
-    * Creates a new priority queue for each tower on the map.
-    */
-  def editPriorityQueues() = {
-    
-  }
 
   def editPriorityQueuesAndCreateBullets(time: Long) = {
     for (tower <- towersOnMap.value) {
@@ -116,7 +110,9 @@ class GameplayUI(w: Double, h: Double) extends Scene(w, h) {
           enemy.getHit(bullet.damage)
           if (enemy.health <= 0) {
             pane.children.remove(enemy)
+            println(enemiesOnMap.length.toString() + " eka")
             enemiesOnMap = enemiesOnMap.filter(_ != enemy)
+            println(enemiesOnMap.length.toString() + " toka")
           }
         }
       }

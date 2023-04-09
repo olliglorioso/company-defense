@@ -11,7 +11,8 @@ object Constants {
     "file:src/main/scala/Resources/Enemies/CamouflagedEnemy.png"
   val SWARM_ENEMY_LOC = "file:src/main/scala/Resources/Enemies/SwarmEnemy.png"
   val TANK_ENEMY_LOC = "file:src/main/scala/Resources/Enemies/TankEnemy.png"
-  val BASIC_ENEMY_2_LOC = "file:src/main/scala/Resources/Enemies/BasicEnemy2.png"
+  val BASIC_ENEMY_2_LOC = "file:src/main/scala/Resources/Enemies/BasicEnemy2.jpg"
+  
   val REGULAR_TOWER_LOC =
     "file:src/main/scala/Resources/Towers/RegularTower.png"
   val SLOW_DOWN_TOWER_LOC =
