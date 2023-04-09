@@ -108,7 +108,15 @@ class GameplayUI(w: Double, h: Double) extends Scene(w, h) {
           pane.children.remove(bullet)
           bulletsOnMap.value = bulletsOnMap.value.filter(_ != bullet)
           enemy.getHit(bullet.damage, bullet.slowDown)
-          if (enemy.health <= 0) {
+          if (enemy.health <= 0 && enemy.isInstanceOf[SplittingEnemyClass]) {
+            val newEnemies: Seq[BasicEnemy] = enemy.asInstanceOf[SplittingEnemyClass].split()
+            for (newEnemy <- newEnemies) {
+              pane.children.add(newEnemy)
+              enemiesOnMap += newEnemy
+            }
+            pane.children.remove(enemy)
+            enemiesOnMap = enemiesOnMap.filter(_ != enemy)
+          } else if (enemy.health <= 0) {
             pane.children.remove(enemy)
             enemiesOnMap = enemiesOnMap.filter(_ != enemy)
           }

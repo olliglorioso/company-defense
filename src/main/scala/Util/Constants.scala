@@ -4,12 +4,18 @@ import scalafx.scene.control.Button
 import scalafx.scene.image.{Image, ImageView}
 
 object Constants {
-  // Image locations of towers
+  // Image locations of enemies
   val BASIC_ENEMY_LOC = "file:src/main/scala/Resources/Enemies/BasicEnemy.jpg"
   val BASIC_ENEMY_2_LOC = "file:src/main/scala/Resources/Enemies/BasicEnemy2.jpg"
   val BASIC_ENEMY_3_LOC = "file:src/main/scala/Resources/Enemies/BasicEnemy3.jpg"
   val SPLITTING_ENEMY_LOC =
     "file:src/main/scala/Resources/Enemies/SplittingEnemy.png"
+  val SPLITTING_ENEMY_2_LOC =
+    "file:src/main/scala/Resources/Enemies/SplittingEnemy2.png"
+  val SPLITTING_ENEMY_3_LOC =
+    "file:src/main/scala/Resources/Enemies/SplittingEnemy3.png"
+  val SPLITTING_ENEMY_4_LOC =
+    "file:src/main/scala/Resources/Enemies/SplittingEnemy4.png"
   val CAMOUFLAGED_ENEMY_LOC =
     "file:src/main/scala/Resources/Enemies/CamouflagedEnemy.png"
   val CAMOUFLAGED_ENEMY_2_LOC =
@@ -18,6 +24,7 @@ object Constants {
     "file:src/main/scala/Resources/Enemies/CamouflagedEnemy3.png"
   val SWARM_ENEMY_LOC = "file:src/main/scala/Resources/Enemies/SwarmEnemy.png"
   val TANK_ENEMY_LOC = "file:src/main/scala/Resources/Enemies/TankEnemy.png"
+  // Tower images locations
   val REGULAR_TOWER_LOC =
     "file:src/main/scala/Resources/Towers/RegularTower.png"
   val SLOW_DOWN_TOWER_LOC =
@@ -56,11 +63,11 @@ object Constants {
   // Health
   val CAMOUFLAGED_ENEMY_HEALTH = 100
   val BASIC_ENEMY_HEALTH = 100
-  val SPLITTING_ENEMY_HEALTH = 125
+  val SPLITTING_ENEMY_HEALTH = 500
   // Size
   val ENEMY_SIZE = 89.5
   // SoeedS
   val CAMOUFLAGED_ENEMY_SPEED = 3
   val BASIC_ENEMY_SPEED = 3
-  val SPLITTING_ENEMY_SPEED = 5
+  val SPLITTING_ENEMY_SPEED = 2.2
 }
