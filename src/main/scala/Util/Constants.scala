@@ -4,6 +4,7 @@ import scalafx.scene.control.Button
 import scalafx.scene.image.{Image, ImageView}
 
 object Constants {
+  // Image locations of towers
   val BASIC_ENEMY_LOC = "file:src/main/scala/Resources/Enemies/BasicEnemy.jpg"
   val BASIC_ENEMY_2_LOC = "file:src/main/scala/Resources/Enemies/BasicEnemy2.jpg"
   val BASIC_ENEMY_3_LOC = "file:src/main/scala/Resources/Enemies/BasicEnemy3.jpg"
@@ -17,41 +18,48 @@ object Constants {
     "file:src/main/scala/Resources/Enemies/CamouflagedEnemy3.png"
   val SWARM_ENEMY_LOC = "file:src/main/scala/Resources/Enemies/SwarmEnemy.png"
   val TANK_ENEMY_LOC = "file:src/main/scala/Resources/Enemies/TankEnemy.png"
-  
-  
   val REGULAR_TOWER_LOC =
     "file:src/main/scala/Resources/Towers/RegularTower.png"
   val SLOW_DOWN_TOWER_LOC =
     "file:src/main/scala/Resources/Towers/SlowDownTower.png"
+  // Image locations of other stuff
   val HEALTH_ICON_LOC = "file:src/main/scala/Resources/Other/HealthIcon.png"
   val MONEY_ICON_LOC = "file:src/main/scala/Resources/Other/MoneyIcon.png"
   val SCORE_ICON_LOC = "file:src/main/scala/Resources/Other/ScoreIcon.png"
   val REGULAR_BULLET_LOC = "file:src/main/scala/Resources/Bullets/RegularBullet.png"
   val SLOW_DOWN_BULLET_LOC = "file:src/main/scala/Resources/Bullets/SlowDownBullet.png"
   val MAINMENU_BG_LOC = "file:src/main/scala/Resources/Other/MainMenuBackground.png"
+  // Scene looks (map, sidebar)
   val MAP_HEIGHT = 12
   val MAP_WIDTH = 20
   val SIDEBAR_WIDTH = 130
+  // HPs of players in different modes
   val EASY_HP = 100
   val NORMAL_HP = 50
   val HARD_HP = 1
-  val R_COST = 10 // Regular Tower cost
-  val S_COST = 15 // Slow Down Tower cost
-  val R_NAME = "Nerdinator" // Regular Tower name
-  val S_NAME = "Hacktivist" // Slow Down Tower name
-  val R_RANGE = 200 // Regular Tower range
-  val S_RANGE = 200 // Slow Down Tower range
+  // Costs of towers, R = Regular, S = Slow Down
+  val R_COST = 10 
+  val S_COST = 15
+  // Tower names 
+  val R_NAME = "Nerdinator" 
+  val S_NAME = "Hacktivist" 
+  // Tower ranges
+  val R_RANGE = 200 
+  val S_RANGE = 200 
+  // Tower damages
   val R_DAMAGE = 5
   val S_DAMAGE = 7
+  // UI looks stuff
   val TOWER_SIDE = 80
   val UI_TILE_SIZE = 89.5
-  
-  val CAMOUFLAGED_ENEMY_HEALTH = 75
+  // Enemy features
+  // Health
+  val CAMOUFLAGED_ENEMY_HEALTH = 100
   val BASIC_ENEMY_HEALTH = 100
-  val SPLITTING_ENEMY_HEALTH = 100
-  val CAMOUFLAGED_ENEMY_SIZE = 89.5
-  val BASIC_ENEMY_SIZE = 89.5
-  val SPLITTING_ENEMY_SIZE = 89.5
+  val SPLITTING_ENEMY_HEALTH = 125
+  // Size
+  val ENEMY_SIZE = 89.5
+  // SoeedS
   val CAMOUFLAGED_ENEMY_SPEED = 3
   val BASIC_ENEMY_SPEED = 3
   val SPLITTING_ENEMY_SPEED = 5
