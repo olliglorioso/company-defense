@@ -134,6 +134,7 @@ class GameplayUI(w: Double, h: Double) extends Scene(w, h) {
     AnimationTimer { time =>
       {
         if (timerStarted == false) {
+          showMessage("Wave " + ((variates.value("waveNo") + 1).toInt.toString()), "info", 5)
           startTime = time
           timerStarted = true
           lastTime = time
@@ -142,8 +143,10 @@ class GameplayUI(w: Double, h: Double) extends Scene(w, h) {
             val currWave = waves(variates.value("waveNo").toInt)
             if (currWave.length < 1) {
               if (enemiesOnMap.length < 1)
-                variates.value =
-                  variates.value.updated("waveNo", variates.value("waveNo") + 1)
+                // wait for five seconds
+                variates.value = variates.value.updated("waveNo", variates.value("waveNo") + 1)
+                showMessage("Wave " + ((variates.value("waveNo") + 1).toInt.toString()), "info", 5)
+                
             } else {
               val newEnemyType = currWave.dequeue
               val enemy = spawnEnemy(newEnemyType)

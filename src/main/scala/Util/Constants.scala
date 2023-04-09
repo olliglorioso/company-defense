@@ -61,9 +61,9 @@ object Constants {
   val UI_TILE_SIZE = 89.5
   // Enemy features
   // Health
-  val CAMOUFLAGED_ENEMY_HEALTH = 100
+  val CAMOUFLAGED_ENEMY_HEALTH = 175
   val BASIC_ENEMY_HEALTH = 100
-  val SPLITTING_ENEMY_HEALTH = 500
+  val SPLITTING_ENEMY_HEALTH = 700
   // Size
   val ENEMY_SIZE = 89.5
   // SoeedS
