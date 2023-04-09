@@ -15,7 +15,7 @@ import Util.Constants.BASIC_ENEMY_3_LOC
 case class Enemy(
     path: String,
     size: Double,
-    var speed: Int,
+    var speed: Double,
     pathQueue: Queue[PathTile],
     var health: Int
 ) extends GameObject(path, size) {
@@ -29,7 +29,7 @@ case class Enemy(
   var imageChanged2 = false
   getNextTile()
 
-  def getHit(damage: Int, slowDown: Int = 0): Unit = null
+  def getHit(damage: Int, slowDown: Int): Unit = null
 
   def getDistanceToPoint (towerX: Double, towerY: Double) = {
     val scenevals = localToScene(x.value, y.value)
@@ -39,7 +39,7 @@ case class Enemy(
   def getHitFinal(damage: Int, slowDown: Int, image1: String, image2: String): Unit = {
         val origSpeed = speed
         health = health - damage
-        if (slowDown > 0 && speed >= 0.5 * origSpeed) speed = speed * (1 - (slowDown / 100))
+        if (slowDown > 0 && speed >= (0.5 * origSpeed)) speed = speed * (1 - (slowDown.toDouble / 100))
         if (health >= 0 && health <= origHealth / 2 && !imageChanged) {
             imageChanged = true
             image = new Image(image1)
