@@ -5,13 +5,19 @@ import scalafx.scene.image.{Image, ImageView}
 
 object Constants {
   val BASIC_ENEMY_LOC = "file:src/main/scala/Resources/Enemies/BasicEnemy.jpg"
+  val BASIC_ENEMY_2_LOC = "file:src/main/scala/Resources/Enemies/BasicEnemy2.jpg"
+  val BASIC_ENEMY_3_LOC = "file:src/main/scala/Resources/Enemies/BasicEnemy3.jpg"
   val SPLITTING_ENEMY_LOC =
     "file:src/main/scala/Resources/Enemies/SplittingEnemy.png"
   val CAMOUFLAGED_ENEMY_LOC =
     "file:src/main/scala/Resources/Enemies/CamouflagedEnemy.png"
+  val CAMOUFLAGED_ENEMY_2_LOC =
+    "file:src/main/scala/Resources/Enemies/CamouflagedEnemy2.png"
+  val CAMOUFLAGED_ENEMY_3_LOC =
+    "file:src/main/scala/Resources/Enemies/CamouflagedEnemy3.png"
   val SWARM_ENEMY_LOC = "file:src/main/scala/Resources/Enemies/SwarmEnemy.png"
   val TANK_ENEMY_LOC = "file:src/main/scala/Resources/Enemies/TankEnemy.png"
-  val BASIC_ENEMY_2_LOC = "file:src/main/scala/Resources/Enemies/BasicEnemy2.jpg"
+  
   
   val REGULAR_TOWER_LOC =
     "file:src/main/scala/Resources/Towers/RegularTower.png"
