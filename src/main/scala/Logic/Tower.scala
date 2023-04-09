@@ -9,12 +9,14 @@ import scalafx.geometry.Point2D
 abstract class Tower(path: String, price: Int, range: Int)
     extends GameObject(path, TOWER_SIDE) {
     
-    val attackSpeed = 2 // is a good basic speed. Adjusting between 0.5-5 is ok
+    var attackSpeed = 2.0 // is a good basic speed. Adjusting between 0.5-5 is ok. The lower the better
     var lastBulletInit = 0L
     val bulletLoc = REGULAR_BULLET_LOC
-    val damage = 1
-    val slowDown = 0
+    var damage = 1
+    var slowDown = 0
     val bulletSpeed = 30
+    var level = 1
+    val maxLevel = 5 
     // Enemy priority queue
     val enemyPriority = new PriorityQueue[Enemy]()(Ordering.by(enemyPriorityCalc(_)))
 
@@ -24,6 +26,38 @@ abstract class Tower(path: String, price: Int, range: Int)
         if (distToEnemy > range) (generalPrio - 1000)
         else generalPrio
     }
+
+    def sellPrice(): Int = {
+        math.round(price * 0.6).toInt
+    }
+
+    def upgradePrice(): Int = {
+        math.round((price * 0.4) * level).toInt
+    }
+
+    def upgradeToNextLevel(): Unit = {
+        if (level < maxLevel) {
+            level += 1
+            attackSpeed *= 0.85
+            damage = damage + 1
+            slowDown = slowDown + 1
+        }
+    }
+    upgradeToNextLevel()
+    upgradeToNextLevel()
+    upgradeToNextLevel()
+    upgradeToNextLevel()
+    upgradeToNextLevel()
+    upgradeToNextLevel()
+    upgradeToNextLevel()
+    upgradeToNextLevel()
+    upgradeToNextLevel()
+    upgradeToNextLevel()
+    upgradeToNextLevel()
+    upgradeToNextLevel()
+    upgradeToNextLevel()
+    upgradeToNextLevel()
+    upgradeToNextLevel()
 
     def addEnemyToPriorityQueue(enemy: Enemy) = {
         enemyPriority.enqueue(enemy)

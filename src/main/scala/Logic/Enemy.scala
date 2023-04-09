@@ -29,6 +29,8 @@ case class Enemy(
 
   def getHit(damage: Int, slowDown: Int): Unit = null
 
+  def sellPrice(): Int = 0
+
   def getDistanceToPoint (towerX: Double, towerY: Double) = {
     val scenevals = localToScene(x.value, y.value)
     math.sqrt(math.pow(scenevals.x - towerX, 2) + math.pow(scenevals.y - towerY, 2))
