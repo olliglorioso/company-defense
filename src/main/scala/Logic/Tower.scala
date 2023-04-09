@@ -34,6 +34,7 @@ abstract class Tower(path: String, price: Int, range: Int)
     }
 
     def canShootTowardsEnemy(enemy: Enemy): Boolean = {
+        if (enemy.isInstanceOf[CamouflagedEnemy]) return false
         val towerLoc = localToScene(x.value, y.value)
         val distToEnemy = enemy.getDistanceToPoint(towerLoc.x, towerLoc.y)
         if (distToEnemy <= range) true
@@ -67,7 +68,7 @@ abstract class Tower(path: String, price: Int, range: Int)
     }
 
     def rotateTowardsPriorityEnemy() = {
-        if (enemyPriority.nonEmpty) {
+        if (enemyPriority.nonEmpty && canShootTowardsEnemy(enemyPriority.head)) {
             val enemy = enemyPriority.head
             val angle = math.atan2(enemy.translateY.value - y.value, enemy.translateX.value - x.value)
             rotate.value = math.toDegrees(angle) + 90 // Make the head towards the enemy (shooting happens from the "head" of tower)
