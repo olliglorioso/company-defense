@@ -107,12 +107,10 @@ class GameplayUI(w: Double, h: Double) extends Scene(w, h) {
         if (enemy.getDistanceToPoint(bullet.target._1, bullet.target._2) <= enemy.boundBox) {
           pane.children.remove(bullet)
           bulletsOnMap.value = bulletsOnMap.value.filter(_ != bullet)
-          enemy.getHit(bullet.damage)
+          enemy.getHit(bullet.damage, bullet.slowDown)
           if (enemy.health <= 0) {
             pane.children.remove(enemy)
-            println(enemiesOnMap.length.toString() + " eka")
             enemiesOnMap = enemiesOnMap.filter(_ != enemy)
-            println(enemiesOnMap.length.toString() + " toka")
           }
         }
       }

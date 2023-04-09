@@ -32,6 +32,8 @@ case class Enemy(
     math.sqrt(math.pow(scenevals.x - towerX, 2) + math.pow(scenevals.y - towerY, 2))
   }
 
+  def getHit(damage: Int, slowDown: Int): Unit = null
+
   def getNextTile(): PathTile = {
     try
       previousTile = nextTile
@@ -44,15 +46,6 @@ case class Enemy(
       case e: NoSuchElementException =>
         throw Error("No more elements in the queue.")
 
-  }
-
-  def getHit(damage: Int, slowDown: Int = 0) = {
-    if (slowDown > 0) speed = speed - slowDown
-    health = health - damage
-    if (health >= 0 && health <= origHealth / 2 && !imageChanged) {
-      imageChanged = true
-      image = new Image(BASIC_ENEMY_2_LOC)
-    }
   }
 
   def move(newEnemies: Buffer[Enemy], pane: Pane, variates: ObjectProperty[Map[String, Double]]): Unit = 
