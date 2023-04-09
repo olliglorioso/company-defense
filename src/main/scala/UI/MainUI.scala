@@ -14,7 +14,6 @@ import scalafx.animation.AnimationTimer
 import java.util.concurrent.TimeUnit
 
 class MainUI extends JFXApp3:
-  main(Array())
 
   override def start(): Unit =
     val visualBounds: Rectangle2D = Screen.primary.visualBounds

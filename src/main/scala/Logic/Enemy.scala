@@ -1,16 +1,14 @@
 package Logic
 
 import scalafx.scene.image.{ImageView, Image}
-import Logic.*
+import Logic._
 import scala.collection.immutable.Queue
 import scala.collection.mutable.Buffer
-import Util.Constants.UI_TILE_SIZE
 import scalafx.scene.layout.Pane
 import scalafx.beans.property.ObjectProperty
 import scalafx.scene.shape.Rectangle
 import scalafx.scene.paint.Color
-import Util.Constants.BASIC_ENEMY_2_LOC
-import Util.Constants.BASIC_ENEMY_3_LOC
+import Util.Constants._
 
 case class Enemy(
     path: String,
@@ -104,5 +102,4 @@ case class Enemy(
       newEnemies += this
     }
 
-  // add a health bar next to the neemy
 }
