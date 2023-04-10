@@ -54,8 +54,8 @@ object Constants {
   val R_RANGE = 200 
   val S_RANGE = 200 
   // Tower damages
-  val R_DAMAGE = 5
-  val S_DAMAGE = 7
+  val R_DAMAGE = 2
+  val S_DAMAGE = 3
   // UI looks stuff
   val TOWER_SIDE = 80
   val UI_TILE_SIZE = 89.5
