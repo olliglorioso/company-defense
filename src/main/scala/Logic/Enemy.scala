@@ -18,7 +18,7 @@ case class Enemy(
     var health: Int
 ) extends GameObject(path, size) {
   val origHealth = health
-  var boundBox = 20
+  var boundBox = 100
   var (nextTile, queue) =
     pathQueue.dequeue // Take start point and create queue class variable.
   var previousTile = nextTile
@@ -33,8 +33,9 @@ case class Enemy(
   def sellPrice(): Int = 0
 
   def getDistanceToPoint (towerX: Double, towerY: Double) = {
-    val scenevals = localToScene(x.value, y.value)
-    math.sqrt(math.pow(scenevals.x - towerX, 2) + math.pow(scenevals.y - towerY, 2))
+    val scenevals = localToScene(x.value / 2, y.value / 2)
+    val distance = math.sqrt(math.pow(scenevals.x - towerX, 2) + math.pow(scenevals.y - towerY, 2))
+    distance
   }
 
   def getHitFinal(damage: Int, slowDown: Int, image1: String, image2: String): Unit = {

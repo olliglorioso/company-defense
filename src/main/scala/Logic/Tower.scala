@@ -78,9 +78,9 @@ abstract class Tower(path: String, price: Int, range: Int)
                 case _ => (0.0, 0.0)
             
             val target = (enemyLoc.x + enemyLocCoeff._1 * 50, enemyLoc.y + enemyLocCoeff._2 * 50)
-            val bullet = Bullet(bulletLoc, target, bulletSpeed, slowDown, damage)
-            bullet.x.value = x.value + 0.25 * TOWER_SIDE
-            bullet.y.value = y.value + 0.25 * TOWER_SIDE
+            val bullet = Bullet(bulletLoc, target, bulletSpeed, slowDown, damage, closestEnemy)
+            bullet.x.value = x.value + 0.5 * TOWER_SIDE
+            bullet.y.value = y.value + 0.5 * TOWER_SIDE
             lastBulletInit = time
             bullet
         else null
