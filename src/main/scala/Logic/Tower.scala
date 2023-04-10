@@ -72,8 +72,8 @@ abstract class Tower(path: String, price: Int, range: Int)
             val closestEnemy = enemyPriority.head
             val enemyLoc = closestEnemy.localToScene(closestEnemy.layoutBounds.getValue().getCenterX(), closestEnemy.layoutBounds.getValue().getCenterY())
             val bullet = Bullet(bulletLoc, enemyLoc, bulletSpeed, slowDown, damage, closestEnemy)
-            bullet.x.value = x.value + 0.5 * TOWER_SIDE
-            bullet.y.value = y.value + 0.5 * TOWER_SIDE
+            bullet.x.value = layoutBounds.getValue().getCenterX()
+            bullet.y.value = layoutBounds.getValue().getCenterY()
             lastBulletInit = time
             bullet
         else null
