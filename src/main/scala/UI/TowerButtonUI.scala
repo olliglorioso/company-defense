@@ -10,6 +10,7 @@ import scalafx.scene.shape.Circle
 import Util.Constants._
 import scalafx.beans.property._
 import scala.util.control.Breaks._
+import scalafx.scene.paint.Color
 
 class TowerButtonUI(
     picLoc: String,
@@ -45,7 +46,15 @@ class TowerButtonUI(
   })
   tt.setShowDelay(javafx.util.Duration(650.0))
   style = "-fx-background-color: transparent;"
-  graphic = imageView
+  // scalafx circle with css styling
+  val backgroundCircle = new Circle {
+    val towerRadius = getBgCircleRadius.toString()
+    radius = 1
+    fill = Color.Transparent
+  }
+  graphic = new StackPane {
+    children = Seq(backgroundCircle, imageView)
+  }
   minWidth = TOWER_SIDE
   minHeight = TOWER_SIDE
   tooltip_=(tt)
@@ -90,11 +99,18 @@ class TowerButtonUI(
     !broken
   }
 
-  def getButtonStyle(event: MouseEvent, mapInst: GameMap): String = {
+  def getBgCircleRadius = {
+    name match {
+      case R_NAME => R_RANGE
+      case S_NAME => S_RANGE
+    }
+  }
+
+  def setBackgroundStyle(event: MouseEvent, mapInst: GameMap): Unit = {
     if (mapInst.isBgTile(event.getSceneY(), event.getSceneX()) && towerCanBePlaced(event.getSceneX() - (TOWER_SIDE / 2), event.getSceneY() - (TOWER_SIDE / 2))) {
-      "-fx-background-color: green;"
+      backgroundCircle.fill = Color.Green
     } else {
-      "-fx-background-color: red;"
+      backgroundCircle.fill = Color.Red
     }
   }
 
@@ -140,7 +156,9 @@ class TowerButtonUI(
       val newPos = calculateNewPosition(event, userData)
       translateX = newPos._1
       translateY = newPos._2
-      style = getButtonStyle(event, mapInst)
+      setBackgroundStyle(event, mapInst)
+      val newRadius = getBgCircleRadius
+      backgroundCircle.style = "-fx-scale-x: " + newRadius + "; -fx-scale-y: " + newRadius + ";"
     }
   }
 
@@ -175,5 +193,7 @@ class TowerButtonUI(
     } else {
       placeNewTowerIfMoney(towerX, towerY, x, y)
     }
+    backgroundCircle.fill = Color.Transparent
+    backgroundCircle.style = "-fx-scale-x: 0; -fx-scale-y: 0;"
   }
 }
