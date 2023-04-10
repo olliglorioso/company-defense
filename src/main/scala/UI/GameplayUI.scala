@@ -92,13 +92,14 @@ class GameplayUI(w: Double, h: Double) extends Scene(w, h) {
   }
 
   def moveBulletsAndCheckHits(time: Long) = {
+    val enemiesOnMapCopy = enemiesOnMap.clone()
     for (bullet <- bulletsOnMap.value) {
       bullet.move(time)
       if (bullet.isOnTarget()) {
         pane.children.remove(bullet)
         bulletsOnMap.value = bulletsOnMap.value.filter(_ != bullet)
       }
-      for (enemy <- enemiesOnMap) {
+      for (enemy <- enemiesOnMapCopy) {
         if (enemy.getDistanceToPoint(bullet.target._1, bullet.target._2) <= enemy.boundBox) {
           pane.children.remove(bullet)
           bulletsOnMap.value = bulletsOnMap.value.filter(_ != bullet)

@@ -18,7 +18,7 @@ case class Enemy(
     var health: Int
 ) extends GameObject(path, size) {
   val origHealth = health
-  var boundBox = 100
+  var boundBox = 20
   var (nextTile, queue) =
     pathQueue.dequeue // Take start point and create queue class variable.
   var previousTile = nextTile

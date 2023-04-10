@@ -36,28 +36,13 @@ abstract class Tower(path: String, price: Int, range: Int)
     }
 
     def upgradeToNextLevel(): Unit = {
-        if (level < maxLevel) {
+        if (level <= maxLevel) {
             level += 1
             attackSpeed *= 0.85
             damage = damage + 1
             slowDown = slowDown + 1
         }
     }
-    upgradeToNextLevel()
-    upgradeToNextLevel()
-    upgradeToNextLevel()
-    upgradeToNextLevel()
-    upgradeToNextLevel()
-    upgradeToNextLevel()
-    upgradeToNextLevel()
-    upgradeToNextLevel()
-    upgradeToNextLevel()
-    upgradeToNextLevel()
-    upgradeToNextLevel()
-    upgradeToNextLevel()
-    upgradeToNextLevel()
-    upgradeToNextLevel()
-    upgradeToNextLevel()
 
     def addEnemyToPriorityQueue(enemy: Enemy) = {
         enemyPriority.enqueue(enemy)
