@@ -14,7 +14,7 @@ abstract class Tower(path: String, price: Int, range: Int)
     val bulletLoc = REGULAR_BULLET_LOC
     var damage = 1
     var slowDown = 0
-    val bulletSpeed = 30
+    val bulletSpeed = 40
     var level = 1
     val maxLevel = 5 
     // Enemy priority queue
