@@ -59,15 +59,18 @@ object Constants {
   // UI looks stuff
   val TOWER_SIDE = 80
   val UI_TILE_SIZE = 89.5
+  val ENEMY_SIZE = 89.5
   // Enemy features
   // Health
   val CAMOUFLAGED_ENEMY_HEALTH = 175
   val BASIC_ENEMY_HEALTH = 100
   val SPLITTING_ENEMY_HEALTH = 700
-  // Size
-  val ENEMY_SIZE = 89.5
-  // SoeedS
+  // Seeds
   val CAMOUFLAGED_ENEMY_SPEED = 3
   val BASIC_ENEMY_SPEED = 3
   val SPLITTING_ENEMY_SPEED = 2.2
+  // Money rewards
+  val BASIC_ENEMY_MONEY = 2
+  val CAMOUFLAGED_ENEMY_MONEY = 14
+  val SPLITTING_ENEMY_MONEY = 7
 }

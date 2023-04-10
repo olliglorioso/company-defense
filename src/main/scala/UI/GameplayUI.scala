@@ -104,6 +104,8 @@ class GameplayUI(w: Double, h: Double) extends Scene(w, h) {
           bulletsOnMap.value = bulletsOnMap.value.filter(_ != bullet)
           enemy.getHit(bullet.damage, bullet.slowDown)
           if (enemy.health <= 0 && enemy.isInstanceOf[SplittingEnemyClass]) {
+            variates.value = variates.value.updated("money", variates.value("money") + enemy.moneyReward)
+            variates.value = variates.value.updated("score", variates.value("score") + math.round(enemy.moneyReward/2))
             val newEnemies: Seq[BasicEnemy] = enemy.asInstanceOf[SplittingEnemyClass].split()
             for (newEnemy <- newEnemies) {
               pane.children.add(newEnemy)
@@ -112,6 +114,8 @@ class GameplayUI(w: Double, h: Double) extends Scene(w, h) {
             pane.children.remove(enemy)
             enemiesOnMap = enemiesOnMap.filter(_ != enemy)
           } else if (enemy.health <= 0) {
+            variates.value = variates.value.updated("money", variates.value("money") + enemy.moneyReward)
+            variates.value = variates.value.updated("score", variates.value("score") + math.round(enemy.moneyReward/2))
             pane.children.remove(enemy)
             enemiesOnMap = enemiesOnMap.filter(_ != enemy)
           }

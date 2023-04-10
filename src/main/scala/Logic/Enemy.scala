@@ -25,6 +25,7 @@ case class Enemy(
   var tilesTraversed = 0
   var imageChanged = false
   var imageChanged2 = false
+  val moneyReward = 2
   getNextTile()
 
   def getHit(damage: Int, slowDown: Int): Unit = null
