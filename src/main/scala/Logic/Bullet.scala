@@ -6,14 +6,10 @@ import scalafx.geometry.Point2D
 
 // Target: add adjustable target????
 class Bullet (fileLoc: String, val target: Point2D, speed: Int, val slowDown: Int, val damage: Int, val targetEnemy: Enemy) extends GameObject(fileLoc, 35) {
-    def getDistanceToPoint(x: Double, y: Double): Double = {
-        val bulletLoc = localToScene(this.x.value, this.y.value)
-        math.sqrt(math.pow(x - bulletLoc.x, 2) + math.pow(y - bulletLoc.y, 2))
-    }
     def move(time: Long) = {
-        val distToTarget = getDistanceToPoint(target.x, target.y)
+        val distToTarget = getGlobalCenter.distance(target)
         if (distToTarget > speed) {
-            val angle = math.atan2(target.y - y.value, target.x - x.value)
+            val angle = math.atan2(target.y - getGlobalCenter.y, target.x - getGlobalCenter.x)
             translateX.value += math.cos(angle) * speed
             translateY.value += math.sin(angle) * speed
         } else {
@@ -22,7 +18,7 @@ class Bullet (fileLoc: String, val target: Point2D, speed: Int, val slowDown: In
         }
     }
     def isOnTarget() = {
-        val distToTarget = getDistanceToPoint(target.x, target.y)
+        val distToTarget = getGlobalCenter.distance(target)
         distToTarget <= speed
     }
     def getGlobalCenter: Point2D = {
