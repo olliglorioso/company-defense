@@ -23,6 +23,8 @@ import scalafx.stage.Screen
 import scalafx.scene.paint.Color
 import scalafx.scene.image.ImageView
 import Logic._
+import scalafx.geometry.Pos
+import scalafx.scene.control.Button
 
 class SidebarUI(
     pane: Pane,
@@ -60,7 +62,6 @@ class SidebarUI(
   val moneyLabel = new Label(variatesRef.value("money").toInt.toString()) {
     style =
       "-fx-font: normal bold 20 Langdon; " + "-fx-base: #AE3522; " + "-fx-text-fill: orange;"
-    translateY = h - 100
     graphic = new ImageView(MONEY_ICON_LOC) {
       fitWidth = 30.0
       fitHeight = 30.0
@@ -70,7 +71,6 @@ class SidebarUI(
   val healthLabel = new Label(variatesRef.value("health").toInt.toString()) {
     style =
       "-fx-font: normal bold 20 Langdon; " + "-fx-base: #AE3522; " + "-fx-text-fill: orange;"
-    translateY = h - 175
     graphic = new ImageView(HEALTH_ICON_LOC) {
       fitWidth = 30.0
       fitHeight = 30.0
@@ -80,8 +80,6 @@ class SidebarUI(
   val scoreLabel = new Label(variatesRef.value("score").toInt.toString()) {
     style =
       "-fx-font: normal bold 20 Langdon; " + "-fx-base: #AE3522; " + "-fx-text-fill: orange;"
-    translateY = h - 250
-    // add an icon to the beginning of this label
     graphic = new ImageView(SCORE_ICON_LOC) {
       fitWidth = 30.0
       fitHeight = 30.0
@@ -95,15 +93,62 @@ class SidebarUI(
     healthLabel.text = newValue("health").toInt.toString()
   })
 
+  val towers = new VBox() {
+    alignment = Pos.Center
+    children = Seq(
+      regularTower,
+      slowDownTower
+    )
+    spacing = 10
+    style = "-fx-background-color: grey;"
+  }
+
+  val infoLabels = new VBox() {
+    // set to the bottom of sidebar
+    alignment = Pos.BottomRight
+    translateY = h - UI_TILE_SIZE * towers.children.length - 3 * 75
+    children = Seq(
+      moneyLabel,
+      healthLabel,
+      scoreLabel
+    )
+    spacing = 10
+    style = "-fx-background-color: grey;"
+  }
+
+  var editInfo = new VBox() {
+    alignment = Pos.Center
+    spacing = 10
+    children = Seq(
+      new Button("Upgrade") {
+        style = "-fx-base: green;"
+        prefWidth = 100
+      },
+      new Button("Sell") {
+        style = "-fx-base: red;"
+        prefWidth = 100
+      }
+    )
+  }
+
+  def showEditInfo(): Unit = {
+    children = Seq(
+      towers,
+      editInfo,
+      infoLabels
+    )
+  }
+
   padding = Insets(20)
-  spacing = 10
-  children = Seq(
-    moneyLabel,
-    healthLabel,
-    scoreLabel,
-    regularTower,
-    slowDownTower
+    spacing = 10
+    children = Seq(
+      towers,
+      infoLabels
   )
+
+  showEditInfo()
+
+  
   // set sidebar width
   prefWidth = SIDEBAR_WIDTH
   style = "-fx-background-color: grey;"
