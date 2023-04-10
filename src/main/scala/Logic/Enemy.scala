@@ -9,6 +9,7 @@ import scalafx.beans.property.ObjectProperty
 import scalafx.scene.shape.Rectangle
 import scalafx.scene.paint.Color
 import Util.Constants._
+import scalafx.geometry.Point2D
 
 case class Enemy(
     path: String,
@@ -32,10 +33,9 @@ case class Enemy(
 
   def sellPrice(): Int = 0
 
-  def getDistanceToPoint (towerX: Double, towerY: Double) = {
-    val scenevals = localToScene(x.value / 2, y.value / 2)
-    val distance = math.sqrt(math.pow(scenevals.x - towerX, 2) + math.pow(scenevals.y - towerY, 2))
-    distance
+  def getDistanceToPoint (point: Point2D) = {
+    val enemyLoc = localToScene(layoutBounds.getValue().getCenterX(), layoutBounds.getValue().getCenterY())
+    enemyLoc.distance(point)
   }
 
   def getHitFinal(damage: Int, slowDown: Int, image1: String, image2: String): Unit = {

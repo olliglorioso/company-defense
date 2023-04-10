@@ -22,7 +22,7 @@ abstract class Tower(path: String, price: Int, range: Int)
 
     def enemyPriorityCalc(enemy: Enemy): Double = {
         val towerLoc = localToScene(layoutBounds.getValue().getCenterX(), layoutBounds.getValue().getCenterY())
-        val distToEnemy = enemy.getDistanceToPoint(towerLoc.x, towerLoc.y)
+        val distToEnemy = enemy.getDistanceToPoint(towerLoc)
         val generalPrio = enemy.health * 0.4 + enemy.speed * 0.01 + -distToEnemy * 0.25 + enemy.tilesTraversed * 0.70
         if (distToEnemy > range) (generalPrio - 1000)
         else generalPrio
@@ -55,8 +55,8 @@ abstract class Tower(path: String, price: Int, range: Int)
 
     def canShootTowardsEnemy(enemy: Enemy): Boolean = {
         if (enemy.isInstanceOf[CamouflagedEnemy]) return false
-        val towerLoc = localToScene(x.value, y.value)
-        val distToEnemy = enemy.getDistanceToPoint(towerLoc.x, towerLoc.y)
+        val towerLoc = localToScene(layoutBounds.getValue().getCenterX(), layoutBounds.getValue().getCenterY())
+        val distToEnemy = enemy.getDistanceToPoint(towerLoc)
         if (distToEnemy <= range) true
         else false
     }
@@ -70,16 +70,8 @@ abstract class Tower(path: String, price: Int, range: Int)
         
         if (canInitNewBullet(time, lastBulletInit)) then 
             val closestEnemy = enemyPriority.head
-            val enemyLoc = closestEnemy.localToScene(closestEnemy.x.value, closestEnemy.y.value)
-            val enemyLocCoeff: (Double, Double) = closestEnemy.rotate.value match
-                case 180.0 => (-1.5, -1.5)
-                case 0 => (1, 1)
-                case 90 => (-1.5, 1)
-                case 270 => (-1.5, 1)
-                case _ => (0.0, 0.0)
-            
-            val target = (enemyLoc.x + enemyLocCoeff._1 * 50, enemyLoc.y + enemyLocCoeff._2 * 50)
-            val bullet = Bullet(bulletLoc, target, bulletSpeed, slowDown, damage, closestEnemy)
+            val enemyLoc = closestEnemy.localToScene(closestEnemy.layoutBounds.getValue().getCenterX(), closestEnemy.layoutBounds.getValue().getCenterY())
+            val bullet = Bullet(bulletLoc, enemyLoc, bulletSpeed, slowDown, damage, closestEnemy)
             bullet.x.value = x.value + 0.5 * TOWER_SIDE
             bullet.y.value = y.value + 0.5 * TOWER_SIDE
             lastBulletInit = time
