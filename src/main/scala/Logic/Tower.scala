@@ -9,7 +9,7 @@ import scalafx.geometry.Point2D
 abstract class Tower(path: String, price: Int, range: Int)
     extends GameObject(path, TOWER_SIDE) {
     
-    var attackSpeed = 2.0 // is a good basic speed. Adjusting between 0.5-5 is ok. The lower the better
+    var attackSpeed = 3.0 // is a good basic speed. Adjusting between 0.5-5 is ok. The lower the better
     var lastBulletInit = 0L
     val bulletLoc = REGULAR_BULLET_LOC
     var damage = 1
