@@ -22,7 +22,7 @@ abstract class Tower(path: String, price: Int, range: Int)
 
     def enemyPriorityCalc(enemy: Enemy): Double = {
         val towerLoc = localToScene(layoutBounds.getValue().getCenterX(), layoutBounds.getValue().getCenterY())
-        val distToEnemy = enemy.getDistanceToPoint(x.value, y.value)
+        val distToEnemy = enemy.getDistanceToPoint(towerLoc.x, towerLoc.y)
         val generalPrio = enemy.health * 0.4 + enemy.speed * 0.01 + -distToEnemy * 0.25 + enemy.tilesTraversed * 0.70
         if (distToEnemy > range) (generalPrio - 1000)
         else generalPrio
