@@ -37,6 +37,10 @@ case class Enemy(
     val enemyLoc = localToScene(layoutBounds.getValue().getCenterX(), layoutBounds.getValue().getCenterY())
     enemyLoc.distance(point)
   }
+  def getGlobalCenter: Point2D = {
+        val enemyLoc = localToScene(layoutBounds.getValue().getCenterX(), layoutBounds.getValue().getCenterY())
+        enemyLoc
+  }
 
   def getHitFinal(damage: Int, slowDown: Int, image1: String, image2: String): Unit = {
       val origSpeed = speed

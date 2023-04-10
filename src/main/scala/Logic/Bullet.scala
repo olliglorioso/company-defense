@@ -25,4 +25,8 @@ class Bullet (fileLoc: String, val target: Point2D, speed: Int, val slowDown: In
         val distToTarget = getDistanceToPoint(target.x, target.y)
         distToTarget <= speed
     }
+    def getGlobalCenter: Point2D = {
+        val bulletLoc = localToScene(layoutBounds.getValue().getCenterX(), layoutBounds.getValue().getCenterY())
+        bulletLoc
+    }
 }

@@ -100,7 +100,8 @@ class GameplayUI(w: Double, h: Double) extends Scene(w, h) {
         bulletsOnMap.value = bulletsOnMap.value.filter(_ != bullet)
       }
       for (enemy <- enemiesOnMapCopy) {
-        if (enemy.getDistanceToPoint(bullet.target) <= enemy.boundBox && bullet.targetEnemy == enemy) {
+        if (enemy.getDistanceToPoint(bullet.getGlobalCenter) <= enemy.boundBox && bullet.targetEnemy == enemy) {
+          println("hit!")
           enemy.getHit(bullet.damage, bullet.slowDown)
           if (enemy.health <= 0 && enemy.isInstanceOf[SplittingEnemyClass]) {
             variates.value = variates.value.updated("money", variates.value("money") + enemy.moneyReward)

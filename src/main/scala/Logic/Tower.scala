@@ -64,13 +64,17 @@ abstract class Tower(path: String, price: Int, range: Int)
     def canInitNewBullet(time: Long, lastBulletInit: Long): Boolean = {
         (enemyPriority.nonEmpty && canShootTowardsEnemy(enemyPriority.head) && (lastBulletInit == 0L || time - lastBulletInit >= attackSpeed * 100000000L))
     }
+    def getGlobalCenter: Point2D = {
+        val towerLoc = localToScene(layoutBounds.getValue().getCenterX(), layoutBounds.getValue().getCenterY())
+        towerLoc
+    }
 
 
     def initBullet(time: Long): Bullet = {
         
         if (canInitNewBullet(time, lastBulletInit)) then 
             val closestEnemy = enemyPriority.head
-            val enemyLoc = closestEnemy.localToScene(closestEnemy.layoutBounds.getValue().getCenterX(), closestEnemy.layoutBounds.getValue().getCenterY())
+            val enemyLoc = closestEnemy.getGlobalCenter
             val bullet = Bullet(bulletLoc, enemyLoc, bulletSpeed, slowDown, damage, closestEnemy)
             bullet.x.value = layoutBounds.getValue().getCenterX()
             bullet.y.value = layoutBounds.getValue().getCenterY()
@@ -82,7 +86,7 @@ abstract class Tower(path: String, price: Int, range: Int)
     def rotateTowardsPriorityEnemy() = {
         if (enemyPriority.nonEmpty && canShootTowardsEnemy(enemyPriority.head)) {
             val enemy = enemyPriority.head
-            val angle = math.atan2(enemy.translateY.value - y.value, enemy.translateX.value - x.value)
+            val angle = math.atan2(enemy.getGlobalCenter.y - getGlobalCenter.y, enemy.getGlobalCenter.x - getGlobalCenter.x)
             rotate.value = math.toDegrees(angle) + 90 // Make the head towards the enemy (shooting happens from the "head" of tower)
         }
     }
