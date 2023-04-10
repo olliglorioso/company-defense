@@ -116,14 +116,11 @@ class TowerButtonUI(
 
   def placeNewTowerIfMoney(towerX: Double, towerY: Double, x: Double, y: Double) = {
     if (variates.value("money") >= price) then
-      // Create a new Tower instance in this position
       val newTower = name match {
         case R_NAME => new RegularTower()
         case S_NAME => new SlowDownTower()
       }
-      // make tooltip to stay when mouse over it
       val info = new Button() {
-        tooltip_=(tt)
         minWidth = TOWER_SIDE
         minHeight = TOWER_SIDE
       }
