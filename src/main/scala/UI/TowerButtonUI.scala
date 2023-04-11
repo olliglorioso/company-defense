@@ -121,26 +121,13 @@ class TowerButtonUI(
         case R_NAME => new RegularTower()
         case S_NAME => new SlowDownTower()
       }
-      val info = new Button() {
-        minWidth = TOWER_SIDE
-        minHeight = TOWER_SIDE
-        onMouseClicked = (event: MouseEvent) => {
-          openUpgradeMenu(newTower, this)
-        }
-      }
       towersOnMap.value = towersOnMap.value :+ newTower
       newTower.x = towerX
       newTower.y = towerY
-      val stackPane = new StackPane()
-      info.style =
-        "-fx-background-color: transparent; -fx-border-color: transparent;" // Tooltip button style (transparent)
-      stackPane.getChildren().addAll(newTower, info)
-      stackPane.translateX = towerX
-      stackPane.translateY = towerY
       // Return the button to its original position
       variates.value =
         variates.value.updated("money", variates.value("money") - price)
-      pane.children.add(stackPane)
+      pane.children.add(newTower)
       translateX = x
       translateY = y
       style = "-fx-background-color: transparent;"
