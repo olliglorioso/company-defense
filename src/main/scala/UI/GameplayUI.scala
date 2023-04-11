@@ -179,6 +179,9 @@ class GameplayUI(w: Double, h: Double, stage: PrimaryStage, mainmenuScene: => Sc
                   timer.stop()
                   stage.setScene(mainmenuSceneLazy)
                 }
+                onShowing = _ => {
+                  timer.stop()
+                }
               }.show()
             }
             if (newEnemyInstance != null) {
