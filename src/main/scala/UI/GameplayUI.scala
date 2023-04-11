@@ -93,15 +93,15 @@ class GameplayUI(w: Double, h: Double) extends Scene(w, h) {
 
   def moveBulletsAndCheckHits(time: Long) = {
     val enemiesOnMapCopy = enemiesOnMap.clone()
-    for (bullet <- bulletsOnMap.value) {
-      bullet.move(time)
+    val bulletsOnMapCopy = bulletsOnMap.value.clone()
+    for (bullet <- bulletsOnMapCopy) {
+      bullet.move()
       if (bullet.isOnTarget()) {
         pane.children.remove(bullet)
         bulletsOnMap.value = bulletsOnMap.value.filter(_ != bullet)
       }
       for (enemy <- enemiesOnMapCopy) {
         if (enemy.getDistanceToPoint(bullet.getGlobalCenter) <= enemy.boundBox) {
-          println("hit!")
           enemy.getHit(bullet.damage, bullet.slowDown)
           if (enemy.health <= 0 && enemy.isInstanceOf[SplittingEnemyClass]) {
             variates.value = variates.value.updated("money", variates.value("money") + enemy.moneyReward)

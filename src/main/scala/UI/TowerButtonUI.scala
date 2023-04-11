@@ -101,8 +101,8 @@ class TowerButtonUI(
 
   def getBgCircleRadius = {
     name match {
-      case R_NAME => R_RANGE
-      case S_NAME => S_RANGE
+      case R_NAME => (R_RANGE - 1/2 * ENEMY_SIZE).toInt
+      case S_NAME => (S_RANGE - 1/2 * ENEMY_SIZE).toInt
     }
   }
 

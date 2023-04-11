@@ -45,6 +45,7 @@ case class Enemy(
   def getHitFinal(damage: Int, slowDown: Int, image1: String, image2: String): Unit = {
       val origSpeed = speed
       health = health - damage
+      println(speed)
       if (slowDown > 0 && (speed >= (0.6 * origSpeed))) speed = speed * (1 - (slowDown.toDouble / 100))
       if (health >= 0 && health <= origHealth / 2 && !imageChanged) {
           imageChanged = true
