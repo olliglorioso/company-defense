@@ -215,10 +215,9 @@ class GameplayUI(w: Double, h: Double) extends Scene(w, h) {
             count += 1
             startTime = time
           }
-          if (count > blinks) {
+          if (count > blinks) then
             pane.children.remove(label)
             timer.stop()
-          }
         }
       }
     }

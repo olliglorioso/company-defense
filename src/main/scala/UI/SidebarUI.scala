@@ -143,6 +143,7 @@ class SidebarUI(
     )
     spacing = 10
     style = "-fx-background-color: grey;"
+    
   }
 
   val infoLabels = new VBox() {
@@ -153,17 +154,16 @@ class SidebarUI(
       healthLabel,
       scoreLabel
     )
+    vgrow_=(Priority.Always)
     spacing = 10
     style = "-fx-background-color: transparent;"
-    vgrow_=(Priority.Always)
   }
 
   // make towers to be in the top of the sidebar, and infolabels in the bottom
   
   padding = Insets(20)
   spacing = 10
-  prefHeight = h - 200
-  alignment = Pos.Center
+  margin = Insets(0, 0, 30, 0)
   children = Seq(
     towers,
     infoLabels
