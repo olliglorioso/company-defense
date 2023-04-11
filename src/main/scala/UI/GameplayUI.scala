@@ -168,6 +168,7 @@ class GameplayUI(w: Double, h: Double, stage: PrimaryStage, mainmenuScene: => Sc
             val newEnemyInstance = enemy.move(pane, variates)
             if (variates.value("health") <= 9 && !gameOver) {
               gameOver = true
+              showMessage("Game Over", "info", 20)
               val dialog = new Dialog[String]() {
                 title = "Game Over"
                 headerText = s"Your points: ${variates.value("score").toInt}"

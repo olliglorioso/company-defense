@@ -32,14 +32,13 @@ class MainMenuUI {
     */
   def mainMenuScene(
       stage: JFXApp3.PrimaryStage,
-      gameplayScene: => GameplayUI,
       settingsScene: => Scene,
       w: Double,
       h: Double
   ): Scene =
     val buttonStyle = "-fx-background-color: red; -fx-text-fill: black; -fx-font-size: 24pt; -fx-font-family: 'Arial Black', sans-serif; -fx-padding: 10px 20px; -fx-background-radius: 50px; -fx-border-radius: 50px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 3);"
-    lazy val gameplaySceneLazy = gameplayScene
     lazy val settingsSceneLazy = settingsScene
+    
     val mainmenuScene: Scene = new Scene(w, h):
       root = new VBox {
         background = new Background(
@@ -78,8 +77,9 @@ class MainMenuUI {
             }
 
             onAction = () => {
-              stage.setScene(gameplaySceneLazy)
-              gameplaySceneLazy.timer.start()
+              val gameplayScene = new GameplayUI(w, h, stage, mainMenuScene(stage, settingsSceneLazy, w, h))
+              stage.setScene(gameplayScene)
+              gameplayScene.timer.start()
             }
           },
           new Button("Settings") {
