@@ -14,9 +14,8 @@ import scalafx.scene.shape.Rectangle
 import scalafx.scene.input.TransferMode
 import scalafx.scene.Scene
 import Logic.GameMap
-import scalafx.scene.control.Label
 import scalafx.beans.property.ObjectProperty
-import scalafx.scene.control.Labeled
+import scalafx.scene.control._
 import scalafx.beans.property.BufferProperty
 import scalafx.geometry.Rectangle2D
 import scalafx.stage.Screen
@@ -24,7 +23,6 @@ import scalafx.scene.paint.Color
 import scalafx.scene.image.ImageView
 import Logic._
 import scalafx.geometry.Pos
-import scalafx.scene.control.Button
 
 class SidebarUI(
     pane: Pane,
@@ -42,7 +40,8 @@ class SidebarUI(
     mapInst,
     variatesRef,
     towersOnMap,
-    showMessage
+    showMessage,
+    openUpgradeMenu
   )
   val slowDownTower = new TowerButtonUI(
     SLOW_DOWN_TOWER_LOC,
@@ -53,11 +52,37 @@ class SidebarUI(
     mapInst,
     variatesRef,
     towersOnMap,
-    showMessage
+    showMessage,
+    openUpgradeMenu
   )
 
   val visualBounds: Rectangle2D = Screen.primary.visualBounds
   val (h, w) = (visualBounds.getHeight, visualBounds.getWidth)
+
+  def openUpgradeMenu(tower: Tower): Unit = {
+    var editInfo = new VBox() {
+      alignment = Pos.Center
+      spacing = 10
+      children = Seq(
+        new Label(tower.displayName) {
+          style = "-fx-font: normal bold 20 Langdon; " + "-fx-base: #AE3522; " + "-fx-text-fill: orange;"
+        },
+        new Button("Upgrade") {
+          style = "-fx-base: green;"
+          prefWidth = 100
+        },
+        new Button("Sell") {
+          style = "-fx-base: red;"
+          prefWidth = 100
+        }
+      )
+    }
+    children = Seq(
+      towers,
+      editInfo,
+      infoLabels
+    )
+  }
   // Label for showing money amount
   val moneyLabel = new Label(variatesRef.value("money").toInt.toString()) {
     style =
@@ -76,7 +101,6 @@ class SidebarUI(
       fitHeight = 30.0
     }
   }
-
   val scoreLabel = new Label(variatesRef.value("score").toInt.toString()) {
     style =
       "-fx-font: normal bold 20 Langdon; " + "-fx-base: #AE3522; " + "-fx-text-fill: orange;"
@@ -85,14 +109,12 @@ class SidebarUI(
       fitHeight = 30.0
     }
   }
-
   // Update money label
   variatesRef.onChange((_, _, newValue) => {
     moneyLabel.text = newValue("money").toInt.toString()
     scoreLabel.text = newValue("score").toInt.toString()
     healthLabel.text = newValue("health").toInt.toString()
   })
-
   val towers = new VBox() {
     alignment = Pos.Center
     children = Seq(
@@ -116,29 +138,6 @@ class SidebarUI(
     style = "-fx-background-color: grey;"
   }
 
-  var editInfo = new VBox() {
-    alignment = Pos.Center
-    spacing = 10
-    children = Seq(
-      new Button("Upgrade") {
-        style = "-fx-base: green;"
-        prefWidth = 100
-      },
-      new Button("Sell") {
-        style = "-fx-base: red;"
-        prefWidth = 100
-      }
-    )
-  }
-
-  def showEditInfo(): Unit = {
-    children = Seq(
-      towers,
-      editInfo,
-      infoLabels
-    )
-  }
-
   padding = Insets(20)
     spacing = 10
     children = Seq(
@@ -146,10 +145,6 @@ class SidebarUI(
       infoLabels
   )
 
-  showEditInfo()
-
-  
-  // set sidebar width
   prefWidth = SIDEBAR_WIDTH
   style = "-fx-background-color: grey;"
 }

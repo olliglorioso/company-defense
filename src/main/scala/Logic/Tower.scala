@@ -1,10 +1,12 @@
 package Logic
 import Logic._
-import scalafx.Includes.jfxMouseEvent2sfx
+import scalafx.Includes._
 import scalafx.scene.input.InputIncludes.jfxMouseEvent2sfx
 import scala.collection.mutable.PriorityQueue
 import Util.Constants._
 import scalafx.geometry.Point2D
+import javafx.event.EventHandler
+import javafx.scene.input.MouseEvent
 
 abstract class Tower(path: String, price: Int, range: Int)
     extends GameObject(path, TOWER_SIDE) {
@@ -17,10 +19,11 @@ abstract class Tower(path: String, price: Int, range: Int)
     val bulletSpeed = 40
     var level = 1
     val maxLevel = 5 
+    val towerThis = this
     // Enemy priority queue
     val enemyPriority = new PriorityQueue[Enemy]()(Ordering.by(enemyPriorityCalc(_)))
 
-    def enemyPriorityCalc(enemy: Enemy): Double = {
+    private def enemyPriorityCalc(enemy: Enemy): Double = {
         val distToEnemy = enemy.getDistanceToPoint(getGlobalCenter)
         val generalPrio = enemy.health * 0.4 + enemy.speed * 0.01 + -distToEnemy * 0.25 + enemy.tilesTraversed * 0.70
         if (distToEnemy > range) (generalPrio - 1000)
@@ -52,7 +55,7 @@ abstract class Tower(path: String, price: Int, range: Int)
         enemyPriority.clear()
     }
 
-    def canShootTowardsEnemy(enemy: Enemy): Boolean = {
+    private def canShootTowardsEnemy(enemy: Enemy): Boolean = {
         if (enemy.isInstanceOf[CamouflagedEnemy]) return false
         val towerLoc = localToScene(layoutBounds.getValue().getCenterX(), layoutBounds.getValue().getCenterY())
         val distToEnemy = enemy.getDistanceToPoint(towerLoc)
@@ -60,17 +63,16 @@ abstract class Tower(path: String, price: Int, range: Int)
         else false
     }
 
-    def canInitNewBullet(time: Long, lastBulletInit: Long): Boolean = {
+    private def canInitNewBullet(time: Long, lastBulletInit: Long): Boolean = {
         (enemyPriority.nonEmpty && canShootTowardsEnemy(enemyPriority.head) && (lastBulletInit == 0L || time - lastBulletInit >= attackSpeed * 100000000L))
     }
+
     def getGlobalCenter: Point2D = {
         val towerLoc = localToScene(layoutBounds.getValue().getCenterX(), layoutBounds.getValue().getCenterY())
         towerLoc
     }
 
-
-    def initBullet(time: Long): Bullet = {
-        
+    def initBullet(time: Long): Bullet = { 
         if (canInitNewBullet(time, lastBulletInit)) then 
             val closestEnemy = enemyPriority.head
             val enemyLoc = closestEnemy.getGlobalCenter
