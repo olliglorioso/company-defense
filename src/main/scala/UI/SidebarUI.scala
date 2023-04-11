@@ -23,6 +23,7 @@ import scalafx.scene.paint.Color
 import scalafx.scene.image.ImageView
 import Logic._
 import scalafx.geometry.Pos
+import Util.HelperFunctions.labelStyle
 
 class SidebarUI(
     pane: Pane,
@@ -67,10 +68,10 @@ class SidebarUI(
       spacing = 10
       children = Seq(
         new Label(tower.displayName) {
-          style = "-fx-font: normal bold 13 Langdon; " + "-fx-base: #AE3522; " + "-fx-text-fill: orange;"
+          style = labelStyle(13)
         },
         new Label(s"Level: ${tower.level.value}") {
-          style = "-fx-font: normal bold 13 Langdon; " + "-fx-base: #AE3522; " + "-fx-text-fill: orange;"
+          style = labelStyle(13)
         },
         new Button(s"Up (${upPrice})") {
           style = "-fx-base: green;"
@@ -96,8 +97,7 @@ class SidebarUI(
   }
   // Label for showing money amount
   val moneyLabel = new Label(variatesRef.value("money").toInt.toString()) {
-    style =
-      "-fx-font: normal bold 20 Langdon; " + "-fx-base: #AE3522; " + "-fx-text-fill: orange;"
+    style = labelStyle(20)
     graphic = new ImageView(MONEY_ICON_LOC) {
       fitWidth = 30.0
       fitHeight = 30.0
@@ -105,16 +105,14 @@ class SidebarUI(
   }
 
   val healthLabel = new Label(variatesRef.value("health").toInt.toString()) {
-    style =
-      "-fx-font: normal bold 20 Langdon; " + "-fx-base: #AE3522; " + "-fx-text-fill: orange;"
+    style = labelStyle(20)
     graphic = new ImageView(HEALTH_ICON_LOC) {
       fitWidth = 30.0
       fitHeight = 30.0
     }
   }
   val scoreLabel = new Label(variatesRef.value("score").toInt.toString()) {
-    style =
-      "-fx-font: normal bold 20 Langdon; " + "-fx-base: #AE3522; " + "-fx-text-fill: orange;"
+    style = labelStyle(20)
     graphic = new ImageView(SCORE_ICON_LOC) {
       fitWidth = 30.0
       fitHeight = 30.0

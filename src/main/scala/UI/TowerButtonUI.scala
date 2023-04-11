@@ -11,6 +11,7 @@ import Util.Constants._
 import scalafx.beans.property._
 import scala.util.control.Breaks._
 import scalafx.scene.paint.Color
+import Util.HelperFunctions.labelStyle
 
 class TowerButtonUI(
     picLoc: String,
@@ -31,15 +32,13 @@ class TowerButtonUI(
     fitHeight = 80
     preserveRatio = true
   }
-  val ttstyle =
-    ("-fx-font: normal bold 20 Langdon; " + "-fx-base: #AE3522; " + "-fx-text-fill: orange;")
   val tt = new Tooltip()
-  tt.setStyle(ttstyle)
+  tt.setStyle(labelStyle(20))
   tt.setGraphic(new VBox {
     spacing = 5
     children = Seq(
       new Label(name) {
-        style = ttstyle
+        style = labelStyle(20)
       },
       new Label("Price: " + price),
       new Label(desc)

@@ -15,4 +15,6 @@ object HelperFunctions {
   def showMessage(message: String, title: String, blinks: Int, node: Node) = 
     val currentScene: GameplayUI = node.getScene().asInstanceOf[GameplayUI]
     currentScene.showMessage(message, title, blinks)
+  
+  def labelStyle(size: Int): String = s"-fx-font: normal bold ${size} Langdon; -fx-base: #AE3522; " + "-fx-text-fill: orange;"
 }
