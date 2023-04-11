@@ -130,6 +130,7 @@ class TowerButtonUI(
       translateX = x
       translateY = y
       style = "-fx-background-color: transparent;"
+      openUpgradeMenu(newTower)
   }
     
   onMouseDragged = (event: MouseEvent) => {
