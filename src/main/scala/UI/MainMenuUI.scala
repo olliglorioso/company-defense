@@ -32,8 +32,8 @@ class MainMenuUI {
     */
   def mainMenuScene(
       stage: JFXApp3.PrimaryStage,
-      gameplayScene: GameplayUI,
-      settingsScene: Scene,
+      gameplayScene: => GameplayUI,
+      settingsScene: => Scene,
       w: Double,
       h: Double
   ): Scene =
@@ -76,7 +76,6 @@ class MainMenuUI {
             onMouseExited = () => {
               style = buttonStyle
             }
-
 
             onAction = () => {
               stage.setScene(gameplaySceneLazy)

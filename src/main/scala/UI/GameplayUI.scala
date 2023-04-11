@@ -31,6 +31,12 @@ import Util.Constants._
 import scalafx.scene.control.Tooltip
 import scalafx.beans.property._
 import scala.collection.mutable.ArrayBuffer
+import scalafx.scene.control.Alert
+import scalafx.scene.control.Alert.AlertType
+import scalafx.scene.control.Dialog
+import scalafx.application.Platform
+import scalafx.scene.control.ButtonType
+import scalafx.application.JFXApp3.PrimaryStage
 
 sealed abstract class EnemyType(val value: Int)
 case object BasicEnemy extends EnemyType(1)
@@ -46,7 +52,8 @@ case object CamouflagedEnemy extends EnemyType(5)
   * @param h
   *   Scene height
   */
-class GameplayUI(w: Double, h: Double) extends Scene(w, h) {
+class GameplayUI(w: Double, h: Double, stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(w, h) {
+  lazy val mainmenuSceneLazy = mainmenuScene
   val mapInst: GameMap = new GameMap("test_map.txt")
   val waves: Array[Queue[EnemyType]] = generateWaves("test_wavedata.txt")
   val map = createMap(UI_TILE_SIZE, mapInst.map)
@@ -59,6 +66,7 @@ class GameplayUI(w: Double, h: Double) extends Scene(w, h) {
   var timerStarted = false
   var startTime = 0L
   var lastTime = 0L
+  var gameOver = false
 
   var pane = new Pane {
     children = map.flatten
@@ -145,8 +153,8 @@ class GameplayUI(w: Double, h: Double) extends Scene(w, h) {
               if (enemiesOnMap.length < 1)
                 // wait for five seconds
                 variates.setValue(variates.value.updated("waveNo", variates.value("waveNo") + 1))
-                showMessage("Wave " + ((variates.value("waveNo") + 1).toInt.toString()), "info", 5)
-                
+                showMessage("Wave " + ((variates.value("waveNo") + 1).toInt.toString()), "info", 4)
+                timer.stop()
             } else {
               val newEnemyType = currWave.dequeue
               val enemy = spawnEnemy(newEnemyType)
@@ -158,6 +166,20 @@ class GameplayUI(w: Double, h: Double) extends Scene(w, h) {
           val newEnemies = new ArrayBuffer[Enemy](enemiesOnMap.length - 1)
           for (enemy <- enemiesOnMap) {
             val newEnemyInstance = enemy.move(pane, variates)
+            if (variates.value("health") <= 9 && !gameOver) {
+              gameOver = true
+              val dialog = new Dialog[String]() {
+                title = "Game Over"
+                headerText = s"Your points: ${variates.value("score").toInt}"
+                dialogPane().buttonTypes = Seq(ButtonType.OK)
+                resultConverter = _ => ""
+                width_=(300)
+                onHidden = _ => {
+                  timer.stop()
+                  stage.setScene(mainmenuSceneLazy)
+                }
+              }.show()
+            }
             if (newEnemyInstance != null) {
               newEnemies += newEnemyInstance
             }
