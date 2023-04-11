@@ -37,6 +37,7 @@ import scalafx.scene.control.Dialog
 import scalafx.application.Platform
 import scalafx.scene.control.ButtonType
 import scalafx.application.JFXApp3.PrimaryStage
+import Util.State._
 
 sealed abstract class EnemyType(val value: Int)
 case object BasicEnemy extends EnemyType(1)
@@ -60,9 +61,7 @@ class GameplayUI(w: Double, h: Double, stage: PrimaryStage, mainmenuScene: => Sc
   var enemiesOnMap = Buffer[Enemy]()
   var towersOnMap = BufferProperty[Tower](Seq())
   var bulletsOnMap = BufferProperty[Bullet](Seq())
-  val variates = ObjectProperty(
-    Map("money" -> 500.0, "health" -> 10.0, "waveNo" -> 0.0, "score" -> 0.0)
-  )
+  variates.setValue(Map("money" -> 500.0, "health" -> 10.0, "waveNo" -> 0.0, "score" -> 0.0))
   var timerStarted = false
   var startTime = 0L
   var lastTime = 0L
@@ -74,7 +73,7 @@ class GameplayUI(w: Double, h: Double, stage: PrimaryStage, mainmenuScene: => Sc
     prefHeight = h
   }
 
-  val sidebar = SidebarUI(pane, mapInst, variates, towersOnMap, showMessage)
+  val sidebar = SidebarUI(pane, mapInst, towersOnMap, showMessage)
   sidebar.toFront()
 
   root = new BorderPane {
@@ -165,8 +164,8 @@ class GameplayUI(w: Double, h: Double, stage: PrimaryStage, mainmenuScene: => Sc
           }
           val newEnemies = new ArrayBuffer[Enemy](enemiesOnMap.length - 1)
           for (enemy <- enemiesOnMap) {
-            val newEnemyInstance = enemy.move(pane, variates)
-            if (variates.value("health") <= 9 && !gameOver) {
+            val newEnemyInstance = enemy.move(pane)
+            if (variates.value("health") <= 0 && !gameOver) {
               gameOver = true
               showMessage("Game Over", "info", 20)
               val dialog = new Dialog[String]() {
@@ -182,6 +181,9 @@ class GameplayUI(w: Double, h: Double, stage: PrimaryStage, mainmenuScene: => Sc
                 onShowing = _ => {
                   timer.stop()
                 }
+                // make the dialog look cooler
+
+
               }.show()
             }
             if (newEnemyInstance != null) {

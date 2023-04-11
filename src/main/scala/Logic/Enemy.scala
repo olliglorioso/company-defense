@@ -12,7 +12,7 @@ import Util.Constants._
 import scalafx.geometry.Point2D
 import scalafx.Includes._
 import javafx.scene.paint.ImagePattern
-
+import Util.State._
 case class Enemy(
     path: String,
     size: Double,
@@ -72,7 +72,7 @@ case class Enemy(
 
   }
 
-  def move(pane: Pane, variates: ObjectProperty[Map[String, Double]]): Enemy = 
+  def move(pane: Pane): Enemy = 
     val (currY, currX) = (translateY.value, translateX.value)
     val (tileY, tileX) = (
       previousTile.coord._1 * UI_TILE_SIZE,

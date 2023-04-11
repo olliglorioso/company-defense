@@ -13,6 +13,7 @@ import scala.util.control.Breaks._
 import scalafx.scene.paint.Color
 import Util.HelperFunctions.labelStyle
 import scalafx.geometry.Point2D
+import Util.State._
 
 class TowerButtonUI(
     picLoc: String,
@@ -21,7 +22,6 @@ class TowerButtonUI(
     desc: String,
     pane: Pane,
     mapInst: GameMap,
-    variates: ObjectProperty[Map[String, Double]],
     towersOnMap: BufferProperty[Tower],
     showMessage: (String, String, Int) => Unit,
     openUpgradeMenu: (Tower) => Unit
