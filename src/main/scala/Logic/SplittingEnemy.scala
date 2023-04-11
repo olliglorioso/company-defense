@@ -11,20 +11,6 @@ class SplittingEnemy (pathQueue: Queue[PathTile]) extends Enemy(SPLITTING_ENEMY_
 
   override def getHit(damage: Int, slowDown: Int = 0) = {
         getHitFinal(damage, slowDown, SPLITTING_ENEMY_2_LOC, SPLITTING_ENEMY_3_LOC)
-    }
-
-  override def getHitFinal(damage: Int, slowDown: Int, image1: String, image2: String): Unit = {
-        health = health - damage
-        if (slowDown > 0 && speed >= (0.5 * origSpeed)) then speed = speed * (1 - (slowDown.toDouble / 100))
-
-        if (health >= 0 && health <= (origHealth / 1.5) && !imageChanged) {
-            imageChanged = true
-            image = new Image(image1)
-        }
-        if (health >= 0 && health <= (origHealth / 2) && !imageChanged2) {
-            imageChanged2 = true
-            image = new Image(image2)
-        }
         if (health >= 0 && health <= (origHealth / 4) && !imageChanged3) {
             imageChanged3 = true
             image = new Image(SPLITTING_ENEMY_4_LOC)
