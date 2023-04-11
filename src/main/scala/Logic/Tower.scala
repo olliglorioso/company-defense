@@ -9,6 +9,8 @@ import javafx.event.EventHandler
 import javafx.scene.input.MouseEvent
 import scalafx.scene.control.Button
 import scalafx.beans.property.IntegerProperty
+import javafx.scene.paint.ImagePattern
+import scalafx.scene.image.Image
 
 abstract class Tower(path: String, price: Int, range: Int, showUpgradeInfo: Tower => Unit, showMessage: (String, String, Int) => Unit)
     extends GameObject(path, TOWER_SIDE) {

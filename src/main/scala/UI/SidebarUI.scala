@@ -60,6 +60,7 @@ class SidebarUI(
   val visualBounds: Rectangle2D = Screen.primary.visualBounds
   val (h, w) = (visualBounds.getHeight, visualBounds.getWidth)
 
+
   def openUpgradeMenu(tower: Tower): Unit = {
     val levelLabel = new Label(s"Level: ${tower.level.value}") {
       style = labelStyle(13)
@@ -153,18 +154,22 @@ class SidebarUI(
       scoreLabel
     )
     spacing = 10
-    style = "-fx-background-color: grey;"
+    style = "-fx-background-color: transparent;"
+    vgrow_=(Priority.Always)
   }
 
+  // make towers to be in the top of the sidebar, and infolabels in the bottom
+  
   padding = Insets(20)
   spacing = 10
+  prefHeight = h - 200
   alignment = Pos.Center
   children = Seq(
     towers,
     infoLabels
   )
-  
-  spacing = 100
+
   prefWidth = SIDEBAR_WIDTH
+  prefHeight = h
   style = "-fx-background-color: grey;"
 }
