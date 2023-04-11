@@ -29,6 +29,7 @@ case class Enemy(
   var imageChanged = false
   var imageChanged2 = false
   val moneyReward = 2
+  val origSpeed = speed
   getNextTile()
 
   def getHit(damage: Double, slowDown: Double): Unit = null
@@ -45,7 +46,6 @@ case class Enemy(
   }
 
   def getHitFinal(damage: Double, slowDown: Double, image1: String, image2: String): Unit = {
-      val origSpeed = speed
       health = health - damage
       if (slowDown > 0 && (speed >= (0.6 * origSpeed))) speed = speed * (1 - (slowDown.toDouble / 100))
       if (health >= 0 && health <= origHealth / 2 && !imageChanged) {
