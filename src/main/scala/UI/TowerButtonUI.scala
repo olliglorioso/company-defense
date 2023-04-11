@@ -126,8 +126,7 @@ class TowerButtonUI(
       newTower.x = towerX
       newTower.y = towerY
       // Return the button to its original position
-      variates.value =
-        variates.value.updated("money", variates.value("money") - price)
+      variates.setValue(variates.value.updated("money", variates.value("money") - price))
       pane.children.add(newTower)
       translateX = x
       translateY = y

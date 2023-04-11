@@ -30,6 +30,7 @@ import scala.collection.mutable.Buffer
 import Util.Constants._
 import scalafx.scene.control.Tooltip
 import scalafx.beans.property._
+import scala.collection.mutable.ArrayBuffer
 
 sealed abstract class EnemyType(val value: Int)
 case object BasicEnemy extends EnemyType(1)
@@ -104,8 +105,8 @@ class GameplayUI(w: Double, h: Double) extends Scene(w, h) {
         if (enemy.getDistanceToPoint(bullet.getGlobalCenter) <= enemy.boundBox) {
           enemy.getHit(bullet.damage, bullet.slowDown)
           if (enemy.health <= 0 && enemy.isInstanceOf[SplittingEnemyClass]) {
-            variates.value = variates.value.updated("money", variates.value("money") + enemy.moneyReward)
-            variates.value = variates.value.updated("score", variates.value("score") + math.round(enemy.moneyReward/2))
+            variates.setValue(variates.value.updated("money", variates.value("money") + enemy.moneyReward))
+            variates.setValue(variates.value.updated("score", variates.value("score") + math.round(enemy.moneyReward/2)))
             val newEnemies: Seq[BasicEnemy] = enemy.asInstanceOf[SplittingEnemyClass].split()
             for (newEnemy <- newEnemies) {
               pane.children.add(newEnemy)
@@ -114,8 +115,8 @@ class GameplayUI(w: Double, h: Double) extends Scene(w, h) {
             pane.children.remove(enemy)
             enemiesOnMap = enemiesOnMap.filter(_ != enemy)
           } else if (enemy.health <= 0) {
-            variates.value = variates.value.updated("money", variates.value("money") + enemy.moneyReward)
-            variates.value = variates.value.updated("score", variates.value("score") + math.round(enemy.moneyReward/2))
+            variates.setValue(variates.value.updated("money", variates.value("money") + enemy.moneyReward))
+            variates.setValue(variates.value.updated("score", variates.value("score") + math.round(enemy.moneyReward/2)))
             pane.children.remove(enemy)
             enemiesOnMap = enemiesOnMap.filter(_ != enemy)
           }
@@ -143,7 +144,7 @@ class GameplayUI(w: Double, h: Double) extends Scene(w, h) {
             if (currWave.length < 1) {
               if (enemiesOnMap.length < 1)
                 // wait for five seconds
-                variates.value = variates.value.updated("waveNo", variates.value("waveNo") + 1)
+                variates.setValue(variates.value.updated("waveNo", variates.value("waveNo") + 1))
                 showMessage("Wave " + ((variates.value("waveNo") + 1).toInt.toString()), "info", 5)
                 
             } else {
@@ -154,7 +155,7 @@ class GameplayUI(w: Double, h: Double) extends Scene(w, h) {
               enemiesOnMap += enemy
             }
           }
-          val newEnemies = Buffer[Enemy]()
+          val newEnemies = new ArrayBuffer[Enemy](enemiesOnMap.length - 1)
           for (enemy <- enemiesOnMap) {
             val newEnemyInstance = enemy.move(pane, variates)
             if (newEnemyInstance != null) {
