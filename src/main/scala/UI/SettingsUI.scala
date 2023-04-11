@@ -10,6 +10,8 @@ import scalafx.stage.Screen
 import scalafx.scene.image.Image
 import scalafx.scene.paint.Paint
 import Util.Constants.MAINMENU_BG_LOC
+import scalafx.scene.control.MenuButton
+import scalafx.scene.control.MenuItem
 
 class SettingsUI {
 
@@ -56,12 +58,28 @@ class SettingsUI {
         spacing = 20
         alignment = Pos.Center
         children = Seq(
-          new Label("Main menu"),
           new Button("Main menu") {
             onAction = () => stage.setScene(mainmenuSceneLazy)
             style = buttonStyle
+            onMouseEntered = () => {
+              style = "-fx-background-color: red; -fx-text-fill: white; -fx-font-size: 30pt; -fx-font-family: 'Arial Black', sans-serif; -fx-padding: 10px 20px; -fx-background-radius: 50px; -fx-border-radius: 50px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 3);"
+            }
+
+            onMouseExited = () => {
+              style = buttonStyle
+            }
+          },
+          new MenuButton("Difficulty") {
+            items = Seq(
+              new MenuItem("Reijon Maansiirto Tmi"),
+              new MenuItem("IBM & Cisco & BlackBerry"),
+              new MenuItem("MAGAT")
+            )
+            
           }
+          
           // dropdown menu for selecting difficulty
+
         )
       }
     settingsScene
