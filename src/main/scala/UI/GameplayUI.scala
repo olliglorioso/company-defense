@@ -156,7 +156,10 @@ class GameplayUI(w: Double, h: Double) extends Scene(w, h) {
           }
           val newEnemies = Buffer[Enemy]()
           for (enemy <- enemiesOnMap) {
-            enemy.move(newEnemies, pane, variates)
+            val newEnemyInstance = enemy.move(pane, variates)
+            if (newEnemyInstance != null) {
+              newEnemies += newEnemyInstance
+            }
           }
           enemiesOnMap = newEnemies
           editPriorityQueuesAndCreateBullets(time)

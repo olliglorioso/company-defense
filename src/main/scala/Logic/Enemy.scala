@@ -72,7 +72,7 @@ case class Enemy(
 
   }
 
-  def move(newEnemies: Buffer[Enemy], pane: Pane, variates: ObjectProperty[Map[String, Double]]): Unit = 
+  def move(pane: Pane, variates: ObjectProperty[Map[String, Double]]): Enemy = 
     val (currY, currX) = (translateY.value, translateX.value)
     val (tileY, tileX) = (
       previousTile.coord._1 * UI_TILE_SIZE,
@@ -98,10 +98,10 @@ case class Enemy(
       if (nextTile.getTurn() == End) {
         pane.children.remove(this)
         variates.setValue(variates.value.updated("health", variates.value("health") - 1))
-        return
+        return null
       } else {
         getNextTile()
-        newEnemies += this
+        return this
       }
     } else {
       translateX.value += vx.toInt
@@ -109,7 +109,7 @@ case class Enemy(
       val angle = (math.atan2(dy, dx) * 180 / math.Pi).round.toInt
       val roundedAngle = (Math.round(angle / 10.0) * 10).toInt
       rotate = roundedAngle
-      newEnemies += this
+      return this
     }
 
 }
