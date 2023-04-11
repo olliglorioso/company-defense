@@ -59,7 +59,7 @@ class SidebarUI(
   val visualBounds: Rectangle2D = Screen.primary.visualBounds
   val (h, w) = (visualBounds.getHeight, visualBounds.getWidth)
 
-  def openUpgradeMenu(tower: Tower, info: Button): Unit = {
+  def openUpgradeMenu(tower: Tower): Unit = {
     var editInfo = new VBox() {
       alignment = Pos.Center
       spacing = 10

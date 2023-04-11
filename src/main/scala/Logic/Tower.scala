@@ -9,7 +9,7 @@ import javafx.event.EventHandler
 import javafx.scene.input.MouseEvent
 import scalafx.scene.control.Button
 
-abstract class Tower(path: String, price: Int, range: Int)
+abstract class Tower(path: String, price: Int, range: Int, showUpgradeInfo: Tower => Unit)
     extends GameObject(path, TOWER_SIDE) {
     
     var attackSpeed = 3.0 // is a good basic speed. Adjusting between 0.5-5 is ok. The lower the better
@@ -20,9 +20,12 @@ abstract class Tower(path: String, price: Int, range: Int)
     val bulletSpeed = 40
     var level = 1
     val maxLevel = 5 
-    val towerThis = this
     // Enemy priority queue
     val enemyPriority = new PriorityQueue[Enemy]()(Ordering.by(enemyPriorityCalc(_)))
+
+    onMouseClicked = (e: MouseEvent) => {
+        showUpgradeInfo(this)
+    }
 
     private def enemyPriorityCalc(enemy: Enemy): Double = {
         val distToEnemy = enemy.getDistanceToPoint(getGlobalCenter)
