@@ -147,7 +147,6 @@ class SidebarUI(
   val infoLabels = new VBox() {
     // set to the bottom of sidebar
     alignment = Pos.BottomRight
-    translateY = h - UI_TILE_SIZE * towers.children.length - 3 * 75
     children = Seq(
       moneyLabel,
       healthLabel,
@@ -159,11 +158,13 @@ class SidebarUI(
 
   padding = Insets(20)
   spacing = 10
+  alignment = Pos.Center
   children = Seq(
     towers,
     infoLabels
   )
-
+  
+  spacing = 100
   prefWidth = SIDEBAR_WIDTH
   style = "-fx-background-color: grey;"
 }

@@ -12,6 +12,7 @@ import scalafx.beans.property._
 import scala.util.control.Breaks._
 import scalafx.scene.paint.Color
 import Util.HelperFunctions.labelStyle
+import scalafx.geometry.Point2D
 
 class TowerButtonUI(
     picLoc: String,
@@ -82,12 +83,12 @@ class TowerButtonUI(
       * @param y
       * @return
       */
-  def towerCanBePlaced(x: Double, y: Double): Boolean = {
+  def towerCanBePlaced(eventLoc: Point2D): Boolean = {
     var broken = false
     breakable {
       towersOnMap.value.forall( tower => {
           // Euclidean distance
-          val distance = math.sqrt(math.pow(tower.x.value - x, 2) + math.pow(tower.y.value - y, 2))
+          val distance = tower.getGlobalCenter.distance(eventLoc)
           if (distance < (TOWER_SIDE / 2)) then 
             broken = true
             break()
@@ -107,7 +108,8 @@ class TowerButtonUI(
   }
 
   def setBackgroundStyle(event: MouseEvent, mapInst: GameMap): Unit = {
-    if (mapInst.isBgTile(event.getSceneY(), event.getSceneX()) && towerCanBePlaced(event.getSceneX() - (TOWER_SIDE / 2), event.getSceneY() - (TOWER_SIDE / 2))) {
+    val eventLocation = Point2D(event.getSceneX() - (TOWER_SIDE / 2), event.getSceneY() - (TOWER_SIDE / 2))
+    if (mapInst.isBgTile(event.getSceneY(), event.getSceneX()) && towerCanBePlaced(eventLocation)) {
       backgroundCircle.fill = Color.Green
     } else {
       backgroundCircle.fill = Color.Red
@@ -154,8 +156,7 @@ class TowerButtonUI(
     
     val (x, y, mouseX, mouseY) =
       userData.asInstanceOf[(Double, Double, Double, Double)]
-    val towerX = event.getSceneX() - (minWidth() / 2)
-    val towerY = event.getSceneY() - (minHeight() / 2)
+    val eventLoc = Point2D(event.getSceneX() - (minWidth() / 2), event.getSceneY() - (minHeight() / 2))
 
     def setStartPos() = {
       val transbg = "-fx-background-color: transparent;"
@@ -171,7 +172,7 @@ class TowerButtonUI(
         1
       )
       setStartPos()
-    } else if (!towerCanBePlaced(towerX, towerY)) {
+    } else if (!towerCanBePlaced(eventLoc)) {
         showMessage(
           "You can't place a tower there!",
           "error",
@@ -179,7 +180,7 @@ class TowerButtonUI(
         )
         setStartPos()
     } else {
-      placeNewTowerIfMoney(towerX, towerY, x, y)
+      placeNewTowerIfMoney(eventLoc.x, eventLoc.y, x, y)
     }
     backgroundCircle.fill = Color.Transparent
     backgroundCircle.style = "-fx-scale-x: 0; -fx-scale-y: 0;"

@@ -36,7 +36,7 @@ abstract class Tower(path: String, price: Int, range: Int, showUpgradeInfo: Towe
     }
 
     def sellPrice: Int = {
-        math.round((price * 0.6) * math.pow(1.2, level.value)).toInt
+        math.round((price * 0.5) * math.pow(1.2, level.value)).toInt
     }
 
     def upgradePrice: Int = {
