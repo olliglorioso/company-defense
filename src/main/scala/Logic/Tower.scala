@@ -16,7 +16,7 @@ abstract class Tower(path: String, price: Int, range: Int, showUpgradeInfo: Towe
     var attackSpeed = 3.0 // is a good basic speed. Adjusting between 0.5-5 is ok. The lower the better
     var lastBulletInit = 0L
     val bulletLoc = REGULAR_BULLET_LOC
-    var damage = 1
+    var damage = 1.0
     var slowDown = 0.0
     val bulletSpeed = 40
     var level = IntegerProperty(1)
@@ -28,10 +28,6 @@ abstract class Tower(path: String, price: Int, range: Int, showUpgradeInfo: Towe
         showUpgradeInfo(this)
     }
 
-    level.onChange((_, _, _) => {
-        showUpgradeInfo(this)
-    })
-
     private def enemyPriorityCalc(enemy: Enemy): Double = {
         val distToEnemy = enemy.getDistanceToPoint(getGlobalCenter)
         val generalPrio = enemy.health * 0.4 + enemy.speed * 0.01 + -distToEnemy * 0.25 + enemy.tilesTraversed * 0.70
@@ -40,18 +36,18 @@ abstract class Tower(path: String, price: Int, range: Int, showUpgradeInfo: Towe
     }
 
     def sellPrice: Int = {
-        math.round(price * 0.6).toInt
+        math.round((price * 0.6) * math.pow(1.2, level.value)).toInt
     }
 
     def upgradePrice: Int = {
-        math.round((price * 0.4) * math.pow(1.3, level.value)).toInt
+        math.round((price * 0.6) * math.pow(1.3, level.value)).toInt
     }
 
     def upgradeFeatures(): Unit = {
         level.value += 1
         attackSpeed *= 0.97
-        damage = damage + 1
-        slowDown *= 1.1
+        damage *= 1.05
+        slowDown *= 1.05
     }
 
     def upgrade(money: Double): Double = {

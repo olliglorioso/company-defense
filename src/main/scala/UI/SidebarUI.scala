@@ -61,8 +61,21 @@ class SidebarUI(
   val (h, w) = (visualBounds.getHeight, visualBounds.getWidth)
 
   def openUpgradeMenu(tower: Tower): Unit = {
-    var upPrice = tower.upgradePrice
-    var sellPrice = tower.sellPrice
+    val levelLabel = new Label(s"Level: ${tower.level.value}") {
+      style = labelStyle(13)
+    }
+
+    val sellButton = new Button(s"Sell (${tower.sellPrice})") {
+          style = "-fx-base: red;"
+          prefWidth = 100
+          onAction = _ => {
+            variatesRef.value = variatesRef.value.updated("money", variatesRef.value("money") + tower.sellPrice)
+            moneyLabel.text = variatesRef.value("money").toInt.toString()
+            pane.children.remove(tower)
+            towersOnMap.value -= tower
+            children = Seq(towers, infoLabels)
+          }
+        }
     var editInfo = new VBox() {
       alignment = Pos.Center
       spacing = 10
@@ -70,23 +83,20 @@ class SidebarUI(
         new Label(tower.displayName) {
           style = labelStyle(13)
         },
-        new Label(s"Level: ${tower.level.value}") {
-          style = labelStyle(13)
-        },
-        new Button(s"Up (${upPrice})") {
+        levelLabel,
+        new Button(s"Up (${tower.upgradePrice})") {
           style = "-fx-base: green;"
           prefWidth = 100
           onAction = _ => {
             val newMoney = tower.upgrade(variatesRef.value("money"))
             variatesRef.value = variatesRef.value.updated("money", newMoney)
             moneyLabel.text = variatesRef.value("money").toInt.toString()
-            upPrice = tower.upgradePrice
+            this.text = s"Up (${tower.upgradePrice})"
+            levelLabel.text = s"Level: ${tower.level.value}"
+            sellButton.text = s"Sell (${tower.sellPrice})"
           }
         },
-        new Button(s"Sell (${sellPrice})") {
-          style = "-fx-base: red;"
-          prefWidth = 100
-        }
+        sellButton
       )
     }
     children = Seq(
@@ -148,10 +158,10 @@ class SidebarUI(
   }
 
   padding = Insets(20)
-    spacing = 10
-    children = Seq(
-      towers,
-      infoLabels
+  spacing = 10
+  children = Seq(
+    towers,
+    infoLabels
   )
 
   prefWidth = SIDEBAR_WIDTH
