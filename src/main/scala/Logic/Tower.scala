@@ -17,7 +17,7 @@ abstract class Tower(path: String, price: Int, range: Int, showUpgradeInfo: Towe
     var lastBulletInit = 0L
     val bulletLoc = REGULAR_BULLET_LOC
     var damage = 1
-    var slowDown = 0
+    var slowDown = 0.0
     val bulletSpeed = 40
     var level = IntegerProperty(1)
     val maxLevel = 5 
@@ -44,7 +44,14 @@ abstract class Tower(path: String, price: Int, range: Int, showUpgradeInfo: Towe
     }
 
     def upgradePrice: Int = {
-        math.round((price * 0.4) * math.pow(1.2, level.value)).toInt
+        math.round((price * 0.4) * math.pow(1.3, level.value)).toInt
+    }
+
+    def upgradeFeatures(): Unit = {
+        level.value += 1
+        attackSpeed *= 0.97
+        damage = damage + 1
+        slowDown *= 1.1
     }
 
     def upgrade(money: Double): Double = {
@@ -52,10 +59,7 @@ abstract class Tower(path: String, price: Int, range: Int, showUpgradeInfo: Towe
             showMessage("You don't have enough money to upgrade this tower", "error", 1)
             return money
         } else if (level.value < maxLevel) {
-            level.value += 1
-            attackSpeed *= 0.85
-            damage = damage + 1
-            slowDown = slowDown + 1
+            upgradeFeatures()
             money - upgradePrice
         } else {
             showMessage("You can't upgrade this tower any further", "error", 1)

@@ -11,7 +11,7 @@ class SplittingEnemy (pathQueue: Queue[PathTile]) extends Enemy(SPLITTING_ENEMY_
   val origSpeed = speed
   override val moneyReward: Int = 7
 
-  override def getHit(damage: Int, slowDown: Int = 0) = {
+  override def getHit(damage: Double, slowDown: Double = 0) = {
         getHitFinal(damage, slowDown, SPLITTING_ENEMY_2_LOC, SPLITTING_ENEMY_3_LOC)
         if (health >= 0 && health <= (origHealth / 4) && !imageChanged3) {
             imageChanged3 = true

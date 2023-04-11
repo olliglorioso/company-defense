@@ -18,7 +18,7 @@ case class Enemy(
     size: Double,
     var speed: Double,
     pathQueue: Queue[PathTile],
-    var health: Int
+    var health: Double
 ) extends GameObject(path, size) {
   val origHealth = health
   var boundBox = 100
@@ -31,7 +31,7 @@ case class Enemy(
   val moneyReward = 2
   getNextTile()
 
-  def getHit(damage: Int, slowDown: Int): Unit = null
+  def getHit(damage: Double, slowDown: Double): Unit = null
 
   def sellPrice(): Int = 0
 
@@ -44,7 +44,7 @@ case class Enemy(
         enemyLoc
   }
 
-  def getHitFinal(damage: Int, slowDown: Int, image1: String, image2: String): Unit = {
+  def getHitFinal(damage: Double, slowDown: Double, image1: String, image2: String): Unit = {
       val origSpeed = speed
       health = health - damage
       if (slowDown > 0 && (speed >= (0.6 * origSpeed))) speed = speed * (1 - (slowDown.toDouble / 100))
