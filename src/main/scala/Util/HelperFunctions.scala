@@ -1,6 +1,9 @@
 package Util
 
 import Util.Constants._
+import scalafx.scene.Scene
+import scalafx.scene.Node
+import UI.GameplayUI
 
 object HelperFunctions {
   def getTowerDisplayName(path: String) = 
@@ -8,4 +11,8 @@ object HelperFunctions {
       case REGULAR_TOWER_LOC => R_NAME
       case SLOW_DOWN_TOWER_LOC => S_NAME
       case _ => "Unknown"
+  
+  def showMessage(message: String, title: String, blinks: Int, node: Node) = 
+    val currentScene: GameplayUI = node.getScene().asInstanceOf[GameplayUI]
+    currentScene.showMessage(message, title, blinks)
 }

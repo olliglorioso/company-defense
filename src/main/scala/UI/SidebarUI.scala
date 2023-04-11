@@ -60,18 +60,29 @@ class SidebarUI(
   val (h, w) = (visualBounds.getHeight, visualBounds.getWidth)
 
   def openUpgradeMenu(tower: Tower): Unit = {
+    var upPrice = tower.upgradePrice
+    var sellPrice = tower.sellPrice
     var editInfo = new VBox() {
       alignment = Pos.Center
       spacing = 10
       children = Seq(
         new Label(tower.displayName) {
-          style = "-fx-font: normal bold 20 Langdon; " + "-fx-base: #AE3522; " + "-fx-text-fill: orange;"
+          style = "-fx-font: normal bold 13 Langdon; " + "-fx-base: #AE3522; " + "-fx-text-fill: orange;"
         },
-        new Button("Upgrade") {
+        new Label(s"Level: ${tower.level.value}") {
+          style = "-fx-font: normal bold 13 Langdon; " + "-fx-base: #AE3522; " + "-fx-text-fill: orange;"
+        },
+        new Button(s"Up (${upPrice})") {
           style = "-fx-base: green;"
           prefWidth = 100
+          onAction = _ => {
+            val newMoney = tower.upgrade(variatesRef.value("money"))
+            variatesRef.value = variatesRef.value.updated("money", newMoney)
+            moneyLabel.text = variatesRef.value("money").toInt.toString()
+            upPrice = tower.upgradePrice
+          }
         },
-        new Button("Sell") {
+        new Button(s"Sell (${sellPrice})") {
           style = "-fx-base: red;"
           prefWidth = 100
         }

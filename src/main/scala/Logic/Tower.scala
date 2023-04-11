@@ -8,8 +8,9 @@ import scalafx.geometry.Point2D
 import javafx.event.EventHandler
 import javafx.scene.input.MouseEvent
 import scalafx.scene.control.Button
+import scalafx.beans.property.IntegerProperty
 
-abstract class Tower(path: String, price: Int, range: Int, showUpgradeInfo: Tower => Unit)
+abstract class Tower(path: String, price: Int, range: Int, showUpgradeInfo: Tower => Unit, showMessage: (String, String, Int) => Unit)
     extends GameObject(path, TOWER_SIDE) {
     
     var attackSpeed = 3.0 // is a good basic speed. Adjusting between 0.5-5 is ok. The lower the better
@@ -18,7 +19,7 @@ abstract class Tower(path: String, price: Int, range: Int, showUpgradeInfo: Towe
     var damage = 1
     var slowDown = 0
     val bulletSpeed = 40
-    var level = 1
+    var level = IntegerProperty(1)
     val maxLevel = 5 
     // Enemy priority queue
     val enemyPriority = new PriorityQueue[Enemy]()(Ordering.by(enemyPriorityCalc(_)))
@@ -27,6 +28,10 @@ abstract class Tower(path: String, price: Int, range: Int, showUpgradeInfo: Towe
         showUpgradeInfo(this)
     }
 
+    level.onChange((_, _, _) => {
+        showUpgradeInfo(this)
+    })
+
     private def enemyPriorityCalc(enemy: Enemy): Double = {
         val distToEnemy = enemy.getDistanceToPoint(getGlobalCenter)
         val generalPrio = enemy.health * 0.4 + enemy.speed * 0.01 + -distToEnemy * 0.25 + enemy.tilesTraversed * 0.70
@@ -34,20 +39,27 @@ abstract class Tower(path: String, price: Int, range: Int, showUpgradeInfo: Towe
         else generalPrio
     }
 
-    def sellPrice(): Int = {
+    def sellPrice: Int = {
         math.round(price * 0.6).toInt
     }
 
-    def upgradePrice(): Int = {
-        math.round((price * 0.4) * level).toInt
+    def upgradePrice: Int = {
+        math.round((price * 0.4) * math.pow(1.2, level.value)).toInt
     }
 
-    def upgradeToNextLevel(): Unit = {
-        if (level <= maxLevel) {
-            level += 1
+    def upgrade(money: Double): Double = {
+        if (money < upgradePrice) {
+            showMessage("You don't have enough money to upgrade this tower", "error", 1)
+            return money
+        } else if (level.value < maxLevel) {
+            level.value += 1
             attackSpeed *= 0.85
             damage = damage + 1
             slowDown = slowDown + 1
+            money - upgradePrice
+        } else {
+            showMessage("You can't upgrade this tower any further", "error", 1)
+            money
         }
     }
 

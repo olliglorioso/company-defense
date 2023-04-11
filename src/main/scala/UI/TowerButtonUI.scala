@@ -118,8 +118,8 @@ class TowerButtonUI(
   def placeNewTowerIfMoney(towerX: Double, towerY: Double, x: Double, y: Double) = {
     if (variates.value("money") >= price) then
       val newTower = name match {
-        case R_NAME => new RegularTower(openUpgradeMenu)
-        case S_NAME => new SlowDownTower(openUpgradeMenu)
+        case R_NAME => new RegularTower(openUpgradeMenu, showMessage)
+        case S_NAME => new SlowDownTower(openUpgradeMenu, showMessage)
       }
       towersOnMap.value = towersOnMap.value :+ newTower
       newTower.x = towerX
