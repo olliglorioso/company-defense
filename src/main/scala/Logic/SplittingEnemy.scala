@@ -3,6 +3,8 @@ package Logic
 import Util.Constants._
 import scala.collection.immutable.Queue
 import scalafx.scene.image._
+import scalafx.Includes._
+import javafx.scene.paint.ImagePattern
 
 class SplittingEnemy (pathQueue: Queue[PathTile]) extends Enemy(SPLITTING_ENEMY_LOC, ENEMY_SIZE, SPLITTING_ENEMY_SPEED, pathQueue, SPLITTING_ENEMY_HEALTH) {
   var imageChanged3 = false
@@ -13,7 +15,7 @@ class SplittingEnemy (pathQueue: Queue[PathTile]) extends Enemy(SPLITTING_ENEMY_
         getHitFinal(damage, slowDown, SPLITTING_ENEMY_2_LOC, SPLITTING_ENEMY_3_LOC)
         if (health >= 0 && health <= (origHealth / 4) && !imageChanged3) {
             imageChanged3 = true
-            image = new Image(SPLITTING_ENEMY_4_LOC)
+            fill = new ImagePattern(new Image(SPLITTING_ENEMY_4_LOC))
         }
     }
 

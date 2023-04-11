@@ -22,7 +22,7 @@ class TowerButtonUI(
     variates: ObjectProperty[Map[String, Double]],
     towersOnMap: BufferProperty[Tower],
     showMessage: (String, String, Int) => Unit,
-    openUpgradeMenu: Tower => Unit
+    openUpgradeMenu: (Tower, Button) => Unit
 ) extends Button {
   val image = new Image(picLoc)
   val originalPos = (layoutX, layoutY)
@@ -118,13 +118,15 @@ class TowerButtonUI(
   def placeNewTowerIfMoney(towerX: Double, towerY: Double, x: Double, y: Double) = {
     if (variates.value("money") >= price) then
       val newTower = name match {
-        case R_NAME => new RegularTower(openUpgradeMenu)
-        case S_NAME => new SlowDownTower(openUpgradeMenu)
+        case R_NAME => new RegularTower()
+        case S_NAME => new SlowDownTower()
       }
       val info = new Button() {
         minWidth = TOWER_SIDE
         minHeight = TOWER_SIDE
-        openUpgradeMenu(newTower)
+        onMouseClicked = (event: MouseEvent) => {
+          openUpgradeMenu(newTower, this)
+        }
       }
       towersOnMap.value = towersOnMap.value :+ newTower
       newTower.x = towerX

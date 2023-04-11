@@ -10,6 +10,8 @@ import scalafx.scene.shape.Rectangle
 import scalafx.scene.paint.Color
 import Util.Constants._
 import scalafx.geometry.Point2D
+import scalafx.Includes._
+import javafx.scene.paint.ImagePattern
 
 case class Enemy(
     path: String,
@@ -48,11 +50,11 @@ case class Enemy(
       if (slowDown > 0 && (speed >= (0.6 * origSpeed))) speed = speed * (1 - (slowDown.toDouble / 100))
       if (health >= 0 && health <= origHealth / 2 && !imageChanged) {
           imageChanged = true
-          image = new Image(image1)
+          fill = new ImagePattern(new Image(image1))
       }
       if (health >= 0 && health <= origHealth / 4 && !imageChanged2) {
           imageChanged2 = true
-          image = new Image(image2)
+          fill = new ImagePattern(new Image(image2))
       }
     }
 

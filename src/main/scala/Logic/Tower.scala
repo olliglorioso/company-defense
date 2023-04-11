@@ -7,6 +7,7 @@ import Util.Constants._
 import scalafx.geometry.Point2D
 import javafx.event.EventHandler
 import javafx.scene.input.MouseEvent
+import scalafx.scene.control.Button
 
 abstract class Tower(path: String, price: Int, range: Int)
     extends GameObject(path, TOWER_SIDE) {
