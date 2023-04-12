@@ -7,8 +7,9 @@ import scalafx.scene.control.{Button, Label}
 import scalafx.scene.layout._
 import scalafx.geometry._
 import scalafx.stage.Screen
-import Logic.*
-import UI.*
+import Logic._
+import UI._
+import Util.State._
 import scalafx.scene.control.Tooltip
 import javafx.scene.image.ImageView
 import Util.Constants.MAINMENU_BG_LOC
@@ -23,23 +24,18 @@ class MainMenuUI {
     *   Gameplay-scene
     * @param settingsScene
     *   Settings-scene
-    * @param w
-    *   Width of the scene
-    * @param h
-    *   Height of the scene
     * @return
     *   Mainmenu-scene
     */
   def mainMenuScene(
       stage: JFXApp3.PrimaryStage,
-      settingsScene: => Scene,
-      w: Double,
-      h: Double
+      settingsScene: => Scene
   ): Scene =
+    
     val buttonStyle = "-fx-background-color: red; -fx-text-fill: black; -fx-font-size: 24pt; -fx-font-family: 'Arial Black', sans-serif; -fx-padding: 10px 20px; -fx-background-radius: 50px; -fx-border-radius: 50px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 3);"
     lazy val settingsSceneLazy = settingsScene
     
-    val mainmenuScene: Scene = new Scene(w, h):
+    val mainmenuScene: Scene = new Scene(screenWidth.value, screenHeight.value):
       root = new VBox {
         background = new Background(
           fills = Seq(
@@ -77,7 +73,7 @@ class MainMenuUI {
             }
 
             onAction = () => {
-              val gameplayScene = new GameplayUI(w, h, stage, mainMenuScene(stage, settingsSceneLazy, w, h))
+              val gameplayScene = new GameplayUI(screenWidth.value, screenHeight.value, stage, mainMenuScene(stage, settingsSceneLazy))
               stage.setScene(gameplayScene)
               gameplayScene.timer.start()
             }

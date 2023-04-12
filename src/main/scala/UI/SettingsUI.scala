@@ -6,12 +6,12 @@ import scalafx.scene.Scene
 import scalafx.scene.control.{Button, Label}
 import scalafx.scene.layout._
 import scalafx.geometry._
-import scalafx.stage.Screen
 import scalafx.scene.image.Image
 import scalafx.scene.paint.Paint
 import Util.Constants.MAINMENU_BG_LOC
 import scalafx.scene.control.MenuButton
 import scalafx.scene.control.MenuItem
+import Util.State._
 
 class SettingsUI {
 
@@ -19,23 +19,17 @@ class SettingsUI {
     *   PrimaryStage
     * @param mainmenuScene
     *   Mainmenu-scene
-    * @param w
-    *   Width of the scene
-    * @param h
-    *   Height of the scene
     * @return
     *   New settings-scene
     */
   def settingsScene(
       stage: JFXApp3.PrimaryStage,
       mainmenuScene: => Scene /* Lazy val as a param */,
-      w: Double,
-      h: Double
   ): Scene =
     lazy val mainmenuSceneLazy = mainmenuScene
     val buttonStyle = "-fx-background-color: red; -fx-text-fill: black; -fx-font-size: 24pt; -fx-font-family: 'Arial Black', sans-serif; -fx-padding: 10px 20px; -fx-background-radius: 50px; -fx-border-radius: 50px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 3);"
 
-    val settingsScene: Scene = new Scene(w, h):
+    val settingsScene: Scene = new Scene(screenWidth.value, screenHeight.value):
       root = new VBox {
         background = new Background(
           fills = Seq(
@@ -70,6 +64,7 @@ class SettingsUI {
             }
           },
           new MenuButton("Difficulty") {
+            style = buttonStyle
             items = Seq(
               new MenuItem("Reijon Maansiirto Tmi"),
               new MenuItem("IBM & Cisco & BlackBerry"),

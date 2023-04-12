@@ -18,7 +18,6 @@ import scalafx.beans.property.ObjectProperty
 import scalafx.scene.control._
 import scalafx.beans.property.BufferProperty
 import scalafx.geometry.Rectangle2D
-import scalafx.stage.Screen
 import scalafx.scene.paint.Color
 import scalafx.scene.image.ImageView
 import Logic._
@@ -54,9 +53,6 @@ class SidebarUI(
     showMessage,
     openUpgradeMenu
   )
-
-  val visualBounds: Rectangle2D = Screen.primary.visualBounds
-  val (h, w) = (visualBounds.getHeight, visualBounds.getWidth)
 
 
   def openUpgradeMenu(tower: Tower): Unit = {
@@ -168,6 +164,6 @@ class SidebarUI(
   )
 
   prefWidth = SIDEBAR_WIDTH
-  prefHeight = h
+  prefHeight = screenHeight.value
   style = "-fx-background-color: grey;"
 }
