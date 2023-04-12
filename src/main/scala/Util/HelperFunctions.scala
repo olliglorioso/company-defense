@@ -4,6 +4,7 @@ import Util.Constants._
 import scalafx.scene.Scene
 import scalafx.scene.Node
 import UI.GameplayUI
+import Util.State.difficulty
 
 object HelperFunctions {
   def getTowerDisplayName(path: String) = 
@@ -17,4 +18,6 @@ object HelperFunctions {
     currentScene.showMessage(message, title, blinks)
   
   def labelStyle(size: Int): String = s"-fx-font: normal bold ${size} Langdon; -fx-base: #AE3522; " + "-fx-text-fill: orange;"
+  def getMap = features(difficulty.value)._4
+  def getWaveData = features(difficulty.value)._3
 }

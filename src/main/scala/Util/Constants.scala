@@ -40,10 +40,12 @@ object Constants {
   val MAP_HEIGHT = 12
   val MAP_WIDTH = 20
   val SIDEBAR_WIDTH = 130
-  // HPs of players in different modes
-  val EASY_HP = 100
-  val NORMAL_HP = 50
-  val HARD_HP = 1
+  // Player's features in different modes
+  val features = Map( // Health, Money, Wave file location, Map location
+    1 -> (10, 40, "WaveData/EASY_data.txt", "Maps/EASY_map.txt"), 
+    2 -> (5, 25, "WaveData/MEDIUM_data.txt", "Maps/MEDIUM_map.txt"), 
+    3 -> (1, 15, "WaveData/HARD_data.txt", "Maps/HARD_map.txt")
+  )
   // Costs of towers, R = Regular, S = Slow Down
   val R_COST = 10
   val S_COST = 15

@@ -9,16 +9,11 @@ import scalafx.geometry._
 import scalafx.stage.Screen
 import scalafx.Includes._
 import scalafx.application.JFXApp
-import scalafx.scene.Scene
-import scalafx.scene.control.{Label, TitledPane}
-import scalafx.scene.layout.VBox
-import scalafx.scene.control.{SplitPane, ListView}
+import scalafx.scene.control._
 import scalafx.scene.image._
-import scalafx.scene.image.ImageView
 import scalafx.beans.property.ObjectProperty
-import scalafx.scene.shape.Circle
+import scalafx.scene.shape._
 import scalafx.scene.paint.Color
-import scalafx.scene.shape.Rectangle
 import Util.Constants._
 import Logic.{BasicEnemy => BasicEnemyClass, CamouflagedEnemy => CamouflagedEnemyClass, SplittingEnemy => SplittingEnemyClass}
 import Logic._
@@ -31,13 +26,12 @@ import Util.Constants._
 import scalafx.scene.control.Tooltip
 import scalafx.beans.property._
 import scala.collection.mutable.ArrayBuffer
-import scalafx.scene.control.Alert
+import scalafx.scene.control._
 import scalafx.scene.control.Alert.AlertType
-import scalafx.scene.control.Dialog
 import scalafx.application.Platform
-import scalafx.scene.control.ButtonType
 import scalafx.application.JFXApp3.PrimaryStage
 import Util.State._
+import Util.HelperFunctions._
 
 sealed abstract class EnemyType(val value: Int)
 case object BasicEnemy extends EnemyType(1)
@@ -55,8 +49,8 @@ case object CamouflagedEnemy extends EnemyType(5)
   */
 class GameplayUI(w: Double, h: Double, stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(w, h) {
   lazy val mainmenuSceneLazy = mainmenuScene
-  val mapInst: GameMap = new GameMap("test_map.txt")
-  val waves: Array[Queue[EnemyType]] = generateWaves("test_wavedata.txt")
+  val mapInst: GameMap = new GameMap(getMap)
+  val waves: Array[Queue[EnemyType]] = generateWaves(getWaveData)
   val map = createMap(UI_TILE_SIZE, mapInst.map)
   var enemiesOnMap = Buffer[Enemy]()
   var towersOnMap = BufferProperty[Tower](Seq())
@@ -153,7 +147,6 @@ class GameplayUI(w: Double, h: Double, stage: PrimaryStage, mainmenuScene: => Sc
                 // wait for five seconds
                 variates.setValue(variates.value.updated("waveNo", variates.value("waveNo") + 1))
                 showMessage("Wave " + ((variates.value("waveNo") + 1).toInt.toString()), "info", 4)
-                timer.stop()
             } else {
               val newEnemyType = currWave.dequeue
               val enemy = spawnEnemy(newEnemyType)

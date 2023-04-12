@@ -66,9 +66,21 @@ class SettingsUI {
           new MenuButton("Difficulty") {
             style = buttonStyle
             items = Seq(
-              new MenuItem("Reijon Maansiirto Tmi"),
-              new MenuItem("IBM & Cisco & BlackBerry"),
-              new MenuItem("MAGAT")
+              new MenuItem("Reijon Maansiirto Tmi") {
+                onAction = _ => {
+                  difficulty.setValue(1)
+                }
+              },
+              new MenuItem("IBM & Cisco & BlackBerry") {
+                onAction = _ => {
+                  difficulty.setValue(2)
+                }
+              },
+              new MenuItem("MAGAT") {
+                onAction = _ => {
+                  difficulty.setValue(3)
+                }
+              }
             )
             
           }

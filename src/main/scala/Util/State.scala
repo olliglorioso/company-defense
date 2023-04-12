@@ -2,7 +2,6 @@ package Util
 
 import scalafx.beans.property._
 import scalafx.stage.Screen
-import scalafx.beans.binding.Bindings
 
 object State {
   val variates = ObjectProperty(
@@ -13,7 +12,7 @@ object State {
       "score" -> 0.0 
     )
   )
-  val difficulty = StringProperty("Reijon Maansiirtofirma Tmi")
+  val difficulty = IntegerProperty(1)
   val screenHeight = DoubleProperty(0.0)
   val screenWidth = DoubleProperty(0.0)
 }

@@ -39,7 +39,7 @@ class GameMap(path: String) {
     *   2D Array of BgTiles and PathTiles.
     */
   private def initializeMap(path: String): Array[Array[Tile]] =
-    val lines = Util.FileHandler().readLinesFromFile("/Maps/" + path)
+    val lines = Util.FileHandler().readLinesFromFile(path)
     if (
       lines.length != MAP_HEIGHT || lines
         .filter(a => a.length == MAP_WIDTH)
