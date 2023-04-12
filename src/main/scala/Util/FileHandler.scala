@@ -3,6 +3,7 @@ package Util
 import scala.io.Source
 import upickle.default._
 import ujson._
+import java.io.FileWriter
 class FileHandler:
   def readLinesFromFile(filePath: String): Array[String] = 
     val source = Source.fromFile("./src/main/scala/Resources/" + filePath)
@@ -11,8 +12,12 @@ class FileHandler:
     lines
   end readLinesFromFile
 
+  /**
+   * Reads a JSON-file and returns JSON-like object.
+   * @param filePath the path to the file
+   * @return the contents of the file as ujson.Value
+   */
   def readLinesFromJsonFile(filePath: String) = 
-    // read to a string from filepath
     val source = Source.fromFile("./src/main/scala/Resources/" + filePath)
     val lines = source.getLines()
     var jsonString = ""
@@ -23,7 +28,15 @@ class FileHandler:
     data
   end readLinesFromJsonFile
 
+  def writeLinesToJsonFile(filePath: String, ujsonObj: Value) = // use uPickle
+    val toWrite = readLinesFromFile(filePath)
+    val source = FileWriter("./src/main/scala/Resources/Saved/koira.json")
+    source.write(upickle.default.write(ujsonObj))
+    source.close()
+  end writeLinesToJsonFile
+
 end FileHandler
 
 @main def koira () =
-  println(FileHandler().readLinesFromJsonFile("Saved/saved_test.json")("towers").arr(0)("type"))
+  val data = FileHandler().readLinesFromJsonFile("Saved/LATEST_saved.json")
+  println(FileHandler().writeLinesToJsonFile("Saved/LATEST_saved.json", data))
