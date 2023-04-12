@@ -78,10 +78,13 @@ class MainMenuUI:
             }
 
             onAction = () => {
-              variates.setValue(Map("money" -> getMoney, "health" -> getHealth, "waveNo" -> 0, "score" -> 0))
-              val gameplayScene = new GameplayUI(stage, mainMenuScene(stage, settingsSceneLazy))
-              stage.setScene(gameplayScene)
-              gameplayScene.timer.start()
+              try
+                variates.setValue(Map("money" -> getMoney, "health" -> getHealth, "waveNo" -> 0, "score" -> 0))
+                val gameplayScene = new GameplayUI(stage, mainMenuScene(stage, settingsSceneLazy))
+                stage.setScene(gameplayScene)
+                gameplayScene.timer.start()
+              catch
+                case e: Exception => showErrorAlert(e.getMessage())
             }
           },
           new Button("Continue saved game") {

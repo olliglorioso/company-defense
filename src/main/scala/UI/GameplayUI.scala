@@ -51,7 +51,7 @@ case object CamouflagedEnemy extends EnemyType(5)
 class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(screenWidth(), screenHeight()):
   lazy val mainmenuSceneLazy = mainmenuScene
   val mapInst: GameMap = new GameMap(getMap)
-  val waves: Array[Queue[EnemyType]] = generateWaves()
+  var waves: Array[Queue[EnemyType]] = generateWaves()
   val map = createMap(UI_TILE_SIZE, mapInst.map)
   var enemiesOnMap = Buffer[Enemy]()
   var towersOnMap = BufferProperty[Tower](Seq())
@@ -60,6 +60,7 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
   var startTime = 0L
   var lastTime = 0L
   var gameOver = false
+
   var pane = new Pane:
     children = map.flatten
     prefWidth = (screenWidth() - SIDEBAR_WIDTH)
@@ -328,24 +329,27 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
     * @return
     */
   private def generateWaves(): Array[Queue[EnemyType]] = 
-    val lines = FileHandler().readLinesFromFile(getWaveData)
-    var helperArray: Array[Queue[EnemyType]] = Array()
-    for (i <- lines) {
-      val stringArray = i.split("")
-      var helperQueue: Queue[EnemyType] = Queue()
-      for (str <- stringArray) {
-        val enemy = str match
-          case "B"     => BasicEnemy
-          case "C"     => CamouflagedEnemy
-          case "S"     => SplittingEnemy
-          case "T"     => TankEnemy
-          case "F"     => FlockEnemy
-          case default => BasicEnemy
-        helperQueue.enqueue(enemy)
+    try
+      val lines = FileHandler().readLinesFromFile(getWaveData)
+      var helperArray: Array[Queue[EnemyType]] = Array()
+      for (i <- lines) {
+        val stringArray = i.split("")
+        var helperQueue: Queue[EnemyType] = Queue()
+        for (str <- stringArray) {
+          val enemy = str match
+            case "B"     => BasicEnemy
+            case "C"     => CamouflagedEnemy
+            case "S"     => SplittingEnemy
+            case "T"     => TankEnemy
+            case "F"     => FlockEnemy
+            case default => throw new Exception("Invalid enemy type in wave data file.")
+          helperQueue.enqueue(enemy)
+        }
+        helperArray = helperArray :+ helperQueue
       }
-      helperArray = helperArray :+ helperQueue
-    }
-    helperArray
+      helperArray
+    catch
+      case e: Exception => throw new Exception(e.getMessage())
   end generateWaves
 
   /** Spawn an enemy to the start point.
