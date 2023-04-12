@@ -18,8 +18,7 @@ import scalafx.scene.paint.Paint
 import Util.HelperFunctions.getMoney
 import Util.HelperFunctions.getHealth
 
-class MainMenuUI {
-
+class MainMenuUI:
   /** @param stage
     *   PrimaryStage
     * @param gameplayScene
@@ -111,4 +110,5 @@ class MainMenuUI {
         )
       }
     mainmenuScene
-}
+  end mainMenuScene
+end MainMenuUI
