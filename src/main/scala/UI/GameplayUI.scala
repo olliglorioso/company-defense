@@ -77,7 +77,7 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
   }
 
 
-  def editPriorityQueuesAndCreateBullets(time: Long) = {
+  def editPriorityQueuesAndCreateBullets(time: Long) = 
     for (tower <- towersOnMap.value) {
       tower.clearPriorityQueue()  // Clear the whole priority queue every time (have to remove and reinsert enemies anyway)
       for (enemy <- enemiesOnMap) {
@@ -90,9 +90,9 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
         pane.children.add(bullet)
         bulletsOnMap.value = bulletsOnMap.value :+ bullet
     }
-  }
+  end editPriorityQueuesAndCreateBullets
 
-  def moveBulletsAndCheckHits(time: Long) = {
+  def moveBulletsAndCheckHits(time: Long) = 
     val enemiesOnMapCopy = enemiesOnMap.clone()
     val bulletsOnMapCopy = bulletsOnMap.value.clone()
     for (bullet <- bulletsOnMapCopy) {
@@ -123,14 +123,14 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
         }
       }
     }
-  }
+  end moveBulletsAndCheckHits
 
   /** Creates a basic clock for the game. Started when current gameplay starts.
     *
     * @return
     *   AnimationTimer
     */
-  def createTimer(): AnimationTimer = {
+  def createTimer(): AnimationTimer = 
     AnimationTimer { time =>
       {
         if (timerStarted == false) {
@@ -189,7 +189,7 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
         }
       }
     }
-  }
+  end createTimer
 
   val timer = createTimer()
 
@@ -201,7 +201,7 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
     * @param blinks
     *  Number of blinks
     */
-  def showMessage(msg: String, messageType: String, blinks: Int): Unit = {
+  def showMessage(msg: String, messageType: String, blinks: Int): Unit = 
     val label = new Label(msg) {
       messageType match {
         case "error" =>
@@ -247,7 +247,7 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
       }
     }
     timer.start()
-  }
+  end showMessage
 
   /** Generate enemy waves Array based on a file.
     *
@@ -255,7 +255,7 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
     *   File location
     * @return
     */
-  private def generateWaves(fileLoc: String): Array[Queue[EnemyType]] = {
+  private def generateWaves(fileLoc: String): Array[Queue[EnemyType]] = 
     val lines = FileHandler().readLinesFromFile("/WaveData/test_wavedata.txt")
     var helperArray: Array[Queue[EnemyType]] = Array()
     for (i <- lines) {
@@ -274,14 +274,14 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
       helperArray = helperArray :+ helperQueue
     }
     helperArray
-  }
+  end generateWaves
 
   /** Spawn an enemy to the start point.
     *
     * @return
     *   Enemy
     */
-  def spawnEnemy(enemyType: EnemyType): Enemy = {
+  def spawnEnemy(enemyType: EnemyType): Enemy = 
     val enemy = enemyType match
       case BasicEnemy => BasicEnemyClass(mapInst.pathQueue)
       case SplittingEnemy => SplittingEnemyClass(mapInst.pathQueue)
@@ -297,7 +297,7 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
     enemy.translateY = startY * UI_TILE_SIZE
     enemy.translateX = startX * UI_TILE_SIZE
     enemy
-  }
+  end spawnEnemy
 
   /** Create map UI based on the Map-class's map.
     *
@@ -308,7 +308,7 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
   def createMap(
       UI_TILE_SIZE: Double,
       mapTiles: Array[Array[Tile]]
-  ): Seq[Seq[Rectangle]] = {
+  ): Seq[Seq[Rectangle]] = 
     var mapBlocks: Seq[Seq[Rectangle]] = Seq()
     var yPlus = 0
     for (row <- mapTiles) {
@@ -330,5 +330,5 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
       mapBlocks = mapBlocks :+ rowBlocks
     }
     mapBlocks
-  }
+  end createMap
 }
