@@ -1,0 +1,28 @@
+{
+    "health": 9,
+    "money": 20,
+    "difficulty": 2,
+    "waveNo": 6,
+    "towers": [
+        {
+            "type": "R",
+            "globalX": 300,
+            "globalY": 300
+        },
+        {
+            "type": "R",
+            "globalX": 400,
+            "globalY": 400
+        },
+        {
+            "type": "S",
+            "globalX": 200,
+            "globalY": 200
+        },
+        {
+            "type": "S",
+            "globalX": 100,
+            "globalY": 100
+        }
+    ]
+}

@@ -1,2 +1,8 @@
 9 # health
 20 # money
+2 # difficulty
+6 # waveNo
+R,300,300 # tower type, global coordinate x, global coordinate y
+R,400,400
+S,100,100
+S,200,200

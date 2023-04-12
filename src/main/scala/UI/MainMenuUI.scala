@@ -15,6 +15,8 @@ import javafx.scene.image.ImageView
 import Util.Constants.MAINMENU_BG_LOC
 import scalafx.scene.image.Image
 import scalafx.scene.paint.Paint
+import Util.HelperFunctions.getMoney
+import Util.HelperFunctions.getHealth
 
 class MainMenuUI {
 
@@ -73,9 +75,26 @@ class MainMenuUI {
             }
 
             onAction = () => {
-              val gameplayScene = new GameplayUI(screenWidth.value, screenHeight.value, stage, mainMenuScene(stage, settingsSceneLazy))
+              variates.setValue(Map("money" -> getMoney, "health" -> getHealth, "waveNo" -> 0.0, "score" -> 0.0))
+              val gameplayScene = new GameplayUI(stage, mainMenuScene(stage, settingsSceneLazy))
               stage.setScene(gameplayScene)
               gameplayScene.timer.start()
+            }
+          },
+          new Button("Continue saved game") {
+            style = buttonStyle
+            onAction = () => {
+              variates.setValue(Map("money" -> getMoney, "health" -> getHealth, "waveNo" -> 0.0, "score" -> 0.0))
+              val gameplayScene = new GameplayUI(stage, mainMenuScene(stage, settingsSceneLazy))
+              stage.setScene(gameplayScene)
+              gameplayScene.timer.start()
+            }
+            onMouseEntered = () => {
+              style = "-fx-background-color: red; -fx-text-fill: white; -fx-font-size: 30pt; -fx-font-family: 'Arial Black', sans-serif; -fx-padding: 10px 20px; -fx-background-radius: 50px; -fx-border-radius: 50px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 3);"
+            }
+
+            onMouseExited = () => {
+              style = buttonStyle
             }
           },
           new Button("Settings") {
@@ -88,7 +107,7 @@ class MainMenuUI {
             onMouseExited = () => {
               style = buttonStyle
             }
-          }
+          },
         )
       }
     mainmenuScene

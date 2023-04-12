@@ -47,7 +47,7 @@ case object CamouflagedEnemy extends EnemyType(5)
   * @param h
   *   Scene height
   */
-class GameplayUI(w: Double, h: Double, stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(w, h) {
+class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(screenWidth(), screenHeight()) {
   lazy val mainmenuSceneLazy = mainmenuScene
   val mapInst: GameMap = new GameMap(getMap)
   val waves: Array[Queue[EnemyType]] = generateWaves(getWaveData)
@@ -55,7 +55,6 @@ class GameplayUI(w: Double, h: Double, stage: PrimaryStage, mainmenuScene: => Sc
   var enemiesOnMap = Buffer[Enemy]()
   var towersOnMap = BufferProperty[Tower](Seq())
   var bulletsOnMap = BufferProperty[Bullet](Seq())
-  variates.setValue(Map("money" -> getMoney, "health" -> getHealth, "waveNo" -> 0.0, "score" -> 0.0))
   var timerStarted = false
   var startTime = 0L
   var lastTime = 0L
@@ -63,8 +62,8 @@ class GameplayUI(w: Double, h: Double, stage: PrimaryStage, mainmenuScene: => Sc
 
   var pane = new Pane {
     children = map.flatten
-    prefWidth = (w - SIDEBAR_WIDTH)
-    prefHeight = h
+    prefWidth = (screenWidth() - SIDEBAR_WIDTH)
+    prefHeight = screenHeight()
   }
 
   val sidebar = SidebarUI(pane, mapInst, towersOnMap, showMessage)
@@ -216,9 +215,9 @@ class GameplayUI(w: Double, h: Double, stage: PrimaryStage, mainmenuScene: => Sc
       val textLength = msg.length * 50
       val newLoc = messageType match {
         case "error" =>
-          ((w - SIDEBAR_WIDTH) / 2 - textLength / 3, 0.0)
+          ((screenWidth() - SIDEBAR_WIDTH) / 2 - textLength / 3, 0.0)
         case "info" =>
-          ((w - SIDEBAR_WIDTH) / 2 - textLength / 3, h / 2)
+          ((screenHeight() - SIDEBAR_WIDTH) / 2 - textLength / 3, screenHeight() / 2)
       }
       translateX = newLoc._1
       translateY = newLoc._2

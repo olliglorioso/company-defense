@@ -42,8 +42,8 @@ object Constants {
   val SIDEBAR_WIDTH = 130
   // Player's features in different modes
   val features = Map( // Health, Money, Wave file location, Map location
-    1 -> (10, 40, "WaveData/EASY_data.txt", "Maps/EASY_map.txt"), 
-    2 -> (5, 25, "WaveData/MEDIUM_data.txt", "Maps/MEDIUM_map.txt"), 
+    1 -> (10, 100, "WaveData/EASY_data.txt", "Maps/EASY_map.txt"), 
+    2 -> (5, 50, "WaveData/MEDIUM_data.txt", "Maps/MEDIUM_map.txt"), 
     3 -> (1, 15, "WaveData/HARD_data.txt", "Maps/HARD_map.txt"),
     4 -> (10, 100, "WaveData/CUSTOM_data.txt", "Maps/CUSTOM_map.txt")
   )
