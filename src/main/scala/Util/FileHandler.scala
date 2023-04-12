@@ -30,7 +30,7 @@ class FileHandler:
 
   def writeLinesToJsonFile(filePath: String, ujsonObj: Value) = // use uPickle
     val toWrite = readLinesFromFile(filePath)
-    val source = FileWriter("./src/main/scala/Resources/Saved/koira.json")
+    val source = FileWriter("./src/main/scala/Resources/" + filePath)
     source.write(upickle.default.write(ujsonObj))
     source.close()
   end writeLinesToJsonFile

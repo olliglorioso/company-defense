@@ -66,7 +66,7 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
     prefHeight = screenHeight()
   end pane
 
-  val sidebar = SidebarUI(pane, mapInst, towersOnMap, showMessage, saveCurrentGame)
+  val sidebar = SidebarUI(pane, mapInst, towersOnMap, showMessage, saveAndExit)
   sidebar.toFront()
 
   root = new BorderPane:
@@ -74,7 +74,10 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
       center = pane
     right = sidebar // Sidebar area
 
-  def saveCurrentGame(): Unit =
+  /**
+   * Save current game (save e.g. level, last completed wave, money, health, placed towers and their locs & levels).
+   */
+  def saveAndExit(): Unit =
     val savedTowers = ArrayBuffer[Obj]()
     for (tower <- towersOnMap.value) {
       val towerType = tower match
@@ -86,30 +89,40 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
       val towerY = tower.y
       val towerObj = Obj(
         "type" -> towerType,
-        "level" -> towerLevel,
         "globalX" -> towerX.value,
-        "globalY" -> towerY.value
+        "globalY" -> towerY.value,
+        "level" -> towerLevel
       )
       savedTowers += towerObj
     }
-    val savedGame = Obj(
+    val savedGame = ujson.Value(Obj(
       "health" -> variates.value("health"),
       "money" -> variates.value("money"),
       "difficulty" -> difficulty.value,
       "waveNo" -> (if (variates.value("waveNo") > 0) then (variates.value("waveNo") - 1) else 0),
       "score" -> variates.value("score"),
       "towers" -> savedTowers,
-    )
-  end saveCurrentGame
+    ))
+    timer.stop()
+    FileHandler().writeLinesToJsonFile("Saved/LATEST_saved.json", savedGame) // Write the saved info to a file (and empty previous one)
+    stage.setScene(mainmenuSceneLazy)
+  end saveAndExit
 
+  /**
+   * Initialize saved towers, in case user wants to continue saved game.
+   * @param savedTowers Array of saved towers, should be read from a file.
+   */
   def initializeSavedTowers(savedTowers: ArrayBuffer[Obj]) = 
     for (savedTower <- savedTowers) {
       val towerType = savedTower.value("type").value.asInstanceOf[String]
       val x = savedTower.value("globalX").value.asInstanceOf[Double]
       val y = savedTower.value("globalY").value.asInstanceOf[Double]
       val level = savedTower.value("level").value.asInstanceOf[Double].toInt
-
+      println(mapInst.isBgTile(x, y))
+      println(towerCanBePlaced(Point2D(x, y), towersOnMap))
+      println("Placing saved tower at " + x.toString() + ", " + y.toString())
       if (mapInst.isBgTile(x, y) && towerCanBePlaced(Point2D(x, y), towersOnMap)) then 
+        
         val newTower = towerType match
           case "R" => new RegularTower(sidebar.openUpgradeMenu, showMessage)
           case "S" => new SlowDownTower(sidebar.openUpgradeMenu, showMessage)
@@ -124,6 +137,10 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
     }
   end initializeSavedTowers
 
+  /**
+   * Edit the priority queues of all the towers on the map and create bullets if possible for each tower.
+   * @param time Current time in milliseconds
+   */
   def editPriorityQueuesAndCreateBullets(time: Long) = 
     for (tower <- towersOnMap.value) {
       tower.clearPriorityQueue()  // Clear the whole priority queue every time (have to remove and reinsert enemies anyway)
@@ -139,7 +156,11 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
     }
   end editPriorityQueuesAndCreateBullets
 
-  def moveBulletsAndCheckHits(time: Long) = 
+  /**
+   * Move all the bullets on the map and check if they hit any enemies, if yes -> cause damage.
+   * @param time Current time in milliseconds
+   */
+  def moveBulletsAndCheckHits(): Unit = 
     val enemiesOnMapCopy = enemiesOnMap.clone()
     val bulletsOnMapCopy = bulletsOnMap.value.clone()
     for (bullet <- bulletsOnMapCopy) {
@@ -234,7 +255,7 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
           }
           enemiesOnMap = newEnemies
           editPriorityQueuesAndCreateBullets(time)
-          moveBulletsAndCheckHits(time)
+          moveBulletsAndCheckHits()
         }
       }
     }
