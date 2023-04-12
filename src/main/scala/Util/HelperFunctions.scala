@@ -20,4 +20,6 @@ object HelperFunctions {
   def labelStyle(size: Int): String = s"-fx-font: normal bold ${size} Langdon; -fx-base: #AE3522; " + "-fx-text-fill: orange;"
   def getMap = features(difficulty.value)._4
   def getWaveData = features(difficulty.value)._3
+  def getHealth = features(difficulty.value)._1
+  def getMoney = features(difficulty.value)._2
 }

@@ -55,7 +55,7 @@ class GameplayUI(w: Double, h: Double, stage: PrimaryStage, mainmenuScene: => Sc
   var enemiesOnMap = Buffer[Enemy]()
   var towersOnMap = BufferProperty[Tower](Seq())
   var bulletsOnMap = BufferProperty[Bullet](Seq())
-  variates.setValue(Map("money" -> 500.0, "health" -> 10.0, "waveNo" -> 0.0, "score" -> 0.0))
+  variates.setValue(Map("money" -> getMoney, "health" -> getHealth, "waveNo" -> 0.0, "score" -> 0.0))
   var timerStarted = false
   var startTime = 0L
   var lastTime = 0L
