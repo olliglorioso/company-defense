@@ -60,16 +60,16 @@ class SidebarUI(
     }
 
     val sellButton = new Button(s"Sell (${tower.sellPrice})") {
-          style = "-fx-base: red;"
-          prefWidth = 100
-          onAction = _ => {
-            variates.setValue(variates.value.updated("money", variates.value("money") + tower.sellPrice))
-            moneyLabel.text = variates.value("money").toInt.toString()
-            pane.children.remove(tower)
-            towersOnMap.value -= tower
-            children = Seq(towers, infoLabels)
-          }
-        }
+      style = "-fx-base: red;"
+      prefWidth = 100
+      onAction = _ => {
+        variates.setValue(variates.value.updated("money", variates.value("money") + tower.sellPrice))
+        moneyLabel.text = variates.value("money").toInt.toString()
+        pane.children.remove(tower)
+        towersOnMap.value -= tower
+        children = Seq(towers, infoLabels)
+      }
+    }
     var editInfo = new VBox() {
       alignment = Pos.Center
       spacing = 10

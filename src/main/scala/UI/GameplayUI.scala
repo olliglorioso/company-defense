@@ -50,7 +50,7 @@ case object CamouflagedEnemy extends EnemyType(5)
 class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(screenWidth(), screenHeight()):
   lazy val mainmenuSceneLazy = mainmenuScene
   val mapInst: GameMap = new GameMap(getMap)
-  val waves: Array[Queue[EnemyType]] = generateWaves(getWaveData)
+  val waves: Array[Queue[EnemyType]] = generateWaves()
   val map = createMap(UI_TILE_SIZE, mapInst.map)
   var enemiesOnMap = Buffer[Enemy]()
   var towersOnMap = BufferProperty[Tower](Seq())
@@ -76,10 +76,10 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
 
   def initializeSavedTowers(savedTowers: ArrayBuffer[Map[String, Any]]) = 
     for (savedTower <- savedTowers) {
-      val tower = savedTower("tower").asInstanceOf[String]
-      val x = savedTower("globalX").asInstanceOf[Double]
-      val y = savedTower("globalY").asInstanceOf[Double]
-      val level = savedTower("level").asInstanceOf[Double].toInt
+      val tower = savedTower("tower").toString()
+      val x = savedTower("globalX").toString().toDouble
+      val y = savedTower("globalY").toString().toDouble
+      val level = savedTower("level").toString().toInt
       val newTower = tower match
         case "R" => new RegularTower(null, showMessage)
         case "S" => new SlowDownTower(null, showMessage)
@@ -177,7 +177,9 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
             if (variates.value("health") <= 0 && !gameOver) {
               gameOver = true
               showMessage("Game Over", "info", 20)
-              val dialog = new Dialog[String]() {
+              new Dialog[String]() {
+                initOwner(stage)
+                resizable=false
                 title = "Game Over"
                 headerText = s"Your points: ${variates.value("score").toInt}"
                 dialogPane().buttonTypes = Seq(ButtonType.OK)
@@ -271,8 +273,8 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
     *   File location
     * @return
     */
-  private def generateWaves(fileLoc: String): Array[Queue[EnemyType]] = 
-    val lines = FileHandler().readLinesFromFile("/WaveData/test_wavedata.txt")
+  private def generateWaves(): Array[Queue[EnemyType]] = 
+    val lines = FileHandler().readLinesFromFile(getWaveData)
     var helperArray: Array[Queue[EnemyType]] = Array()
     for (i <- lines) {
       val stringArray = i.split("")

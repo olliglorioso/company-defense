@@ -12,6 +12,8 @@ import Util.Constants.MAINMENU_BG_LOC
 import scalafx.scene.control.MenuButton
 import scalafx.scene.control.MenuItem
 import Util.State._
+import Util.HelperFunctions.labelStyle
+import Util.HelperFunctions.getDifficultyName
 
 class SettingsUI {
 
@@ -31,6 +33,9 @@ class SettingsUI {
 
     val settingsScene: Scene = new Scene(screenWidth.value, screenHeight.value):
       root = new VBox {
+        val difficultyInfoLabel = new Label("Difficulty: " + getDifficultyName):
+          style = s"${labelStyle(30, "black")} -fx-background-color: red;"
+        difficulty.onChange((_, _, newValue) => difficultyInfoLabel.text = "Difficulty: " + getDifficultyName)
         background = new Background(
           fills = Seq(
             new BackgroundFill(
@@ -52,7 +57,7 @@ class SettingsUI {
         spacing = 20
         alignment = Pos.Center
         children = Seq(
-          new Button("Main menu") {
+          new Button("Main menu"):
             onAction = () => stage.setScene(mainmenuSceneLazy)
             style = buttonStyle
             onMouseEntered = () => {
@@ -62,35 +67,28 @@ class SettingsUI {
             onMouseExited = () => {
               style = buttonStyle
             }
-          },
-          new MenuButton("Difficulty") {
+          ,
+          new MenuButton("Difficulty"):
             style = buttonStyle
             items = Seq(
-              new MenuItem("Reijon Maansiirto Tmi") {
+              new MenuItem("Reijon Maansiirto Tmi"):
                 onAction = _ => {
                   difficulty.setValue(1)
-                }
-              },
-              new MenuItem("IBM & Cisco & BlackBerry") {
+                },
+              new MenuItem("IBM & Cisco & BlackBerry"):
                 onAction = _ => {
                   difficulty.setValue(2)
-                }
-              },
-              new MenuItem("MAGAT") {
+                },
+              new MenuItem("MAGAT"):
                 onAction = _ => {
                   difficulty.setValue(3)
-                }
-              },
-              new MenuItem("Nokia (Custom)") {
+                },
+              new MenuItem("Nokia (Custom)"):
                 onAction = _ => {
                   difficulty.setValue(4)
-                }
-              }
-            )
-          }
-          
-          // dropdown menu for selecting difficulty
-
+                },
+            ),
+            difficultyInfoLabel
         )
       }
     settingsScene

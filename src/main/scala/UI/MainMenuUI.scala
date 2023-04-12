@@ -94,6 +94,7 @@ class MainMenuUI:
                   anyToInteger(saved("score")), saved("towers").arr.asInstanceOf[ArrayBuffer[Map[String, Any]]]
                 )
               variates.setValue(Map("money" -> savedMoney, "health" -> savedHealth, "waveNo" -> savedWaveNo, "score" -> savedScore))
+              difficulty.setValue(savedDifficulty)
               val gameplayScene = new GameplayUI(stage, mainMenuScene(stage, settingsSceneLazy))
               stage.setScene(gameplayScene)
               gameplayScene.timer.start()
