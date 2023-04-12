@@ -32,6 +32,7 @@ import scalafx.application.Platform
 import scalafx.application.JFXApp3.PrimaryStage
 import Util.State._
 import Util.HelperFunctions._
+import ujson.Obj
 
 sealed abstract class EnemyType(val value: Int)
 case object BasicEnemy extends EnemyType(1)
@@ -74,20 +75,22 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
       center = pane
     right = sidebar // Sidebar area
 
-  def initializeSavedTowers(savedTowers: ArrayBuffer[Map[String, Any]]) = 
+  def initializeSavedTowers(savedTowers: ArrayBuffer[Obj]) = 
     for (savedTower <- savedTowers) {
-      val tower = savedTower("tower").toString()
-      val x = savedTower("globalX").toString().toDouble
-      val y = savedTower("globalY").toString().toDouble
-      val level = savedTower("level").toString().toInt
-      val newTower = tower match
-        case "R" => new RegularTower(null, showMessage)
-        case "S" => new SlowDownTower(null, showMessage)
+      val towerType = savedTower.value("type").value.asInstanceOf[String]
+      val x = savedTower.value("globalX").value.asInstanceOf[Double]
+      val y = savedTower.value("globalY").value.asInstanceOf[Double]
+      val level = savedTower.value("level").value.asInstanceOf[Double].toInt
+      println(s"Loading tower of type $towerType at ($x, $y) with level $level")
+      val newTower = towerType match
+        case "R" => new RegularTower(sidebar.openUpgradeMenu, showMessage)
+        case "S" => new SlowDownTower(sidebar.openUpgradeMenu, showMessage)
         case _ => null
       newTower.x = x
       newTower.y = y
       newTower.setTranslateX(x)
       newTower.setTranslateY(y)
+      newTower.level.setValue(level)
       pane.children.add(newTower)
       towersOnMap.setValue(towersOnMap.value :+ newTower)
     }

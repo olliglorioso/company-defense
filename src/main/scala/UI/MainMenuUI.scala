@@ -19,6 +19,7 @@ import scalafx.scene.image.Image
 import scalafx.scene.paint.Paint
 import Util.HelperFunctions._
 import scala.collection.mutable.ArrayBuffer
+import ujson.Obj
 
 class MainMenuUI:
   /** @param stage
@@ -91,11 +92,12 @@ class MainMenuUI:
                 (
                   anyToInteger(saved("money")), anyToInteger(saved("health")),
                   anyToInteger(saved("difficulty")), anyToInteger(saved("waveNo")),
-                  anyToInteger(saved("score")), saved("towers").arr.asInstanceOf[ArrayBuffer[Map[String, Any]]]
+                  anyToInteger(saved("score")), saved("towers").arr.asInstanceOf[ArrayBuffer[Obj]]
                 )
               variates.setValue(Map("money" -> savedMoney, "health" -> savedHealth, "waveNo" -> savedWaveNo, "score" -> savedScore))
               difficulty.setValue(savedDifficulty)
               val gameplayScene = new GameplayUI(stage, mainMenuScene(stage, settingsSceneLazy))
+              gameplayScene.initializeSavedTowers(savedTowers)
               stage.setScene(gameplayScene)
               gameplayScene.timer.start()
             }
