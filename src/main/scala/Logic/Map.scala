@@ -93,13 +93,14 @@ class GameMap(path: String):
       y += 1
     }
     map
+  end initializeMap
 
   /** @param tile
     *   The starting tile.
     * @return
     *   A queue of PathTiles.
     */
-  private def generatePathQueue(tile: PathTile): Queue[PathTile] = {
+  private def generatePathQueue(tile: PathTile): Queue[PathTile] = 
     // All possible next steps from a tile.
     val searchValues = Array(
       (0, 1),
@@ -143,7 +144,7 @@ class GameMap(path: String):
       }
     }
     return queue
-  }
+  end generatePathQueue
 
   private def whichTile = (x: Int, y: Int) => map(x)(y)
 
@@ -155,14 +156,12 @@ class GameMap(path: String):
   def isBgTile = (x: Double, y: Double) => {
     val xCoord = (x / UI_TILE_SIZE).toInt
     val yCoord = (y / UI_TILE_SIZE).toInt
-    if (
-      xCoord < 0 || yCoord < 0 || xCoord > (MAP_HEIGHT - 1) || yCoord > (MAP_WIDTH - 1)
-    ) then false
-    else {
-      val tile = whichTile(xCoord, yCoord)
+    val invalidValues = xCoord < 0 || yCoord < 0 || xCoord > (MAP_HEIGHT - 1) || yCoord > (MAP_WIDTH - 1)
 
+    if invalidValues then false
+    else
+      val tile = whichTile(xCoord, yCoord)
       if (tile.isInstanceOf[BgTile]) true
       else false
-    }
   }
 end GameMap
