@@ -13,7 +13,7 @@ import javafx.scene.paint.ImagePattern
 import scalafx.scene.image.Image
 
 abstract class Tower(path: String, price: Int, range: Int, showUpgradeInfo: Tower => Unit, showMessage: (String, String, Int) => Unit)
-    extends GameObject(path, TOWER_SIDE) {
+    extends GameObject(path, TOWER_SIDE):
     
     var attackSpeed = 3.0 // is a good basic speed. Adjusting between 0.5-5 is ok. The lower the better
     var lastBulletInit = 0L
@@ -26,71 +26,69 @@ abstract class Tower(path: String, price: Int, range: Int, showUpgradeInfo: Towe
     // Enemy priority queue
     val enemyPriority = new PriorityQueue[Enemy]()(Ordering.by(enemyPriorityCalc(_)))
 
-    onMouseClicked = (e: MouseEvent) => {
-        showUpgradeInfo(this)
-    }
+    onMouseClicked = (e: MouseEvent) => showUpgradeInfo(this)
+    
 
-    private def enemyPriorityCalc(enemy: Enemy): Double = {
+    private def enemyPriorityCalc(enemy: Enemy): Double =
         val distToEnemy = enemy.getDistanceToPoint(getGlobalCenter)
         val generalPrio = enemy.health * 0.4 + enemy.speed * 0.01 + -distToEnemy * 0.25 + enemy.tilesTraversed * 0.70 * 100
         if (distToEnemy > range) (generalPrio - 1000)
         else generalPrio
-    }
+    end enemyPriorityCalc
 
-    def sellPrice: Int = {
+    def sellPrice: Int =
         math.round((price * 0.5) * math.pow(1.2, level.value)).toInt
-    }
+    end sellPrice
 
-    def upgradePrice: Int = {
+    def upgradePrice: Int =
         math.round((price * 0.6) * math.pow(1.3, level.value)).toInt
-    }
+    end upgradePrice
 
-    def upgradeFeatures(): Unit = {
+    def upgradeFeatures(): Unit =
         level.value += 1
         attackSpeed *= 0.97
         damage *= 1.05
         slowDown *= 1.05
-    }
+    end upgradeFeatures
 
-    def upgrade(money: Double): Double = {
-        if (money < upgradePrice) {
+    def upgrade(money: Double): Double =
+        if (money < upgradePrice) then
             showMessage("You don't have enough money to upgrade this tower", "error", 1)
             return money
-        } else if (level.value < maxLevel) {
+        else if (level.value < maxLevel) then
             upgradeFeatures()
             money - upgradePrice
-        } else {
+        else 
             showMessage("You can't upgrade this tower any further", "error", 1)
             money
-        }
-    }
+    end upgrade
 
-    def addEnemyToPriorityQueue(enemy: Enemy) = {
+    def addEnemyToPriorityQueue(enemy: Enemy) =
         enemyPriority.enqueue(enemy)
-    }   
+    end addEnemyToPriorityQueue
 
-    def clearPriorityQueue() = {
+    def clearPriorityQueue() =
         enemyPriority.clear()
-    }
+    end clearPriorityQueue
 
-    private def canShootTowardsEnemy(enemy: Enemy): Boolean = {
-        if (enemy.isInstanceOf[CamouflagedEnemy]) return false
+    private def canShootTowardsEnemy(enemy: Enemy): Boolean =
+        if (enemy.isInstanceOf[CamouflagedEnemy]) then return false
         val towerLoc = localToScene(layoutBounds.getValue().getCenterX(), layoutBounds.getValue().getCenterY())
         val distToEnemy = enemy.getDistanceToPoint(towerLoc)
-        if (distToEnemy <= range) true
+        if (distToEnemy <= range) then true
         else false
-    }
+    end canShootTowardsEnemy
 
-    private def canInitNewBullet(time: Long, lastBulletInit: Long): Boolean = {
+    private def canInitNewBullet(time: Long, lastBulletInit: Long): Boolean =
         (enemyPriority.nonEmpty && canShootTowardsEnemy(enemyPriority.head) && (lastBulletInit == 0L || time - lastBulletInit >= attackSpeed * 100000000L))
-    }
+    end canInitNewBullet
 
-    def getGlobalCenter: Point2D = {
+    def getGlobalCenter: Point2D =
         val towerLoc = localToScene(layoutBounds.getValue().getCenterX(), layoutBounds.getValue().getCenterY())
         towerLoc
-    }
+    end getGlobalCenter
 
-    def initBullet(time: Long): Bullet = { 
+    def initBullet(time: Long): Bullet = 
         if (canInitNewBullet(time, lastBulletInit)) then 
             val closestEnemy = enemyPriority.head
             val enemyLoc = closestEnemy.getGlobalCenter
@@ -100,14 +98,12 @@ abstract class Tower(path: String, price: Int, range: Int, showUpgradeInfo: Towe
             lastBulletInit = time
             bullet
         else null
-    }
+    end initBullet
 
-    def rotateTowardsPriorityEnemy() = {
-        if (enemyPriority.nonEmpty && canShootTowardsEnemy(enemyPriority.head)) {
+    def rotateTowardsPriorityEnemy() =
+        if (enemyPriority.nonEmpty && canShootTowardsEnemy(enemyPriority.head)) then
             val enemy = enemyPriority.head
             val angle = math.atan2(enemy.getGlobalCenter.y - getGlobalCenter.y, enemy.getGlobalCenter.x - getGlobalCenter.x)
             rotate.value = math.toDegrees(angle) + 90 // Make the head towards the enemy (shooting happens from the "head" of tower)
-        }
-    }
-
-}
+    end rotateTowardsPriorityEnemy
+end Tower

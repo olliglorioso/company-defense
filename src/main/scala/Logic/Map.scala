@@ -17,12 +17,23 @@ case object End extends Turn(5)
 
 class InvalidMapError extends Error
 
+/**
+  * Path tile (enemy's route tile).
+  *
+  * @param coord Coodinates
+  * @param turn Where is the next PathTile.
+  */
 class PathTile(coord: Tuple2[Int, Int], turn: Turn)
     extends Tile(canBuildTower = false, coord = coord):
   override def toString = s"PathTile, c: ${coord}, t: ${turn}"
   def getTurn() = turn
 end PathTile
 
+/**
+  * Background tile.
+  *
+  * @param coord Coordinates
+  */
 class BgTile(coord: Tuple2[Int, Int])
     extends Tile(canBuildTower = true, coord = coord):
   override def toString = s"BgTile, c: ${coord}"
@@ -146,7 +157,13 @@ class GameMap(path: String):
     return queue
   end generatePathQueue
 
-  private def whichTile = (x: Int, y: Int) => map(x)(y)
+  /**
+    * Returns the tile that is located in the given coordinates.
+    *
+    * @return Tile
+    */
+  private def whichTile (x: Int, y: Int): Tile = map(x)(y)
+  end whichTile
 
   /** @param coords
     *   The coordinates to check, not rounded.
@@ -156,7 +173,6 @@ class GameMap(path: String):
   def isBgTile (x: Double, y: Double) =
     val xCoord = (x / UI_TILE_SIZE).toInt
     val yCoord = (y / UI_TILE_SIZE).toInt
-    println(s"X: ${xCoord}, Y: ${yCoord}")
     val invalidValues = xCoord < 0 || yCoord < 0 || xCoord > (MAP_HEIGHT - 1) || yCoord > (MAP_WIDTH - 1)
 
     if invalidValues then false
