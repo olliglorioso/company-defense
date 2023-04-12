@@ -156,6 +156,7 @@ class GameMap(path: String):
   def isBgTile (x: Double, y: Double) =
     val xCoord = (x / UI_TILE_SIZE).toInt
     val yCoord = (y / UI_TILE_SIZE).toInt
+    println(s"X: ${xCoord}, Y: ${yCoord}")
     val invalidValues = xCoord < 0 || yCoord < 0 || xCoord > (MAP_HEIGHT - 1) || yCoord > (MAP_WIDTH - 1)
 
     if invalidValues then false
