@@ -7,6 +7,7 @@ lazy val root = (project in file("."))
     libraryDependencies += "org.scalafx" %% "scalafx" % "18.0.1-R28",
     libraryDependencies += "org.scalactic" %% "scalactic" % "3.2.15",
     libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.15" % "test",
+    libraryDependencies += "com.lihaoyi" %% "upickle" % "3.1.0",
     libraryDependencies += "org.testfx" % "testfx-junit5" % "4.0.16-alpha" % Test,
     libraryDependencies += "org.junit.jupiter" % "junit-jupiter-api" % "5.7.0-M1" % Test,
     libraryDependencies += "org.junit.jupiter" % "junit-jupiter-engine" % "5.7.0-M1" % Test,
