@@ -85,12 +85,13 @@ class MainMenuUI:
           new Button("Continue saved game") {
             style = buttonStyle
             onAction = () => {
+              def toInteger = (x: Any) => x.asInstanceOf[Double].toInt
               val saved = FileHandler().readLinesFromJsonFile(LATEST_SAVED_LOC)
               val (savedMoney, savedHealth, savedDifficulty, savedWaveNo, savedScore, savedTowers) = 
                 (
-                  saved("money").value.asInstanceOf[Double], saved("health").value.asInstanceOf[Double],
-                  saved("difficulty").value.asInstanceOf[Double], saved("waveNo").value.asInstanceOf[Double],
-                  saved("score").value.asInstanceOf[Double], saved("towers").arr.asInstanceOf[ArrayBuffer[Map[String, Any]]]
+                  toInteger(saved("money")).toInt, toInteger(saved("health")).toInt,
+                  toInteger(saved("difficulty")), toInteger(saved("waveNo")).toInt,
+                  toInteger(saved("score")), saved("towers").arr.asInstanceOf[ArrayBuffer[Map[String, Any]]]
                 )
               variates.setValue(Map("money" -> savedMoney, "health" -> savedHealth, "waveNo" -> savedWaveNo, "score" -> savedScore))
               val gameplayScene = new GameplayUI(stage, mainMenuScene(stage, settingsSceneLazy))
