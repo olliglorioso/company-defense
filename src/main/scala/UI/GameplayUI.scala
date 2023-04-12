@@ -107,7 +107,7 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
       "health" -> variates.value("health"),
       "money" -> variates.value("money"),
       "difficulty" -> difficulty.value,
-      "waveNo" -> (if (variates.value("waveNo") > 0) then (variates.value("waveNo") - 1) else 0),
+      "waveNo" -> (if (variates.value("waveNo") > 0) then (variates.value("waveNo")) else 0),
       "score" -> variates.value("score"),
       "towers" -> savedTowers,
     ))
@@ -211,20 +211,23 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
           lastTime = time
         } else {
           if (time - lastTime >= 1000000000L) {
-            val currWave = waves(variates.value("waveNo").toInt)
-            if (currWave.length < 1) {
-              if (enemiesOnMap.length < 1)
-                variates.setValue(variates.value.updated("waveNo", variates.value("waveNo") + 1))
-                // Give the player some money for completing the wave, in an sqrt function to make the money amount grow slowly
-                variates.setValue(variates.value.updated("money", variates.value("money") + math.round(25 * math.sqrt((variates.value("waveNo") + 1).toInt))))
-                showMessage("Wave " + ((variates.value("waveNo") + 1).toInt.toString()), "info", 4)
-            } else {
-              val newEnemyType = currWave.dequeue
-              val enemy = spawnEnemy(newEnemyType)
+            val waveNo = variates.value("waveNo").toInt
+            if (waveNo >= waves.length) then
+              showMessage("Wave data has ended - now random enemies...", "info", 3)
+              val newEnemy = spawnEnemy(getRandomEnemyType)
               lastTime = time
-              pane.children.add(enemy)
-              enemiesOnMap += enemy
-            }
+            else
+              val currWave = waves(variates.value("waveNo").toInt)
+              if (currWave.length < 1) then
+                if (enemiesOnMap.length < 1)
+                  variates.setValue(variates.value.updated("waveNo", variates.value("waveNo") + 1))
+                  // Give the player some money for completing the wave, in an sqrt function to make the money amount grow slowly
+                  variates.setValue(variates.value.updated("money", variates.value("money") + math.round(25 * math.sqrt((variates.value("waveNo") + 1).toInt))))
+                  showMessage("Wave " + ((variates.value("waveNo") + 1).toInt.toString()), "info", 4)
+              else 
+                val newEnemyType = currWave.dequeue
+                val enemy = spawnEnemy(newEnemyType)
+                lastTime = time
           }
           val newEnemies = new ArrayBuffer[Enemy](enemiesOnMap.length - 1)
           for (enemy <- enemiesOnMap) {
@@ -247,9 +250,6 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
                 onShowing = _ => {
                   timer.stop()
                 }
-                // make the dialog look cooler
-
-
               }.show()
             }
             if (newEnemyInstance != null) {
@@ -372,6 +372,8 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
       else mapInst.startPoint.coord._2
     enemy.translateY = startY * UI_TILE_SIZE
     enemy.translateX = startX * UI_TILE_SIZE
+    pane.children.add(enemy)
+    enemiesOnMap += enemy
     enemy
   end spawnEnemy
 

@@ -11,6 +11,10 @@ import scala.util.control.Breaks._
 import Logic.Tower
 import scalafx.beans.property.BufferProperty
 import scalafx.scene.control.Alert
+import UI.BasicEnemy
+import UI.CamouflagedEnemy
+import UI.SplittingEnemy
+import UI.EnemyType
 
 object HelperFunctions {
   def getTowerDisplayName(path: String) = 
@@ -65,4 +69,14 @@ object HelperFunctions {
       contentText = msg
     }.showAndWait()
   end showErrorAlert
+
+  def getRandomEnemyType: EnemyType = 
+    val random = scala.util.Random
+    val enemyType = random.nextInt(3)
+    enemyType match
+      case 0 => BasicEnemy
+      case 1 => CamouflagedEnemy
+      case 2 => SplittingEnemy
+      case _ => BasicEnemy
+  end getRandomEnemyType
 }
