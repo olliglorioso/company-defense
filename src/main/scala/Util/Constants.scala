@@ -76,4 +76,6 @@ object Constants {
   val BASIC_ENEMY_MONEY = 2
   val CAMOUFLAGED_ENEMY_MONEY = 14
   val SPLITTING_ENEMY_MONEY = 7
+  // Some locations
+  val LATEST_SAVED_LOC = "Saved/LATEST_saved.json"
 }

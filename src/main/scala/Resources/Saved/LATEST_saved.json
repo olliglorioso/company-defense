@@ -3,6 +3,7 @@
     "money": 20,
     "difficulty": 2,
     "waveNo": 6,
+    "score": 200,
     "towers": [
         {
             "type": "R",

@@ -10,13 +10,15 @@ import scalafx.stage.Screen
 import Logic._
 import UI._
 import Util.State._
+import Util._
+import Util.Constants._ 
 import scalafx.scene.control.Tooltip
 import javafx.scene.image.ImageView
 import Util.Constants.MAINMENU_BG_LOC
 import scalafx.scene.image.Image
 import scalafx.scene.paint.Paint
-import Util.HelperFunctions.getMoney
-import Util.HelperFunctions.getHealth
+import Util.HelperFunctions._
+import scala.collection.mutable.ArrayBuffer
 
 class MainMenuUI:
   /** @param stage
@@ -83,7 +85,14 @@ class MainMenuUI:
           new Button("Continue saved game") {
             style = buttonStyle
             onAction = () => {
-              variates.setValue(Map("money" -> getMoney, "health" -> getHealth, "waveNo" -> 0.0, "score" -> 0.0))
+              val saved = FileHandler().readLinesFromJsonFile(LATEST_SAVED_LOC)
+              val (savedMoney, savedHealth, savedDifficulty, savedWaveNo, savedScore, savedTowers) = 
+                (
+                  saved("money").value.asInstanceOf[Double], saved("health").value.asInstanceOf[Double],
+                  saved("difficulty").value.asInstanceOf[Double], saved("waveNo").value.asInstanceOf[Double],
+                  saved("score").value.asInstanceOf[Double], saved("towers").arr.asInstanceOf[ArrayBuffer[Map[String, Any]]]
+                )
+              println(savedTowers)
               val gameplayScene = new GameplayUI(stage, mainMenuScene(stage, settingsSceneLazy))
               stage.setScene(gameplayScene)
               gameplayScene.timer.start()

@@ -11,7 +11,7 @@ class FileHandler:
     lines
   end readLinesFromFile
 
-  def readLinesFromJsonFile(filePath: String): Value = 
+  def readLinesFromJsonFile(filePath: String) = 
     // read to a string from filepath
     val source = Source.fromFile("./src/main/scala/Resources/" + filePath)
     val lines = source.getLines()
@@ -26,4 +26,4 @@ class FileHandler:
 end FileHandler
 
 @main def koira () =
-  println(FileHandler().readLinesFromJsonFile("Saved/saved_test.json"))
+  println(FileHandler().readLinesFromJsonFile("Saved/saved_test.json")("towers").arr(0)("type"))
