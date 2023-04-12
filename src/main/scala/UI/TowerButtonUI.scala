@@ -9,9 +9,9 @@ import scalafx.scene.layout._
 import scalafx.scene.shape.Circle
 import Util.Constants._
 import scalafx.beans.property._
-import scala.util.control.Breaks._
+
 import scalafx.scene.paint.Color
-import Util.HelperFunctions.labelStyle
+import Util.HelperFunctions._
 import scalafx.geometry.Point2D
 import Util.State._
 
@@ -76,29 +76,7 @@ class TowerButtonUI(
     (x - deltaX, y - deltaY)
   }
 
-  /**
-      * 
-      * Does a tower hit a previously placed tower?
-      * @param x
-      * @param y
-      * @return
-      */
-  def towerCanBePlaced(eventLoc: Point2D): Boolean = {
-    var broken = false
-    breakable {
-      towersOnMap.value.forall( tower => {
-          // Euclidean distance
-          val distance = tower.getGlobalCenter.distance(eventLoc)
-          if (distance < (TOWER_SIDE / 2)) then 
-            broken = true
-            break()
-          else
-            true
-        }
-      )
-    }
-    !broken
-  }
+  
 
   def getBgCircleRadius = {
     name match {
@@ -109,7 +87,7 @@ class TowerButtonUI(
 
   def setBackgroundStyle(event: MouseEvent, mapInst: GameMap): Unit = {
     val eventLocation = Point2D(event.getSceneX() - (TOWER_SIDE / 2), event.getSceneY() - (TOWER_SIDE / 2))
-    if (mapInst.isBgTile(event.getSceneY(), event.getSceneX()) && towerCanBePlaced(eventLocation)) {
+    if (mapInst.isBgTile(event.getSceneY(), event.getSceneX()) && towerCanBePlaced(eventLocation, towersOnMap)) {
       backgroundCircle.fill = Color.Green
     } else {
       backgroundCircle.fill = Color.Red
@@ -164,20 +142,13 @@ class TowerButtonUI(
       style = transbg
     }
     // Illegal positions not allowed
-    if (!mapInst.isBgTile(event.getSceneY(), event.getSceneX())) {
+    if (!mapInst.isBgTile(event.getSceneY(), event.getSceneX()) || !towerCanBePlaced(eventLoc, towersOnMap)) {
       showMessage(
         "You can't place a tower there!",
         "error",
         1
       )
       setStartPos()
-    } else if (!towerCanBePlaced(eventLoc)) {
-        showMessage(
-          "You can't place a tower there!",
-          "error",
-          1
-        )
-        setStartPos()
     } else {
       placeNewTowerIfMoney(eventLoc.x, eventLoc.y, x, y)
     }

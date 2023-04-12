@@ -6,6 +6,10 @@ import scalafx.scene.Node
 import UI.GameplayUI
 import Util.State.difficulty
 import ujson.Num
+import scalafx.geometry.Point2D
+import scala.util.control.Breaks._
+import Logic.Tower
+import scalafx.beans.property.BufferProperty
 
 object HelperFunctions {
   def getTowerDisplayName(path: String) = 
@@ -29,4 +33,27 @@ object HelperFunctions {
     case 2 => "IBM & Cisco & BlackBerry"
     case 3 => "MAGAT"
     case _ => "Nokia (Custom)"
+  /**
+      * 
+      * Does a tower hit a previously placed tower?
+      * @param x
+      * @param y
+      * @return
+      */
+  def towerCanBePlaced(eventLoc: Point2D, towersOnMap: BufferProperty[Tower]): Boolean = {
+    var broken = false
+    breakable {
+      towersOnMap.value.forall( tower => {
+          // Euclidean distance
+          val distance = tower.getGlobalCenter.distance(eventLoc)
+          if (distance < (TOWER_SIDE / 2)) then 
+            broken = true
+            break()
+          else
+            true
+        }
+      )
+    }
+    !broken
+  }
 }

@@ -81,18 +81,19 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
       val x = savedTower.value("globalX").value.asInstanceOf[Double]
       val y = savedTower.value("globalY").value.asInstanceOf[Double]
       val level = savedTower.value("level").value.asInstanceOf[Double].toInt
-      println(s"Loading tower of type $towerType at ($x, $y) with level $level")
-      val newTower = towerType match
-        case "R" => new RegularTower(sidebar.openUpgradeMenu, showMessage)
-        case "S" => new SlowDownTower(sidebar.openUpgradeMenu, showMessage)
-        case _ => null
-      newTower.x = x
-      newTower.y = y
-      newTower.setTranslateX(x)
-      newTower.setTranslateY(y)
-      newTower.level.setValue(level)
-      pane.children.add(newTower)
-      towersOnMap.setValue(towersOnMap.value :+ newTower)
+
+      if (mapInst.isBgTile(x, y) && towerCanBePlaced(Point2D(x, y), towersOnMap)) then 
+        val newTower = towerType match
+          case "R" => new RegularTower(sidebar.openUpgradeMenu, showMessage)
+          case "S" => new SlowDownTower(sidebar.openUpgradeMenu, showMessage)
+          case _ => null
+        newTower.x = x
+        newTower.y = y
+        newTower.setTranslateX(x)
+        newTower.setTranslateY(y)
+        newTower.level.setValue(level)
+        pane.children.add(newTower)
+        towersOnMap.setValue(towersOnMap.value :+ newTower)
     }
   end initializeSavedTowers
 
