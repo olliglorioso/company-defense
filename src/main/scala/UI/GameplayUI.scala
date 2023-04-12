@@ -47,7 +47,7 @@ case object CamouflagedEnemy extends EnemyType(5)
   * @param h
   *   Scene height
   */
-class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(screenWidth(), screenHeight()) {
+class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(screenWidth(), screenHeight()):
   lazy val mainmenuSceneLazy = mainmenuScene
   val mapInst: GameMap = new GameMap(getMap)
   val waves: Array[Queue[EnemyType]] = generateWaves(getWaveData)
@@ -60,22 +60,38 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
   var lastTime = 0L
   var gameOver = false
 
-  var pane = new Pane {
+  var pane = new Pane:
     children = map.flatten
     prefWidth = (screenWidth() - SIDEBAR_WIDTH)
     prefHeight = screenHeight()
-  }
+  end pane
 
   val sidebar = SidebarUI(pane, mapInst, towersOnMap, showMessage)
   sidebar.toFront()
 
-  root = new BorderPane {
-    center = new BorderPane { // Map area
+  root = new BorderPane:
+    center = new BorderPane: // Map area
       center = pane
-    }
     right = sidebar // Sidebar area
-  }
 
+  def initializeSavedTowers(savedTowers: ArrayBuffer[Map[String, Any]]) = 
+    for (savedTower <- savedTowers) {
+      val tower = savedTower("tower").asInstanceOf[String]
+      val x = savedTower("globalX").asInstanceOf[Double]
+      val y = savedTower("globalY").asInstanceOf[Double]
+      val level = savedTower("level").asInstanceOf[Double].toInt
+      val newTower = tower match
+        case "R" => new RegularTower(null, showMessage)
+        case "S" => new SlowDownTower(null, showMessage)
+        case _ => null
+      newTower.x = x
+      newTower.y = y
+      newTower.setTranslateX(x)
+      newTower.setTranslateY(y)
+      pane.children.add(newTower)
+      towersOnMap.setValue(towersOnMap.value :+ newTower)
+    }
+  end initializeSavedTowers
 
   def editPriorityQueuesAndCreateBullets(time: Long) = 
     for (tower <- towersOnMap.value) {
@@ -331,4 +347,4 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
     }
     mapBlocks
   end createMap
-}
+end GameplayUI

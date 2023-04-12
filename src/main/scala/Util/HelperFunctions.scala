@@ -22,4 +22,5 @@ object HelperFunctions {
   def getWaveData = features(difficulty.value)._3
   def getHealth = features(difficulty.value)._1
   def getMoney = features(difficulty.value)._2
+  def anyToInteger = (x: Any) => x.asInstanceOf[Double].toInt
 }

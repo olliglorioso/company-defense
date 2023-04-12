@@ -8,22 +8,26 @@
         {
             "type": "R",
             "globalX": 300,
-            "globalY": 300
+            "globalY": 300,
+            "level": 1
         },
         {
             "type": "R",
             "globalX": 400,
-            "globalY": 400
+            "globalY": 400,
+            "level": 2
         },
         {
             "type": "S",
             "globalX": 200,
-            "globalY": 200
+            "globalY": 200,
+            "level": 3
         },
         {
             "type": "S",
             "globalX": 100,
-            "globalY": 100
+            "globalY": 100,
+            "level": 1
         }
     ]
 }
