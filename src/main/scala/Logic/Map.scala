@@ -6,6 +6,7 @@ import scala.util.control.Breaks._
 import Util.Constants._
 
 case class Tile(canBuildTower: Boolean, var coord: Tuple2[Int, Int])
+end Tile
 
 sealed abstract class Turn(val value: Int)
 case object NoTurn extends Turn(1)
@@ -17,17 +18,17 @@ case object End extends Turn(5)
 class InvalidMapError extends Error
 
 class PathTile(coord: Tuple2[Int, Int], turn: Turn)
-    extends Tile(canBuildTower = false, coord = coord) {
+    extends Tile(canBuildTower = false, coord = coord):
   override def toString = s"PathTile, c: ${coord}, t: ${turn}"
   def getTurn() = turn
-}
+end PathTile
 
 class BgTile(coord: Tuple2[Int, Int])
-    extends Tile(canBuildTower = true, coord = coord) {
+    extends Tile(canBuildTower = true, coord = coord):
   override def toString = s"BgTile, c: ${coord}"
-}
+end BgTile
 
-class GameMap(path: String) {
+class GameMap(path: String):
   var startPoint: PathTile = PathTile((0, 0), Start)
   var endPoint: PathTile = PathTile((0, 0), End)
   var map: Array[Array[Tile]] = initializeMap(path)
@@ -164,4 +165,4 @@ class GameMap(path: String) {
       else false
     }
   }
-}
+end GameMap
