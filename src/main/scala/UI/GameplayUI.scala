@@ -66,7 +66,7 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
     prefHeight = screenHeight()
   end pane
 
-  val sidebar = SidebarUI(pane, mapInst, towersOnMap, showMessage)
+  val sidebar = SidebarUI(pane, mapInst, towersOnMap, showMessage, saveCurrentGame)
   sidebar.toFront()
 
   root = new BorderPane:
@@ -74,7 +74,7 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
       center = pane
     right = sidebar // Sidebar area
 
-  def saveCurrentGame() =
+  def saveCurrentGame(): Unit =
     val savedTowers = ArrayBuffer[Obj]()
     for (tower <- towersOnMap.value) {
       val towerType = tower match

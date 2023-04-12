@@ -77,7 +77,7 @@ class MainMenuUI:
             }
 
             onAction = () => {
-              variates.setValue(Map("money" -> getMoney, "health" -> getHealth, "waveNo" -> 0.0, "score" -> 0.0))
+              variates.setValue(Map("money" -> getMoney, "health" -> getHealth, "waveNo" -> 0, "score" -> 0))
               val gameplayScene = new GameplayUI(stage, mainMenuScene(stage, settingsSceneLazy))
               stage.setScene(gameplayScene)
               gameplayScene.timer.start()

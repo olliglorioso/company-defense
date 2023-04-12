@@ -24,12 +24,12 @@ import Logic._
 import scalafx.geometry.Pos
 import Util.HelperFunctions.labelStyle
 import Util.State._
-
 class SidebarUI(
     pane: Pane,
     mapInst: GameMap,
     towersOnMap: BufferProperty[Tower],
-    showMessage: (String, String, Int) => Unit
+    showMessage: (String, String, Int) => Unit,
+    saveCurrentGame: => Unit
 ) extends VBox:
   val regularTower = new TowerButtonUI(
     REGULAR_TOWER_LOC,
@@ -100,35 +100,35 @@ class SidebarUI(
     )
   end openUpgradeMenu
   // Label for showing money amount
-  val moneyLabel = new Label(variates.value("money").toInt.toString()) {
+  val moneyLabel = new Label(variates.value("money").toInt.toString()):
     style = labelStyle(20)
     graphic = new ImageView(MONEY_ICON_LOC) {
       fitWidth = 30.0
       fitHeight = 30.0
     }
-  }
+  end moneyLabel
 
-  val healthLabel = new Label(variates.value("health").toInt.toString()) {
+  val healthLabel = new Label(variates.value("health").toInt.toString()):
     style = labelStyle(20)
     graphic = new ImageView(HEALTH_ICON_LOC) {
       fitWidth = 30.0
       fitHeight = 30.0
     }
-  }
-  val scoreLabel = new Label(variates.value("score").toInt.toString()) {
+  end healthLabel
+  val scoreLabel = new Label(variates.value("score").toInt.toString()):
     style = labelStyle(20)
     graphic = new ImageView(SCORE_ICON_LOC) {
       fitWidth = 30.0
       fitHeight = 30.0
     }
-  }
+  end scoreLabel
   // Update money label
   variates.onChange((_, _, newValue) => {
     moneyLabel.text = newValue("money").toInt.toString()
     scoreLabel.text = newValue("score").toInt.toString()
     healthLabel.text = newValue("health").toInt.toString()
   })
-  val towers = new VBox() {
+  val towers = new VBox():
     alignment = Pos.Center
     children = Seq(
       regularTower,
@@ -136,8 +136,7 @@ class SidebarUI(
     )
     spacing = 10
     style = "-fx-background-color: grey;"
-    
-  }
+  end towers
 
   val infoLabels = new VBox():
     // set to the bottom of sidebar
@@ -150,6 +149,7 @@ class SidebarUI(
     vgrow_=(Priority.Always)
     spacing = 10
     style = "-fx-background-color: transparent;"
+  end infoLabels
   
   padding = Insets(20)
   spacing = 10
