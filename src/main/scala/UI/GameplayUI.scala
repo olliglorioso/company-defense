@@ -60,7 +60,6 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
   var startTime = 0L
   var lastTime = 0L
   var gameOver = false
-
   var pane = new Pane:
     children = map.flatten
     prefWidth = (screenWidth() - SIDEBAR_WIDTH)
@@ -74,6 +73,34 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
     center = new BorderPane: // Map area
       center = pane
     right = sidebar // Sidebar area
+
+  def saveCurrentGame() =
+    val savedTowers = ArrayBuffer[Obj]()
+    for (tower <- towersOnMap.value) {
+      val towerType = tower match
+        case _: RegularTower => "R"
+        case _: SlowDownTower => "S"
+        case _ => null
+      val towerLevel = tower.level.value
+      val towerX = tower.x
+      val towerY = tower.y
+      val towerObj = Obj(
+        "type" -> towerType,
+        "level" -> towerLevel,
+        "globalX" -> towerX.value,
+        "globalY" -> towerY.value
+      )
+      savedTowers += towerObj
+    }
+    val savedGame = Obj(
+      "health" -> variates.value("health"),
+      "money" -> variates.value("money"),
+      "difficulty" -> difficulty.value,
+      "waveNo" -> (if (variates.value("waveNo") > 0) then (variates.value("waveNo") - 1) else 0),
+      "score" -> variates.value("score"),
+      "towers" -> savedTowers,
+    )
+  end saveCurrentGame
 
   def initializeSavedTowers(savedTowers: ArrayBuffer[Obj]) = 
     for (savedTower <- savedTowers) {
@@ -303,7 +330,7 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
     * @return
     *   Enemy
     */
-  def spawnEnemy(enemyType: EnemyType): Enemy = 
+  private def spawnEnemy(enemyType: EnemyType): Enemy = 
     val enemy = enemyType match
       case BasicEnemy => BasicEnemyClass(mapInst.pathQueue)
       case SplittingEnemy => SplittingEnemyClass(mapInst.pathQueue)
@@ -327,7 +354,7 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
     * @param mapTiles
     * @return
     */
-  def createMap(
+  private def createMap(
       UI_TILE_SIZE: Double,
       mapTiles: Array[Array[Tile]]
   ): Seq[Seq[Rectangle]] = 
