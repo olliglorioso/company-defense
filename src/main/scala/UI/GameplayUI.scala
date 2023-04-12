@@ -93,7 +93,7 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
         case _: SlowDownTower => "S"
         case _ => null
       val towerLevel = tower.level.value
-      val towerLoc = tower.localToScene(tower.x.value, tower.y.value)
+      val towerLoc = tower.getGlobalCenter
       val towerObj = Obj(
         "type" -> towerType,
         "globalX" -> towerLoc.x,
@@ -122,13 +122,12 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
   def initializeSavedGame(savedTowers: ArrayBuffer[Obj]) = 
     for (savedTower <- savedTowers) {
       val towerType = savedTower.value("type").value.asInstanceOf[String]
-      val x = savedTower.value("globalX").value.asInstanceOf[Double]
-      val y = savedTower.value("globalY").value.asInstanceOf[Double]
+      val x = savedTower.value("globalX").value.asInstanceOf[Double] - TOWER_SIDE / 2
+      val y = savedTower.value("globalY").value.asInstanceOf[Double] - TOWER_SIDE / 2
       val level = savedTower.value("level").value.asInstanceOf[Double].toInt
-      println(mapInst.isBgTile(x, y))
+      println(mapInst.isBgTile(y, x))
       println(towerCanBePlaced(Point2D(x, y), towersOnMap))
-      println("Placing saved tower at " + x.toString() + ", " + y.toString())
-      if (mapInst.isBgTile(y - TOWER_SIDE, x - TOWER_SIDE) && towerCanBePlaced(Point2D(x, y), towersOnMap)) then 
+      if (mapInst.isBgTile(y, x) && towerCanBePlaced(Point2D(x, y), towersOnMap)) then 
         
         val newTower = towerType match
           case "R" => new RegularTower(sidebar.openUpgradeMenu, showMessage)
