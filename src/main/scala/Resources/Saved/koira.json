@@ -1,1 +1,33 @@
-{"health":9,"money":20,"difficulty":3,"waveNo":5,"score":200,"towers":[{"type":"R","globalX":300,"globalY":10,"level":1},{"type":"R","globalX":400,"globalY":400,"level":2},{"type":"S","globalX":200,"globalY":200,"level":3},{"type":"S","globalX":100,"globalY":100,"level":1}]}
+{
+    "health": 9,
+    "money": 20,
+    "difficulty": 3,
+    "waveNo": 5,
+    "score": 200,
+    "towers": [
+        {
+            "type": "R",
+            "globalX": 300,
+            "globalY": 10,
+            "level": 1
+        },
+        {
+            "type": "R",
+            "globalX": 400,
+            "globalY": 400,
+            "level": 2
+        },
+        {
+            "type": "S",
+            "globalX": 200,
+            "globalY": 200,
+            "level": 3
+        },
+        {
+            "type": "S",
+            "globalX": 100,
+            "globalY": 100,
+            "level": 1
+        }
+    ]
+}

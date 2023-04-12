@@ -55,6 +55,11 @@ class SidebarUI(
     openUpgradeMenu
   )
 
+  /**
+    * Opens the upgrade/sell menu for the given tower.
+    *
+    * @param tower Tower to upgrade/sell.
+    */
   def openUpgradeMenu(tower: Tower): Unit =
     val levelLabel = new Label(s"Level: ${tower.level.value}") {
       style = labelStyle(13)
@@ -159,9 +164,7 @@ class SidebarUI(
     prefWidth = 100
     vgrow_=(Priority.Always)
     alignment = Pos.BottomCenter
-    onAction = _ => {
-      saveAndExit()
-    }
+    onAction = _ => saveAndExit()
   end saveAndExitButton
 
   val exitButton = new Button("Exit"):
@@ -169,9 +172,7 @@ class SidebarUI(
     prefWidth = 100
     vgrow_=(Priority.Always)
     alignment = Pos.BottomCenter
-    onAction = _ => {
-      exit()
-    }
+    onAction = _ => exit()
   end exitButton
 
   padding = Insets(20)
