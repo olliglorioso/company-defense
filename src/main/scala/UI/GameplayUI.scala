@@ -144,8 +144,9 @@ class GameplayUI(w: Double, h: Double, stage: PrimaryStage, mainmenuScene: => Sc
             val currWave = waves(variates.value("waveNo").toInt)
             if (currWave.length < 1) {
               if (enemiesOnMap.length < 1)
-                // wait for five seconds
                 variates.setValue(variates.value.updated("waveNo", variates.value("waveNo") + 1))
+                // Give the player some money for completing the wave, in an sqrt function to make the money amount grow slowly
+                variates.setValue(variates.value.updated("money", variates.value("money") + math.round(25 * math.sqrt((variates.value("waveNo") + 1).toInt))))
                 showMessage("Wave " + ((variates.value("waveNo") + 1).toInt.toString()), "info", 4)
             } else {
               val newEnemyType = currWave.dequeue

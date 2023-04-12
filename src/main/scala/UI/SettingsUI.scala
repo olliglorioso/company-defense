@@ -80,9 +80,13 @@ class SettingsUI {
                 onAction = _ => {
                   difficulty.setValue(3)
                 }
+              },
+              new MenuItem("Nokia (Custom)") {
+                onAction = _ => {
+                  difficulty.setValue(4)
+                }
               }
             )
-            
           }
           
           // dropdown menu for selecting difficulty
