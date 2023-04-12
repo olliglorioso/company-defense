@@ -20,6 +20,7 @@ import scalafx.scene.paint.Paint
 import Util.HelperFunctions._
 import scala.collection.mutable.ArrayBuffer
 import ujson.Obj
+import scalafx.scene.control.Alert
 
 class MainMenuUI:
   /** @param stage
@@ -86,20 +87,22 @@ class MainMenuUI:
           new Button("Continue saved game") {
             style = buttonStyle
             onAction = () => {
-              
-              val saved = FileHandler().readLinesFromJsonFile(LATEST_SAVED_LOC)
-              val (savedMoney, savedHealth, savedDifficulty, savedWaveNo, savedScore, savedTowers) = 
-                (
-                  anyToInteger(saved("money")), anyToInteger(saved("health")),
-                  anyToInteger(saved("difficulty")), anyToInteger(saved("waveNo")),
-                  anyToInteger(saved("score")), saved("towers").arr.asInstanceOf[ArrayBuffer[Obj]]
-                )
-              variates.setValue(Map("money" -> savedMoney, "health" -> savedHealth, "waveNo" -> savedWaveNo, "score" -> savedScore))
-              difficulty.setValue(savedDifficulty)
-              val gameplayScene = new GameplayUI(stage, mainMenuScene(stage, settingsSceneLazy))
-              gameplayScene.initializeSavedGame(savedTowers)
-              stage.setScene(gameplayScene)
-              gameplayScene.timer.start()
+              try
+                val saved = FileHandler().readLinesFromJsonFile(LATEST_SAVED_LOC)
+                val (savedMoney, savedHealth, savedDifficulty, savedWaveNo, savedScore, savedTowers) = 
+                  (
+                    anyToInteger(saved("money")), anyToInteger(saved("health")),
+                    anyToInteger(saved("difficulty")), anyToInteger(saved("waveNo")),
+                    anyToInteger(saved("score")), saved("towers").arr.asInstanceOf[ArrayBuffer[Obj]]
+                  )
+                variates.setValue(Map("money" -> savedMoney, "health" -> savedHealth, "waveNo" -> savedWaveNo, "score" -> savedScore))
+                difficulty.setValue(savedDifficulty)
+                val gameplayScene = new GameplayUI(stage, mainMenuScene(stage, settingsSceneLazy))
+                gameplayScene.initializeSavedGame(savedTowers)
+                stage.setScene(gameplayScene)
+                gameplayScene.timer.start()
+              catch
+                case e: Exception => showErrorAlert(e.getMessage())
             }
             onMouseEntered = () => {
               style = "-fx-background-color: red; -fx-text-fill: white; -fx-font-size: 30pt; -fx-font-family: 'Arial Black', sans-serif; -fx-padding: 10px 20px; -fx-background-radius: 50px; -fx-border-radius: 50px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 3);"

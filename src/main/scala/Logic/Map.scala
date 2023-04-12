@@ -4,6 +4,7 @@ import java.util.logging.FileHandler
 import scala.collection.immutable.Queue
 import scala.util.control.Breaks._
 import Util.Constants._
+import Util.HelperFunctions.showErrorAlert
 
 case class Tile(canBuildTower: Boolean, var coord: Tuple2[Int, Int])
 end Tile
@@ -15,7 +16,6 @@ case object TurnLeft extends Turn(3)
 case object Start extends Turn(4)
 case object End extends Turn(5)
 
-class InvalidMapError extends Error
 
 /**
   * Path tile (enemy's route tile).
@@ -42,7 +42,11 @@ end BgTile
 class GameMap(path: String):
   var startPoint: PathTile = PathTile((0, 0), Start)
   var endPoint: PathTile = PathTile((0, 0), End)
-  var map: Array[Array[Tile]] = initializeMap(path)
+  var map: Array[Array[Tile]] = null
+  try 
+    map = initializeMap(path)
+  catch
+    case e: Exception => showErrorAlert(e.getMessage)
   val pathQueue: Queue[PathTile] = generatePathQueue(startPoint)
 
   /** @param path
@@ -56,7 +60,7 @@ class GameMap(path: String):
       lines.length != MAP_HEIGHT || lines
         .filter(a => a.length == MAP_WIDTH)
         .length != lines.length
-    ) then throw InvalidMapError()
+    ) then throw Exception("Invalid map file.")
     val map = Array.ofDim[Tile](MAP_HEIGHT, MAP_WIDTH)
     var y = 0
     for (line <- lines) {
@@ -80,10 +84,10 @@ class GameMap(path: String):
                   invalidPath = false
                 else if (line.charAt(x - 1) == '1') then invalidPath = false
               }
-              if (invalidPath) then throw InvalidMapError()
+              if (invalidPath) then throw Exception("Invalid map file (invalid path).")
               else map(y)(x) = new PathTile((y, x), turn)
             catch
-              case _: StringIndexOutOfBoundsException => throw InvalidMapError()
+              case _: StringIndexOutOfBoundsException => throw Exception("Invalid map file.")
           }
           // Start point > always go straight.
           case '2' => {
@@ -97,7 +101,7 @@ class GameMap(path: String):
             endPoint.coord = (y, x)
             map(y)(x) = new PathTile((y, x), End)
           }
-          case somethingElse => throw InvalidMapError()
+          case somethingElse => throw Exception("Invalid map file (invalid character).")
         }
         x += 1
       }

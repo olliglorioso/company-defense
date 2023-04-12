@@ -10,6 +10,7 @@ import scalafx.geometry.Point2D
 import scala.util.control.Breaks._
 import Logic.Tower
 import scalafx.beans.property.BufferProperty
+import scalafx.scene.control.Alert
 
 object HelperFunctions {
   def getTowerDisplayName(path: String) = 
@@ -56,4 +57,12 @@ object HelperFunctions {
     }
     !broken
   end towerCanBePlaced
+
+  def showErrorAlert(msg: String) =
+    new Alert(Alert.AlertType.Error) {
+      title = "Error"
+      headerText = "Error"
+      contentText = msg
+    }.showAndWait()
+  end showErrorAlert
 }
