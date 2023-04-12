@@ -29,7 +29,8 @@ class SidebarUI(
     mapInst: GameMap,
     towersOnMap: BufferProperty[Tower],
     showMessage: (String, String, Int) => Unit,
-    saveAndExit: () => Unit
+    saveAndExit: () => Unit,
+    exit: () => Unit
 ) extends VBox:
   val regularTower = new TowerButtonUI(
     REGULAR_TOWER_LOC,
@@ -97,7 +98,8 @@ class SidebarUI(
       towers,
       editInfo,
       infoLabels,
-      saveAndExitButton
+      saveAndExitButton,
+      exitButton
     )
   end openUpgradeMenu
   // Label for showing money amount
@@ -158,10 +160,19 @@ class SidebarUI(
     vgrow_=(Priority.Always)
     alignment = Pos.BottomCenter
     onAction = _ => {
-      println("moi")
       saveAndExit()
     }
   end saveAndExitButton
+
+  val exitButton = new Button("Exit"):
+    style = "-fx-background-color: red; -fx-text-fill: black; -fx-font-size: 9pt; -fx-font-family: 'Arial Black', sans-serif; -fx-border-radius: 10px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 3);"
+    prefWidth = 100
+    vgrow_=(Priority.Always)
+    alignment = Pos.BottomCenter
+    onAction = _ => {
+      exit()
+    }
+  end exitButton
 
   padding = Insets(20)
   spacing = 10
@@ -169,7 +180,8 @@ class SidebarUI(
   children = Seq(
     towers,
     infoLabels,
-    saveAndExitButton
+    saveAndExitButton,
+    exitButton
   )
 
   prefWidth = SIDEBAR_WIDTH

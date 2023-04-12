@@ -66,13 +66,21 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
     prefHeight = screenHeight()
   end pane
 
-  val sidebar = SidebarUI(pane, mapInst, towersOnMap, showMessage, saveAndExit)
+  val sidebar = SidebarUI(pane, mapInst, towersOnMap, showMessage, saveAndExit, exit)
   sidebar.toFront()
 
   root = new BorderPane:
     center = new BorderPane: // Map area
       center = pane
     right = sidebar // Sidebar area
+
+  /**
+   * Exit to main menu without saving.
+   */
+  def exit(): Unit =
+    timer.stop()
+    stage.setScene(mainmenuSceneLazy)
+  end exit
 
   /**
    * Save current game (save e.g. level, last completed wave, money, health, placed towers and their locs & levels).
@@ -112,7 +120,7 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
    * Initialize saved towers, in case user wants to continue saved game.
    * @param savedTowers Array of saved towers, should be read from a file.
    */
-  def initializeSavedTowers(savedTowers: ArrayBuffer[Obj]) = 
+  def initializeSavedGame(savedTowers: ArrayBuffer[Obj]) = 
     for (savedTower <- savedTowers) {
       val towerType = savedTower.value("type").value.asInstanceOf[String]
       val x = savedTower.value("globalX").value.asInstanceOf[Double]
@@ -121,7 +129,7 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
       println(mapInst.isBgTile(x, y))
       println(towerCanBePlaced(Point2D(x, y), towersOnMap))
       println("Placing saved tower at " + x.toString() + ", " + y.toString())
-      if (mapInst.isBgTile(x, y) && towerCanBePlaced(Point2D(x, y), towersOnMap)) then 
+      if (mapInst.isBgTile(x - TOWER_SIDE, y - TOWER_SIDE) && towerCanBePlaced(Point2D(x, y), towersOnMap)) then 
         
         val newTower = towerType match
           case "R" => new RegularTower(sidebar.openUpgradeMenu, showMessage)
@@ -129,13 +137,11 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
           case _ => null
         newTower.x = x
         newTower.y = y
-        newTower.setTranslateX(x)
-        newTower.setTranslateY(y)
         newTower.level.setValue(level)
         pane.children.add(newTower)
         towersOnMap.setValue(towersOnMap.value :+ newTower)
     }
-  end initializeSavedTowers
+  end initializeSavedGame
 
   /**
    * Edit the priority queues of all the towers on the map and create bullets if possible for each tower.
