@@ -9,9 +9,9 @@ import javafx.scene.paint.ImagePattern
 import scalafx.Includes._
 import scalafx.scene.shape.Rectangle
 
-trait GameObject(path: String, size: Double) extends Rectangle {
+trait GameObject(path: String, size: Double) extends Rectangle:
   fill = new ImagePattern(new Image(path))
   width = size
   height = size
   val displayName = getTowerDisplayName(path)
-}
+end GameObject

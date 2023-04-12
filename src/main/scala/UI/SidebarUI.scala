@@ -30,7 +30,7 @@ class SidebarUI(
     mapInst: GameMap,
     towersOnMap: BufferProperty[Tower],
     showMessage: (String, String, Int) => Unit
-) extends VBox {
+) extends VBox:
   val regularTower = new TowerButtonUI(
     REGULAR_TOWER_LOC,
     R_NAME,
@@ -54,8 +54,7 @@ class SidebarUI(
     openUpgradeMenu
   )
 
-
-  def openUpgradeMenu(tower: Tower): Unit = {
+  def openUpgradeMenu(tower: Tower): Unit =
     val levelLabel = new Label(s"Level: ${tower.level.value}") {
       style = labelStyle(13)
     }
@@ -99,7 +98,7 @@ class SidebarUI(
       editInfo,
       infoLabels
     )
-  }
+  end openUpgradeMenu
   // Label for showing money amount
   val moneyLabel = new Label(variates.value("money").toInt.toString()) {
     style = labelStyle(20)
@@ -140,7 +139,7 @@ class SidebarUI(
     
   }
 
-  val infoLabels = new VBox() {
+  val infoLabels = new VBox():
     // set to the bottom of sidebar
     alignment = Pos.BottomRight
     children = Seq(
@@ -151,9 +150,6 @@ class SidebarUI(
     vgrow_=(Priority.Always)
     spacing = 10
     style = "-fx-background-color: transparent;"
-  }
-
-  // make towers to be in the top of the sidebar, and infolabels in the bottom
   
   padding = Insets(20)
   spacing = 10
@@ -166,4 +162,4 @@ class SidebarUI(
   prefWidth = SIDEBAR_WIDTH
   prefHeight = screenHeight.value
   style = "-fx-background-color: grey;"
-}
+end SidebarUI
