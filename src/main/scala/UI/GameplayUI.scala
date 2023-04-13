@@ -128,7 +128,10 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
       val x = savedTower.value("globalX").value.asInstanceOf[Double] - TOWER_SIDE / 2
       val y = savedTower.value("globalY").value.asInstanceOf[Double] - TOWER_SIDE / 2
       val level = savedTower.value("level").value.asInstanceOf[Double].toInt
-      if (mapInst.isBgTile(y, x) && towerCanBePlaced(Point2D(x, y), towersOnMap)) then 
+      println(mapInst.isBgTile(y + TOWER_SIDE / 2, x + TOWER_SIDE / 2))
+      println(towerCanBePlaced(Point2D(x, y), towersOnMap))
+
+      if (mapInst.isBgTile(y + TOWER_SIDE / 2, x + TOWER_SIDE / 2) && towerCanBePlaced(Point2D(x, y), towersOnMap)) then 
         
         val newTower = towerType match
           case "R" => new RegularTower(sidebar.openUpgradeMenu, showMessage)
