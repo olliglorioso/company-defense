@@ -22,8 +22,8 @@ class MainUI extends JFXApp3:
     screenHeight.setValue(Screen.primary.visualBounds.getHeight())
     screenWidth.setValue(Screen.primary.visualBounds.getWidth())
 
-    lazy val mainmenuScene: Scene = MainMenuUI().mainMenuScene(stage, settingsScene)
-    lazy val settingsScene: Scene = SettingsUI().settingsScene(stage, mainmenuScene)
+    lazy val mainmenuScene: Scene = MainMenuUI(stage, settingsScene)
+    lazy val settingsScene: Scene = SettingsUI(stage, mainmenuScene)
 
     stage.scene = mainmenuScene
   end start
