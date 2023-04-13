@@ -29,12 +29,15 @@ object Constants {
     "file:src/main/scala/Resources/Towers/RegularTower.png"
   val SLOW_DOWN_TOWER_LOC =
     "file:src/main/scala/Resources/Towers/SlowDownTower.png"
+  val BOMB_TOWER_LOC =
+    "file:src/main/scala/Resources/Towers/BombTower.png"
   // Image locations of other stuff
   val HEALTH_ICON_LOC = "file:src/main/scala/Resources/Other/HealthIcon.png"
   val MONEY_ICON_LOC = "file:src/main/scala/Resources/Other/MoneyIcon.png"
   val SCORE_ICON_LOC = "file:src/main/scala/Resources/Other/ScoreIcon.png"
   val REGULAR_BULLET_LOC = "file:src/main/scala/Resources/Bullets/RegularBullet.png"
   val SLOW_DOWN_BULLET_LOC = "file:src/main/scala/Resources/Bullets/SlowDownBullet.png"
+  val BOMB_BULLET_LOC = "file:src/main/scala/Resources/Bullets/BombBullet.png"
   val MAINMENU_BG_LOC = "file:src/main/scala/Resources/Other/MainMenuBackground.png"
   // Scene looks (map, sidebar)
   val MAP_HEIGHT = 12
@@ -50,15 +53,19 @@ object Constants {
   // Costs of towers, R = Regular, S = Slow Down
   val R_COST = 10
   val S_COST = 15
+  val B_COST = 20
   // Tower names 
   val R_NAME = "Nerdinator" 
   val S_NAME = "Hacktivist" 
+  val B_NAME = "Financebro"
   // Tower ranges
   val R_RANGE = 200 
   val S_RANGE = 200 
+  val B_RANGE = 200
   // Tower damages
   val R_DAMAGE = 2
   val S_DAMAGE = 3
+  val B_DAMAGE = 10
   // UI looks stuff
   val TOWER_SIDE = 80
   val UI_TILE_SIZE = 89.5

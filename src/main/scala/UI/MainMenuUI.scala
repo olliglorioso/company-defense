@@ -83,7 +83,7 @@ class MainMenuUI:
                 val gameplayScene = new GameplayUI(stage, mainMenuScene(stage, settingsSceneLazy))
                 stage.setScene(gameplayScene)
                 gameplayScene.timer.start()
-              catch
+              catch 
                 case e: Exception => showErrorAlert(e.getMessage())
             }
           },

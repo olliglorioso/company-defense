@@ -82,6 +82,7 @@ class TowerButtonUI(
     name match {
       case R_NAME => (R_RANGE - 1/2 * ENEMY_SIZE).toInt
       case S_NAME => (S_RANGE - 1/2 * ENEMY_SIZE).toInt
+      case B_NAME => (B_RANGE - 1/2 * ENEMY_SIZE).toInt
     }
   }
 
@@ -99,6 +100,7 @@ class TowerButtonUI(
       val newTower = name match {
         case R_NAME => new RegularTower(openUpgradeMenu, showMessage)
         case S_NAME => new SlowDownTower(openUpgradeMenu, showMessage)
+        case B_NAME => new BombTower(openUpgradeMenu, showMessage)
       }
       towersOnMap.value = towersOnMap.value :+ newTower
       newTower.x = towerX

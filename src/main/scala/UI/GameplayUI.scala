@@ -94,6 +94,7 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
       val towerType = tower match
         case _: RegularTower => "R"
         case _: SlowDownTower => "S"
+        case _: BombTower => "B"
         case _ => null
       val towerLevel = tower.level.value
       val towerLoc = tower.getGlobalCenter
@@ -134,6 +135,7 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
         val newTower = towerType match
           case "R" => new RegularTower(sidebar.openUpgradeMenu, showMessage)
           case "S" => new SlowDownTower(sidebar.openUpgradeMenu, showMessage)
+          case "B" => new BombTower(sidebar.openUpgradeMenu, showMessage)
           case _ => null
         newTower.x = x
         newTower.y = y
@@ -177,9 +179,9 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
         bulletsOnMap.value = bulletsOnMap.value.filter(_ != bullet)
       }
       for (enemy <- enemiesOnMapCopy) {
-        if (enemy.getDistanceToPoint(bullet.getGlobalCenter) <= enemy.boundBox) {
+        if (enemy.getDistanceToPoint(bullet.getGlobalCenter) <= (if (bullet.boundBox > 0) then bullet.boundBox else enemy.boundBox.toDouble)) then
           enemy.getHit(bullet.damage, bullet.slowDown)
-          if (enemy.health <= 0 && enemy.isInstanceOf[SplittingEnemyClass]) {
+          if (enemy.health <= 0 && enemy.isInstanceOf[SplittingEnemyClass]) then
             variates.setValue(variates.value.updated("money", variates.value("money") + enemy.moneyReward))
             variates.setValue(variates.value.updated("score", variates.value("score") + math.round(enemy.moneyReward/2)))
             val newEnemies: Seq[BasicEnemy] = enemy.asInstanceOf[SplittingEnemyClass].split()
@@ -189,13 +191,11 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
             }
             pane.children.remove(enemy)
             enemiesOnMap = enemiesOnMap.filter(_ != enemy)
-          } else if (enemy.health <= 0) {
+          else if (enemy.health <= 0) then
             variates.setValue(variates.value.updated("money", variates.value("money") + enemy.moneyReward))
             variates.setValue(variates.value.updated("score", variates.value("score") + math.round(enemy.moneyReward/2)))
             pane.children.remove(enemy)
             enemiesOnMap = enemiesOnMap.filter(_ != enemy)
-          }
-        }
       }
     }
   end moveBulletsAndCheckHits

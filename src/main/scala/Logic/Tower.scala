@@ -14,7 +14,7 @@ import scalafx.scene.image.Image
 
 abstract class Tower(path: String, price: Int, range: Int, showUpgradeInfo: Tower => Unit, showMessage: (String, String, Int) => Unit)
     extends GameObject(path, TOWER_SIDE):
-    
+    val boundBox = 0.0
     var attackSpeed = 3.0 // is a good basic speed. Adjusting between 0.5-5 is ok. The lower the better
     var lastBulletInit = 0L
     val bulletLoc = REGULAR_BULLET_LOC
@@ -92,7 +92,7 @@ abstract class Tower(path: String, price: Int, range: Int, showUpgradeInfo: Towe
         if (canInitNewBullet(time, lastBulletInit)) then 
             val closestEnemy = enemyPriority.head
             val enemyLoc = closestEnemy.getGlobalCenter
-            val bullet = Bullet(bulletLoc, enemyLoc, bulletSpeed, slowDown, damage, closestEnemy)
+            val bullet = Bullet(bulletLoc, enemyLoc, bulletSpeed, slowDown, damage, closestEnemy, boundBox)
             bullet.x.value = getGlobalCenter.x
             bullet.y.value = getGlobalCenter.y
             lastBulletInit = time

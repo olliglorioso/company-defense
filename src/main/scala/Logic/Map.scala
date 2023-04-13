@@ -46,7 +46,10 @@ class GameMap(path: String):
   try 
     map = initializeMap(path)
   catch
-    case e: Exception => showErrorAlert(e.getMessage)
+    case e: Exception => {
+      println("map init")
+      showErrorAlert(e.getMessage)
+    }
   val pathQueue: Queue[PathTile] = generatePathQueue(startPoint)
 
   /** @param path

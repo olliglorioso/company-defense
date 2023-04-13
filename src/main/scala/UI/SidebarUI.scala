@@ -55,6 +55,18 @@ class SidebarUI(
     openUpgradeMenu
   )
 
+  val bombTower = new TowerButtonUI(
+    BOMB_TOWER_LOC,
+    B_NAME,
+    B_COST,
+    "I make a big impact for the better!",
+    pane,
+    mapInst,
+    towersOnMap,
+    showMessage,
+    openUpgradeMenu
+  )
+
   /**
     * Opens the upgrade/sell menu for the given tower.
     *
@@ -140,7 +152,8 @@ class SidebarUI(
     alignment = Pos.Center
     children = Seq(
       regularTower,
-      slowDownTower
+      slowDownTower,
+      bombTower
     )
     spacing = 10
     style = "-fx-background-color: grey;"
