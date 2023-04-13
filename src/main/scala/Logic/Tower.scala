@@ -72,9 +72,9 @@ abstract class Tower(path: String, price: Int, range: Int, showUpgradeInfo: Towe
     end clearPriorityQueue
 
     private def canShootTowardsEnemy(enemy: Enemy): Boolean =
+        if (enemy.isInstanceOf[CamouflagedEnemy]) then return false
         val towerLoc = localToScene(layoutBounds.getValue().getCenterX(), layoutBounds.getValue().getCenterY())
         val distToEnemy = enemy.getDistanceToPoint(towerLoc)
-        println(distToEnemy)
         if (distToEnemy <= range) then true
         else false
     end canShootTowardsEnemy
