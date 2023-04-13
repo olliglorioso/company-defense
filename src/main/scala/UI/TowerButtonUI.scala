@@ -17,6 +17,7 @@ import Util.State._
 
 class TowerButtonUI(
     picLoc: String,
+    picsize: Int,
     name: String,
     price: Int,
     desc: String,
@@ -29,8 +30,8 @@ class TowerButtonUI(
   val image = new Image(picLoc)
   val originalPos = (layoutX, layoutY)
   val imageView = new ImageView(image) {
-    fitWidth = 80
-    fitHeight = 80
+    fitWidth = picsize
+    fitHeight = picsize
     preserveRatio = true
   }
   val tt = new Tooltip()

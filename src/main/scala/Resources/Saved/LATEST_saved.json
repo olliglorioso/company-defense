@@ -1,1 +1,1 @@
-{"health":9,"money":179,"difficulty":1,"waveNo":3,"score":5,"towers":[{"type":"R","globalX":1674,"globalY":51,"level":1},{"type":"R","globalX":0,"globalY":262,"level":1},{"type":"R","globalX":1563,"globalY":262,"level":1},{"type":"S","globalX":1521,"globalY":258,"level":1},{"type":"S","globalX":908,"globalY":200,"level":1}]}
+{"health":10,"money":43,"difficulty":1,"waveNo":1,"score":2,"towers":[{"type":"B","globalX":619,"globalY":252,"level":4},{"type":"S","globalX":1460,"globalY":198,"level":1}]}

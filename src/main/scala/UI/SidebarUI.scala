@@ -34,6 +34,7 @@ class SidebarUI(
 ) extends VBox:
   val regularTower = new TowerButtonUI(
     REGULAR_TOWER_LOC,
+    80,
     R_NAME,
     R_COST,
     "What can a school kid do?",
@@ -45,6 +46,7 @@ class SidebarUI(
   )
   val slowDownTower = new TowerButtonUI(
     SLOW_DOWN_TOWER_LOC,
+    80,
     S_NAME,
     S_COST,
     "Slows down profits.",
@@ -57,6 +59,7 @@ class SidebarUI(
 
   val bombTower = new TowerButtonUI(
     BOMB_TOWER_LOC,
+    100,
     B_NAME,
     B_COST,
     "I make a big impact for the better!",
