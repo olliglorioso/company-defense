@@ -55,6 +55,8 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
   val map = createMap(UI_TILE_SIZE, mapInst.map)
   var enemiesOnMap = Buffer[Enemy]()
   var towersOnMap = BufferProperty[Tower](Seq())
+  var towersOnMapAfterWaveChange = BufferProperty[Tower](Seq())
+  var variatesAfterWaveChange = ObjectProperty(variates.value)
   var bulletsOnMap = BufferProperty[Bullet](Seq())
   var timerStarted = false
   var startTime = 0L
@@ -88,7 +90,7 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
    */
   def saveAndExit(): Unit =
     val savedTowers = ArrayBuffer[Obj]()
-    for (tower <- towersOnMap.value) {
+    for (tower <- towersOnMapAfterWaveChange.value) {
       val towerType = tower match
         case _: RegularTower => "R"
         case _: SlowDownTower => "S"
@@ -104,11 +106,11 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
       savedTowers += towerObj
     }
     val savedGame = ujson.Value(Obj(
-      "health" -> variates.value("health"),
-      "money" -> variates.value("money"),
+      "health" -> variatesAfterWaveChange.value("health"),
+      "money" -> variatesAfterWaveChange.value("money"),
       "difficulty" -> difficulty.value,
-      "waveNo" -> (if (variates.value("waveNo") > 0) then (variates.value("waveNo")) else 0),
-      "score" -> variates.value("score"),
+      "waveNo" -> (if (variatesAfterWaveChange.value("waveNo") > 0) then (variatesAfterWaveChange.value("waveNo")) else 0),
+      "score" -> variatesAfterWaveChange.value("score"),
       "towers" -> savedTowers,
     ))
     timer.stop()
@@ -222,6 +224,8 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
                   variates.setValue(variates.value.updated("waveNo", variates.value("waveNo") + 1))
                   // Give the player some money for completing the wave, in an sqrt function to make the money amount grow slowly
                   variates.setValue(variates.value.updated("money", variates.value("money") + math.round(25 * math.sqrt((variates.value("waveNo") + 1).toInt))))
+                  towersOnMapAfterWaveChange.setValue(towersOnMap.value)
+                  variatesAfterWaveChange.setValue(variates.value)
                   showMessage("Wave " + ((variates.value("waveNo") + 1).toInt.toString()), "info", 4)
               else 
                 val newEnemyType = currWave.dequeue
