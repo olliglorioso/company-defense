@@ -128,8 +128,6 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
       val x = savedTower.value("globalX").value.asInstanceOf[Double] - TOWER_SIDE / 2
       val y = savedTower.value("globalY").value.asInstanceOf[Double] - TOWER_SIDE / 2
       val level = savedTower.value("level").value.asInstanceOf[Double].toInt
-      println(mapInst.isBgTile(y + TOWER_SIDE / 2, x + TOWER_SIDE / 2))
-      println(towerCanBePlaced(Point2D(x, y), towersOnMap))
 
       if (mapInst.isBgTile(y + TOWER_SIDE / 2, x + TOWER_SIDE / 2) && towerCanBePlaced(Point2D(x, y), towersOnMap)) then 
         
