@@ -27,7 +27,7 @@ class SplittingEnemy (pathQueue: Queue[PathTile]) extends Enemy(SPLITTING_ENEMY_
         enemy1.translateY = getGlobalCenter.y - ENEMY_SIZE / 2
         enemy2.translateX = getGlobalCenter.x 
         enemy2.translateY = getGlobalCenter.y
-        enemy3.translateX = getGlobalCenter.x - ENEMY_SIZE / 4
-        enemy3.translateY = getGlobalCenter.y - ENEMY_SIZE / 4
+        enemy3.translateX = getGlobalCenter.x - ENEMY_SIZE
+        enemy3.translateY = getGlobalCenter.y - ENEMY_SIZE
         Seq(enemy1, enemy2, enemy3)
 }
