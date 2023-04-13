@@ -123,6 +123,7 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
    * @param savedTowers Array of saved towers, should be read from a file.
    */
   def initializeSavedGame(savedTowers: ArrayBuffer[Obj]) = 
+    variatesAfterWaveChange.setValue(variates.value)
     for (savedTower <- savedTowers) {
       val towerType = savedTower.value("type").value.asInstanceOf[String]
       val x = savedTower.value("globalX").value.asInstanceOf[Double] - TOWER_SIDE / 2
@@ -130,7 +131,6 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
       val level = savedTower.value("level").value.asInstanceOf[Double].toInt
 
       if (mapInst.isBgTile(y + TOWER_SIDE / 2, x + TOWER_SIDE / 2) && towerCanBePlaced(Point2D(x, y), towersOnMap)) then 
-        
         val newTower = towerType match
           case "R" => new RegularTower(sidebar.openUpgradeMenu, showMessage)
           case "S" => new SlowDownTower(sidebar.openUpgradeMenu, showMessage)
@@ -140,6 +140,7 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
         newTower.level.setValue(level)
         pane.children.add(newTower)
         towersOnMap.setValue(towersOnMap.value :+ newTower)
+        towersOnMapAfterWaveChange.setValue(towersOnMapAfterWaveChange.value :+ newTower)
     }
   end initializeSavedGame
 
