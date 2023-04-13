@@ -86,7 +86,7 @@ class TowerButtonUI(
   }
 
   def setBackgroundStyle(event: MouseEvent, mapInst: GameMap): Unit = {
-    val eventLocation = Point2D(event.getSceneX() - (TOWER_SIDE / 2), event.getSceneY() - (TOWER_SIDE / 2))
+    val eventLocation = Point2D(event.getSceneX() , event.getSceneY())
     if (mapInst.isBgTile(event.getSceneY(), event.getSceneX()) && towerCanBePlaced(eventLocation, towersOnMap)) {
       backgroundCircle.fill = Color.Green
     } else {
@@ -133,7 +133,7 @@ class TowerButtonUI(
     
     val (x, y, mouseX, mouseY) =
       userData.asInstanceOf[(Double, Double, Double, Double)]
-    val eventLoc = Point2D(event.getSceneX() - (minWidth() / 2), event.getSceneY() - (minHeight() / 2))
+    val eventLoc = Point2D(event.getSceneX(), event.getSceneY())
 
     def setStartPos() = {
       val transbg = "-fx-background-color: transparent;"
@@ -142,16 +142,22 @@ class TowerButtonUI(
       style = transbg
     }
     // Illegal positions not allowed
-    if (!mapInst.isBgTile(event.getSceneY(), event.getSceneX()) || !towerCanBePlaced(eventLoc, towersOnMap)) {
+    if (!mapInst.isBgTile(event.getSceneY(), event.getSceneX())) then
       showMessage(
         "You can't place a tower there!",
         "error",
         1
       )
       setStartPos()
-    } else {
-      placeNewTowerIfMoney(eventLoc.x, eventLoc.y, x, y)
-    }
+    else if (!towerCanBePlaced(eventLoc, towersOnMap)) then
+      showMessage(
+        "You can't place a tower there!",
+        "error",
+        1
+      )
+      setStartPos()
+    else
+      placeNewTowerIfMoney(event.getSceneX() - TOWER_SIDE / 2,event.getSceneY()- TOWER_SIDE / 2, x, y)
     backgroundCircle.fill = Color.Transparent
     backgroundCircle.style = "-fx-scale-x: 0; -fx-scale-y: 0;"
   }

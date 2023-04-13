@@ -213,7 +213,6 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
           if (time - lastTime >= 1000000000L) {
             val waveNo = variates.value("waveNo").toInt
             if (waveNo >= waves.length) then
-              showMessage("Wave data has ended - now random enemies...", "info", 3)
               val newEnemy = spawnEnemy(getRandomEnemyType)
               lastTime = time
             else
