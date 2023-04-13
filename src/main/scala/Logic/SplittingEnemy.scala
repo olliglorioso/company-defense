@@ -19,15 +19,5 @@ class SplittingEnemy (pathQueue: Queue[PathTile]) extends Enemy(SPLITTING_ENEMY_
     }
 
     def split (): Seq[BasicEnemy] =
-        val enemy1 = new BasicEnemy(pathQueue)
-        val enemy2 = new BasicEnemy(pathQueue)
-        val enemy3 = new BasicEnemy(pathQueue)
-        val sceneLoc = localToScene(x.value, y.value)
-        enemy1.x = translateX.value
-        enemy1.y = translateY.value
-        enemy2.x = translateX.value
-        enemy2.y = translateY.value
-        enemy3.x = translateX.value
-        enemy3.y = translateY.value
-        Seq(enemy1, enemy2, enemy3)
+        Seq()
 }

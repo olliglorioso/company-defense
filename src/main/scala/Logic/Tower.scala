@@ -31,7 +31,7 @@ abstract class Tower(path: String, price: Int, range: Int, showUpgradeInfo: Towe
 
     private def enemyPriorityCalc(enemy: Enemy): Double =
         val distToEnemy = enemy.getDistanceToPoint(getGlobalCenter)
-        val generalPrio = enemy.health * 0.4 + enemy.speed * 0.01 + -distToEnemy * 0.25 + enemy.tilesTraversed * 0.70 * 100
+        val generalPrio = enemy.health * 0.4 + enemy.speed * 0.01 + -distToEnemy * 0.25
         if (distToEnemy > range) (generalPrio - 1000)
         else generalPrio
     end enemyPriorityCalc
@@ -74,6 +74,7 @@ abstract class Tower(path: String, price: Int, range: Int, showUpgradeInfo: Towe
     private def canShootTowardsEnemy(enemy: Enemy): Boolean =
         val towerLoc = localToScene(layoutBounds.getValue().getCenterX(), layoutBounds.getValue().getCenterY())
         val distToEnemy = enemy.getDistanceToPoint(towerLoc)
+        println(distToEnemy)
         if (distToEnemy <= range) then true
         else false
     end canShootTowardsEnemy
