@@ -34,6 +34,70 @@ class MainMenuUI(stage: JFXApp3.PrimaryStage, settingsScene: => Scene) extends S
     */
     val buttonStyle = "-fx-background-color: red; -fx-text-fill: black; -fx-font-size: 24pt; -fx-font-family: 'Arial Black', sans-serif; -fx-padding: 10px 20px; -fx-background-radius: 50px; -fx-border-radius: 50px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 3);"
     lazy val settingsSceneLazy = settingsScene
+
+    val mainLabel = new Label("Company Defense") {
+      style = "-fx-font-size: 72pt; -fx-text-fill: red; -fx-font-weight: bold; -fx-font-family: 'Impact', sans-serif; -fx-background-color: black; -fx-padding: 0 10px 0 10px; -fx-border-color: red; -fx-border-width: 3px; -fx-border-radius: 10px;"
+    }
+    val startNewGameButton = new Button("Start new game") {
+      style = buttonStyle
+
+      onMouseEntered = () => {
+        style = "-fx-background-color: red; -fx-text-fill: white; -fx-font-size: 30pt; -fx-font-family: 'Arial Black', sans-serif; -fx-padding: 10px 20px; -fx-background-radius: 50px; -fx-border-radius: 50px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 3);"
+      }
+
+      onMouseExited = () => {
+        style = buttonStyle
+      }
+
+      onAction = () => {
+        try
+          variates.setValue(Map("money" -> getMoney, "health" -> getHealth, "waveNo" -> 0, "score" -> 0))
+          val gameplayScene = new GameplayUI(stage, MainMenuUI(stage, settingsSceneLazy))
+          stage.setScene(gameplayScene)
+          gameplayScene.timer.start()
+        catch 
+          case e: Exception => showErrorAlert(e.getMessage())
+      }
+    }
+    val continueSavedGameButton = new Button("Continue saved game") {
+      style = buttonStyle
+      onAction = () => {
+        try
+          val saved = FileHandler().readLinesFromJsonFile(LATEST_SAVED_LOC)
+          val (savedMoney, savedHealth, savedDifficulty, savedWaveNo, savedScore, savedTowers) = 
+            (
+              anyToInteger(saved("money")), anyToInteger(saved("health")),
+              anyToInteger(saved("difficulty")), anyToInteger(saved("waveNo")),
+              anyToInteger(saved("score")), saved("towers").arr.asInstanceOf[ArrayBuffer[Obj]]
+            )
+          variates.setValue(Map("money" -> savedMoney, "health" -> savedHealth, "waveNo" -> savedWaveNo, "score" -> savedScore))
+          difficulty.setValue(savedDifficulty)
+          val gameplayScene = new GameplayUI(stage, MainMenuUI(stage, settingsSceneLazy))
+          gameplayScene.initializeSavedGame(savedTowers)
+          stage.setScene(gameplayScene)
+          gameplayScene.timer.start()
+        catch
+          case e: Exception => showErrorAlert(e.getMessage())
+      }
+      onMouseEntered = () => {
+        style = "-fx-background-color: red; -fx-text-fill: white; -fx-font-size: 30pt; -fx-font-family: 'Arial Black', sans-serif; -fx-padding: 10px 20px; -fx-background-radius: 50px; -fx-border-radius: 50px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 3);"
+      }
+
+      onMouseExited = () => {
+        style = buttonStyle
+      }
+    }
+    val settingsButton = new Button("Settings") {
+      style = buttonStyle
+      onAction = () => stage.setScene(settingsSceneLazy)
+      onMouseEntered = () => {
+        style = "-fx-background-color: red; -fx-text-fill: white; -fx-font-size: 30pt; -fx-font-family: 'Arial Black', sans-serif; -fx-padding: 10px 20px; -fx-background-radius: 50px; -fx-border-radius: 50px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 3);"
+      }
+
+      onMouseExited = () => {
+        style = buttonStyle
+      }
+    }
     
     root = new VBox {
       background = new Background(
@@ -57,69 +121,10 @@ class MainMenuUI(stage: JFXApp3.PrimaryStage, settingsScene: => Scene) extends S
       spacing = 20
       alignment = Pos.Center
       children = Seq(
-        new Label("Company Defense") {
-          style = "-fx-font-size: 72pt; -fx-text-fill: red; -fx-font-weight: bold; -fx-font-family: 'Impact', sans-serif; -fx-background-color: black; -fx-padding: 0 10px 0 10px; -fx-border-color: red; -fx-border-width: 3px; -fx-border-radius: 10px;"
-        },
-        new Button("Start new game") {
-          style = buttonStyle
-
-          onMouseEntered = () => {
-            style = "-fx-background-color: red; -fx-text-fill: white; -fx-font-size: 30pt; -fx-font-family: 'Arial Black', sans-serif; -fx-padding: 10px 20px; -fx-background-radius: 50px; -fx-border-radius: 50px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 3);"
-          }
-
-          onMouseExited = () => {
-            style = buttonStyle
-          }
-
-          onAction = () => {
-            try
-              variates.setValue(Map("money" -> getMoney, "health" -> getHealth, "waveNo" -> 0, "score" -> 0))
-              val gameplayScene = new GameplayUI(stage, MainMenuUI(stage, settingsSceneLazy))
-              stage.setScene(gameplayScene)
-              gameplayScene.timer.start()
-            catch 
-              case e: Exception => showErrorAlert(e.getMessage())
-          }
-        },
-        new Button("Continue saved game") {
-          style = buttonStyle
-          onAction = () => {
-            try
-              val saved = FileHandler().readLinesFromJsonFile(LATEST_SAVED_LOC)
-              val (savedMoney, savedHealth, savedDifficulty, savedWaveNo, savedScore, savedTowers) = 
-                (
-                  anyToInteger(saved("money")), anyToInteger(saved("health")),
-                  anyToInteger(saved("difficulty")), anyToInteger(saved("waveNo")),
-                  anyToInteger(saved("score")), saved("towers").arr.asInstanceOf[ArrayBuffer[Obj]]
-                )
-              variates.setValue(Map("money" -> savedMoney, "health" -> savedHealth, "waveNo" -> savedWaveNo, "score" -> savedScore))
-              difficulty.setValue(savedDifficulty)
-              val gameplayScene = new GameplayUI(stage, MainMenuUI(stage, settingsSceneLazy))
-              gameplayScene.initializeSavedGame(savedTowers)
-              stage.setScene(gameplayScene)
-              gameplayScene.timer.start()
-            catch
-              case e: Exception => showErrorAlert(e.getMessage())
-          }
-          onMouseEntered = () => {
-            style = "-fx-background-color: red; -fx-text-fill: white; -fx-font-size: 30pt; -fx-font-family: 'Arial Black', sans-serif; -fx-padding: 10px 20px; -fx-background-radius: 50px; -fx-border-radius: 50px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 3);"
-          }
-
-          onMouseExited = () => {
-            style = buttonStyle
-          }
-        },
-        new Button("Settings") {
-          style = buttonStyle
-          onAction = () => stage.setScene(settingsSceneLazy)
-          onMouseEntered = () => {
-            style = "-fx-background-color: red; -fx-text-fill: white; -fx-font-size: 30pt; -fx-font-family: 'Arial Black', sans-serif; -fx-padding: 10px 20px; -fx-background-radius: 50px; -fx-border-radius: 50px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 3);"
-          }
-
-          onMouseExited = () => {
-            style = buttonStyle
-          }
-        },
+        mainLabel,
+        startNewGameButton,
+        continueSavedGameButton,
+        settingsButton
       )
     }
 end MainMenuUI
