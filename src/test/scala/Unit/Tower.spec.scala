@@ -21,9 +21,6 @@ import scala.jdk.OptionConverters._
 import javafx.scene.Node
 import UI.MainMenuUI
 
-
-
-
 case class TowerExtended() extends Tower(SLOW_DOWN_TOWER_LOC, 100, 50, (_: Tower) => {}, (_: String, _: String, _: Int) => {}):
   slowDown = 1
   def canShootTowardsEnemy(enemy: Enemy): Boolean =
@@ -35,17 +32,10 @@ case class TowerExtended() extends Tower(SLOW_DOWN_TOWER_LOC, 100, 50, (_: Tower
   end canShootTowardsEnemy
 end TowerExtended
 
-@ExtendWith(Array(classOf[ApplicationExtension]))
+
 class TowerTest {
   
-  var gui: Option[MainMenuUI] = None
-
-  @Start
-  def start(stage: Stage): Unit =
-    val newGui = MainMenuUI(null, null)
-    stage.setScene(newGui)
-    gui = Some(newGui)
-    stage.show()
+  
   
   @Test
   def testTowerInit(): Unit =

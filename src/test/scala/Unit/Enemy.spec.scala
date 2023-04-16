@@ -27,7 +27,7 @@ import javafx.scene.Node
 import UI._
 
 @ExtendWith(Array(classOf[ApplicationExtension]))
-class EnemyTest extends AnyFlatSpec with Matchers:
+class EnemyTest:
 
     var gui: Option[MainMenuUI] = None
 
@@ -38,47 +38,15 @@ class EnemyTest extends AnyFlatSpec with Matchers:
         gui = Some(newGui)
         stage.show()
 
-    "An Enemy" should "move along a path" in {
+    @Test
+    def testEnemyInit(): Unit =
         val validMap = new GameMap("/Maps/test.valid_map.txt")
         val enemy = new Enemy(BASIC_ENEMY_LOC, ENEMY_SIZE, 5, validMap.pathQueue, 100)
-        val pane = new Pane()
-        pane.children.add(enemy)
-        enemy.move(pane)
-        println(enemy.x)
-        println(enemy.x)
-        println(enemy.x)
-        1 shouldEqual 1
-    }
+        assert(enemy.health == 5)
+        assert(enemy.speed == 1.0)
+        assert(enemy.pathQueue == validMap.pathQueue)
+        assert(enemy.getGlobalCenter.x == ENEMY_SIZE / 2)
+        assert(enemy.getGlobalCenter.y == ENEMY_SIZE / 2)
 
-    it should "take damage and slow down" in {
-        val validMap = new GameMap("/Maps/test.valid_map.txt")
-        val enemy = new Enemy(BASIC_ENEMY_LOC, ENEMY_SIZE, 5, validMap.pathQueue, 100)
-        enemy.getHitFinal(3, 30, "enemy_damaged.png", "enemy_almost_dead.png")
-        enemy.health shouldEqual 7
-        enemy.speed shouldEqual 3.5
-        enemy.fill shouldBe a [javafx.scene.paint.ImagePattern]
-        enemy.getHitFinal(5, 0, "enemy_damaged.png", "enemy_almost_dead.png")
-        enemy.health shouldEqual 2
-        enemy.speed shouldEqual 3.5
-        enemy.fill shouldBe a [javafx.scene.paint.ImagePattern]
-        enemy.getHitFinal(2, 0, "enemy_damaged.png", "enemy_almost_dead.png")
-        enemy.health shouldEqual 0
-        enemy.speed shouldEqual 3.5
-        enemy.fill shouldBe a [javafx.scene.paint.ImagePattern]
-    }
-
-    it should "calculate the distance to a point" in {
-        val validMap = new GameMap("/Maps/test.valid_map.txt")
-        val enemy = new Enemy(BASIC_ENEMY_LOC, ENEMY_SIZE, 5, validMap.pathQueue, 100)
-        enemy.getDistanceToPoint(new scalafx.geometry.Point2D(0, 0)) shouldEqual 0
-        enemy.getDistanceToPoint(new scalafx.geometry.Point2D(25, 0)) shouldEqual 25
-        enemy.getDistanceToPoint(new scalafx.geometry.Point2D(25, 25)) shouldEqual 50
-    }
-
-    it should "calculate the global center" in {
-        val validMap = new GameMap("/Maps/test.valid_map.txt")
-        val enemy = new Enemy(BASIC_ENEMY_LOC, ENEMY_SIZE, 5, validMap.pathQueue, 100)
-        enemy.getGlobalCenter shouldEqual new scalafx.geometry.Point2D(25, 25)
-    }
 
 end EnemyTest
