@@ -94,3 +94,34 @@ kokeilemaan muutamaa eri vaihtoehtoa mutta mitään en ole vielä saanut toimima
 
 Olen edelleen ok tahdissa, koska huomisen jälkeen minulla helpottaa työmäärä helposti muilta kursseilta jolloin ehdin 
 keskittää voimavarojani paljon tähän projektiin, ja seuraava kaksi viikkoa tuleekin olemaan huomattavasti intensiivisempi tämän projektin suhteen.
+
+---------------------------------------------------------------------------------------------------------------------------------------
+Interim report 17.4.2023
+
+Viimeisen väliraportin jälkeen peli on uudistunut huomattavasti. Tornien raahausominaisuus on nyt toteutettu, ja tornit ampuvat
+automaattisesti omat ominaisuudet huomioon ottaen vihollisia kohti. Pistejärjestelmä, HP-järjestelmä ja rahajärjestelmä on valmis.
+Tornien päivittäminen ja myyminen on valmis, se on totetettu lisäämällä sivupalkkiin pari nappia ja kuvausta. Bullet-luokka on valmis,
+ja ammukset liikkuvat kohti ampumishetken vihollisten keskipistettä. Asetus-sivu on valmis, sieltä voi valita vaikeustason.
+Kaikilla vaikeustasoilla on omat karttansa ja omat WaveData-tiedostonsa. Lisäksi on Custom-moodi, mikä on tarkoitettu siihen tarkoitukseen,
+että pelaaja voi manuaalisesti muokata Custom-tiedostoja ja luoda oman karttansa.
+
+SplittingEnemy implementoitu, BombTower implementoitu, lisäksi vihollisten prioriteettijonon määrittelyä on paranneltu. Nyt
+esimerkiksi vihollisen eteneminen kartalla on isompi prioriteetti kuin aikaisemmin. Myös vihollisten "healthbar" on implementoitu,
+joka tässä tapauksessa on luovasti vain niiden kuvan muokkaaminen "särkyneeksi" kun tietty määrä HP:ta on mennyt. Lisäksi virheidenkäsittelyä
+on paranneltu - jos tapahtuu jokin oleellinen virhe esimerkiksi tiedostojen käsittelyssä (kartta määritelty väärin), niin 
+ohjelma heittää dialogin, jossa kerrotaan virheestä. Tämä on toteutettu käyttämällä try-catch-rakennetta. Myös lopetusruutu, kun pelaaja
+häviää, on implementoitu. Lisäksi ilmoitusluonteiset asiat simerkiksi liian pienestä rahamäärästä tai laittomasta tornin sijoituksesta
+ilmoitetaan nyt peliruudulla. Myös ScalaFX:n Point2D-luokkaa on käytetty enemmän hyväksi ja sitä on aloitettu käyttämään monissa 
+aikaisemmissakin ominaisuuksissa.
+
+Yksi virhe mikä tulee mieleen on se, tornien prioriteettijonoissa painotettiin liikaa vihollisen etenemistä - tornit eivät lopulta
+ampuneet vastustajia koska prioriteettijonon ensimmäinen jäsen oli jo liian kaukana. 
+Myös testausympäristön pystytyksessä on ollut ongelmia - JFXApp piti käynnistää ennen edes esimerikiksi
+Image-instanssien luomista. Eli toisin sanoen JFXApp piti käynnistää myös yksinkertaisten Unit-testien yhteydessä, koska käytän suurimmassa
+osissa luokista jotain ScalaFX:n luokkia.
+
+Seuraavaksi, projektin viimeistelyvaiheessa, aion luoda lisää testejä ja kenties vielä lisätä uusia vihollisia/torneja, mutta
+siihen ei todennäköisesti jää enää aikaa, kun myös dokumentointi pitää vielä tehdä. Lisäksi hion vielä pelin toimintaa siten,
+että luon eri vaikeustasoille oikeanlaiset WaveData-tiedostot (kartat niille ovat jo hyviä) ja ehkä vielä parannan pelin tasapainoisuutta
+vaihtelemalla parametreja, esimerkiksi että kuinka paljon rahaa saa yhden vihollisen tuhoamisesta. Työmäärä tämän kahden viikon aikana oli 
+noin 45 tuntia.
