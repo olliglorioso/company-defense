@@ -19,7 +19,8 @@ import javafx.scene.control.Button
 import scala.jdk.CollectionConverters._
 import scala.jdk.OptionConverters._
 import javafx.scene.Node
-import UI._
+import UI.MainMenuUI
+
 
 
 
@@ -35,7 +36,7 @@ case class TowerExtended() extends Tower(SLOW_DOWN_TOWER_LOC, 100, 50, (_: Tower
 end TowerExtended
 
 @ExtendWith(Array(classOf[ApplicationExtension]))
-class TowerTest extends AnyFlatSpec with Matchers {
+class TowerTest {
   
   var gui: Option[MainMenuUI] = None
 
@@ -46,74 +47,83 @@ class TowerTest extends AnyFlatSpec with Matchers {
     gui = Some(newGui)
     stage.show()
   
-  "App" should "initialize with default values" in {
+  @Test
+  def testTowerInit(): Unit =
     val tower = new TowerExtended()
-    tower.attackSpeed should be (3.0)
-    tower.lastBulletInit should be (0L)
-    tower.damage should be (1.0)
-    tower.slowDown should be (1.0)
-    tower.level.value should be (1)
-  }
+    assert(tower.attackSpeed == 3.0)
+    assert(tower.lastBulletInit == 0L)
+    assert(tower.damage == 1.0)
+    assert(tower.slowDown == 1.0)
+    assert(tower.level.value == 1)
+  end testTowerInit
 
-  "App" should "calculate sell price correctly" in {
+  @Test
+  def testTowerSellPrice(): Unit =
     val tower = new TowerExtended()
-    tower.sellPrice should be (60)
-  }
-
-  "App" should "calculate upgrade price correctly" in {
+    assert(tower.sellPrice == 60)
+  end testTowerSellPrice
+  
+  @Test
+  def testTowerUpgradePrice(): Unit =
     val tower = new TowerExtended()
-    tower.upgradePrice should be (78)
-  }
+    assert(tower.upgradePrice == 78)
+  end testTowerUpgradePrice
 
-  "App" should "upgrade features correctly" in {
+  @Test
+  def testTowerUpgradeFeatures(): Unit =
     val tower = new TowerExtended()
     tower.upgrade(100)
-    tower.attackSpeed should be (2.91 +- 0.01)
-    tower.damage should be (1.05)
-    tower.slowDown should be (1.05)
-    tower.level.value should be (2)
-  }
+    assert(tower.attackSpeed == 2.91)
+    assert(tower.damage == 1.05)
+    assert(tower.slowDown == 1.05)
+    assert(tower.level.value == 2)
+  end testTowerUpgradeFeatures
 
-  "App" should "upgrade tower and return remaining money" in {
+  @Test
+  def testTowerUpgradeReturn(): Unit =
     val tower = new TowerExtended()
-    val remainingMoney = tower.upgrade(100.0)
-    tower.level.value should be (2)
-    remainingMoney should be (22.0)
-  }
-
-  "App" should "not upgrade tower if money is insufficient" in {
-    val tower = new TowerExtended()
-    val remainingMoney = tower.upgrade(50.0)
-    tower.level.value should be (1)
-    remainingMoney should be (50)
-  }
-
-  "App" should "not upgrade tower if already at max level" in {
-    val tower = new TowerExtended()
-    tower.upgrade(1000)
-    tower.upgrade(1000)
-    tower.upgrade(1000)
-    tower.upgrade(1000)
-    tower.level.value should be (5)
     val remainingMoney = tower.upgrade(100)
-    tower.level.value should be (5)
-    remainingMoney should be (100)
-  }
+    assert(tower.level.value == 2)
+    assert(remainingMoney == 22)
+  end testTowerUpgradeReturn
 
-  "App" should "work correctly with priorityqueue" in {
+  @Test
+  def testTowerUpgradeMaxLevel(): Unit =
+    val tower = new TowerExtended()
+    tower.upgrade(1000)
+    tower.upgrade(1000)
+    tower.upgrade(1000)
+    tower.upgrade(1000)
+    assert(tower.level.value == 5)
+    val remainingMoney = tower.upgrade(100)
+    assert(tower.level.value == 5)
+    assert(remainingMoney == 100)
+  end testTowerUpgradeMaxLevel
+
+  @Test
+  def testTowerUpgradeInsufficientMoney(): Unit =
+    val tower = new TowerExtended()
+    val remainingMoney = tower.upgrade(50)
+    assert(tower.level.value == 1)
+    assert(remainingMoney == 50)
+  end testTowerUpgradeInsufficientMoney
+
+  @Test
+  def testTowerWithPriorityQueue(): Unit =
     val enemy = new BasicEnemy(Queue(PathTile((1,1), NoTurn), PathTile((1,1), NoTurn)))
     val tower = new TowerExtended()
     tower.addEnemyToPriorityQueue(enemy)
-    tower.enemyPriority.head should be (enemy)
+    assert(tower.enemyPriority.head == enemy)
     tower.clearPriorityQueue()
-    tower.enemyPriority.isEmpty should be (true)
-  }
+    assert(tower.enemyPriority.isEmpty)
+  end testTowerWithPriorityQueue
 
-  "Tower" should "return correct global coordinates and be able to shoot enemy in the same pos" in {
+  @Test
+  def testTowerGlobalCoordinates(): Unit =
     val tower = new TowerExtended()
     val enemy = new BasicEnemy(Queue(PathTile((1,1), NoTurn), PathTile((1,1), NoTurn)))
-    tower.getGlobalCenter.x should be (TOWER_SIDE / 2)
-    tower.getGlobalCenter.y should be (TOWER_SIDE / 2)
-    tower.canShootTowardsEnemy(enemy) should be (true)
-  }
+    assert(tower.getGlobalCenter.x == TOWER_SIDE / 2)
+    assert(tower.getGlobalCenter.y == TOWER_SIDE / 2)
+    assert(tower.canShootTowardsEnemy(enemy))
+  end testTowerGlobalCoordinates
 }
