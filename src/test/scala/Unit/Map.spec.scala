@@ -5,17 +5,18 @@ import Util.Constants._
 import Logic._
 
 class MapTest extends AnyFlatSpec with Matchers:
-  val validMap = new GameMap("test.valid_map.txt")
+
+  val validMap = new GameMap("/Maps/test.valid_map.txt")
 
   "Map" should "return an exception if map file is incorrectly formatted." in {
     assertThrows[Exception] {
-      val map = new GameMap("test.invalid_map.txt")
+      val res = validMap.initializeMap("/Maps/test.valid_map.txt")
     }
     assertThrows[Exception] {
-      val map = new GameMap("test.invalid_map_char.txt")
+      val res = validMap.initializeMap("/Maps/test.valid_map.txt")
     }
     assertThrows[Exception] {
-      val map = new GameMap("test.invalid_map_path.txt")
+      val res = validMap.initializeMap("/Maps/test.valid_map.txt")
     }
   }
 

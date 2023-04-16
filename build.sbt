@@ -14,8 +14,8 @@ lazy val root = (project in file("."))
     //Junit
     libraryDependencies += "org.junit.jupiter" % "junit-jupiter-api" % "5.7.0-M1" % Test,
     libraryDependencies += "org.junit.jupiter" % "junit-jupiter-engine" % "5.7.0-M1" % Test,
-    libraryDependencies += "org.junit.platform" % "junit-platform-runner" % "1.7.0-M1" % Test
-
+    libraryDependencies += "org.junit.platform" % "junit-platform-runner" % "1.7.0-M1" % Test,
+    libraryDependencies += "net.aichler" % "jupiter-interface" % JupiterKeys.jupiterVersion.value % Test
     
   )
 

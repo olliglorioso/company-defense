@@ -47,7 +47,6 @@ class GameMap(path: String):
     map = initializeMap(path)
   catch
     case e: Exception => {
-      println("map init")
       showErrorAlert(e.getMessage)
     }
   val pathQueue: Queue[PathTile] = generatePathQueue(startPoint)
@@ -57,7 +56,7 @@ class GameMap(path: String):
     * @return
     *   2D Array of BgTiles and PathTiles.
     */
-  private def initializeMap(path: String): Array[Array[Tile]] =
+  def initializeMap(path: String): Array[Array[Tile]] =
     val lines = Util.FileHandler().readLinesFromFile(path)
     if (
       lines.length != MAP_HEIGHT || lines
