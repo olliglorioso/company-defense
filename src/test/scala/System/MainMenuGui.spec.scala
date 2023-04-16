@@ -12,6 +12,7 @@ import scala.jdk.OptionConverters._
 import javafx.scene.Node
 import UI.MainMenuUI
 import scalafx.application.JFXApp3.PrimaryStage
+import scalafx.application.JFXApp3
 
 /*
   TestFX GUI testing with JUnit 5.
@@ -27,7 +28,11 @@ class MainMenuGui:
   // Test preparation. Start JavaFX app.
   @Start
   def start(stage: Stage): Unit =
-    val newGui = MainMenuUI(stage.asInstanceOf[PrimaryStage], null)
+    val primaryStage = new JFXApp3.PrimaryStage:
+      title = "Company defense"
+      resizable = false
+
+    val newGui = MainMenuUI(primaryStage, null)
     stage.setScene(newGui)
     gui = Some(newGui)
     stage.show()

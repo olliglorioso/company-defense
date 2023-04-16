@@ -52,7 +52,7 @@ class MainMenuUI(stage: JFXApp3.PrimaryStage, settingsScene: => Scene) extends S
       onAction = () => {
         try
           variates.setValue(Map("money" -> getMoney, "health" -> getHealth, "waveNo" -> 0, "score" -> 0))
-          val gameplayScene = new GameplayUI(stage, MainMenuUI(stage, settingsSceneLazy))
+          val gameplayScene = new GameplayUI(stage, new MainMenuUI(stage, settingsSceneLazy))
           stage.setScene(gameplayScene)
           gameplayScene.timer.start()
         catch 
@@ -72,7 +72,7 @@ class MainMenuUI(stage: JFXApp3.PrimaryStage, settingsScene: => Scene) extends S
             )
           variates.setValue(Map("money" -> savedMoney, "health" -> savedHealth, "waveNo" -> savedWaveNo, "score" -> savedScore))
           difficulty.setValue(savedDifficulty)
-          val gameplayScene = new GameplayUI(stage, MainMenuUI(stage, settingsSceneLazy))
+          val gameplayScene = new GameplayUI(stage, new MainMenuUI(stage, settingsSceneLazy))
           gameplayScene.initializeSavedGame(savedTowers)
           stage.setScene(gameplayScene)
           gameplayScene.timer.start()

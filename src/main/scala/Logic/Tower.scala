@@ -44,7 +44,7 @@ abstract class Tower(path: String, price: Int, range: Int, showUpgradeInfo: Towe
         math.round((price * 0.6) * math.pow(1.3, level.value)).toInt
     end upgradePrice
 
-    def upgradeFeatures(): Unit =
+    private def upgradeFeatures(): Unit =
         level.value += 1
         attackSpeed *= 0.97
         damage *= 1.05
@@ -54,10 +54,11 @@ abstract class Tower(path: String, price: Int, range: Int, showUpgradeInfo: Towe
     def upgrade(money: Double): Double =
         if (money < upgradePrice) then
             showMessage("You don't have enough money to upgrade this tower", "error", 1)
-            return money
+            money
         else if (level.value < maxLevel) then
+            val moneyLeft = money - upgradePrice
             upgradeFeatures()
-            money - upgradePrice
+            moneyLeft
         else 
             showMessage("You can't upgrade this tower any further", "error", 1)
             money
