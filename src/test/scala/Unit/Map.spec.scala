@@ -10,13 +10,13 @@ class MapTest extends AnyFlatSpec with Matchers:
 
   "Map" should "return an exception if map file is incorrectly formatted." in {
     assertThrows[Exception] {
-      val res = validMap.initializeMap("/Maps/test.valid_map.txt")
+      validMap.initializeMap("/Maps/test.invalid_map.txt")
     }
     assertThrows[Exception] {
-      val res = validMap.initializeMap("/Maps/test.valid_map.txt")
+      validMap.initializeMap("/Maps/test.invalid_map_char.txt")
     }
     assertThrows[Exception] {
-      val res = validMap.initializeMap("/Maps/test.valid_map.txt")
+      validMap.initializeMap("/Maps/test.invalid_map_path.txt")
     }
   }
 
