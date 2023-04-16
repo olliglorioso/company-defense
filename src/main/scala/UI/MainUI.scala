@@ -13,7 +13,6 @@ import java.util.concurrent.TimeUnit
 import Util.State._
 import scalafx.stage.Screen
 class MainUI extends JFXApp3:
-  
   override def start(): Unit =
     stage = new JFXApp3.PrimaryStage:
       title = "Company defense"
@@ -27,6 +26,7 @@ class MainUI extends JFXApp3:
 
     stage.scene = mainmenuScene
   end start
+end MainUI
 
 @main def start() =
   val ui = new MainUI()

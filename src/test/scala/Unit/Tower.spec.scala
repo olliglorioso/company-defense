@@ -3,11 +3,25 @@ package Unit
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import collection.mutable.Buffer
-
 import Util.Constants._
-import Logic._
-import org.junit.jupiter.api.extension.ExtendWith
 import scala.collection.immutable.Queue
+import _root_.Logic._
+
+import org.junit.jupiter.api.extension.ExtendWith
+import org.testfx.framework.junit5.ApplicationExtension
+import org.testfx.framework.junit5.Start
+import javafx.stage.Stage
+import org.junit.jupiter.api.Test
+import org.testfx.api.FxRobot
+import org.testfx.api.FxAssert
+import org.testfx.matcher.control.LabeledMatchers
+import javafx.scene.control.Button
+import scala.jdk.CollectionConverters._
+import scala.jdk.OptionConverters._
+import javafx.scene.Node
+import UI._
+
+
 
 case class TowerExtended() extends Tower(SLOW_DOWN_TOWER_LOC, 100, 50, (_: Tower) => {}, (_: String, _: String, _: Int) => {}):
   slowDown = 1
@@ -20,8 +34,18 @@ case class TowerExtended() extends Tower(SLOW_DOWN_TOWER_LOC, 100, 50, (_: Tower
   end canShootTowardsEnemy
 end TowerExtended
 
-@ExtendWith(Array(classOf[org.testfx.framework.junit5.ApplicationExtension]))
+@ExtendWith(Array(classOf[ApplicationExtension]))
 class TowerTest extends AnyFlatSpec with Matchers {
+  
+  var gui: Option[MainMenuUI] = None
+
+  @Start
+  def start(stage: Stage): Unit =
+    val newGui = MainMenuUI(null, null)
+    stage.setScene(newGui)
+    gui = Some(newGui)
+    stage.show()
+  
   "App" should "initialize with default values" in {
     val tower = new TowerExtended()
     tower.attackSpeed should be (3.0)
