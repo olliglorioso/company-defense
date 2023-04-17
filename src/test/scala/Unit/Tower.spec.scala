@@ -32,10 +32,17 @@ case class TowerExtended() extends Tower(SLOW_DOWN_TOWER_LOC, 100, 50, (_: Tower
   end canShootTowardsEnemy
 end TowerExtended
 
-
+@ExtendWith(Array(classOf[ApplicationExtension]))
 class TowerTest {
+
+  var gui: Option[MainMenuUI] = None
   
-  
+  @Start
+    def start(stage: Stage): Unit =
+        val newGui = MainMenuUI(null, null)
+        stage.setScene(newGui)
+        gui = Some(newGui)
+        stage.show()
   
   @Test
   def testTowerInit(): Unit =

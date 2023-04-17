@@ -25,11 +25,14 @@ import scala.jdk.CollectionConverters._
 import scala.jdk.OptionConverters._
 import javafx.scene.Node
 import UI._
+import org.scalatest.BeforeAndAfterEach
 
 @ExtendWith(Array(classOf[ApplicationExtension]))
-class EnemyTest:
+class EnemyTest extends AnyFlatSpec with Matchers with BeforeAndAfterEach:
 
     var gui: Option[MainMenuUI] = None
+    var enemy: Enemy = null
+    var validMap: GameMap = null
 
     @Start
     def start(stage: Stage): Unit =
@@ -38,15 +41,22 @@ class EnemyTest:
         gui = Some(newGui)
         stage.show()
 
+    override def beforeEach(): Unit =
+        validMap = new GameMap("/Maps/test.valid_map.txt")
+        enemy = new Enemy(BASIC_ENEMY_LOC, ENEMY_SIZE, 5, validMap.pathQueue, 100)
+
+    override def afterEach(): Unit =
+        enemy = null
+        validMap = null
+
     @Test
     def testEnemyInit(): Unit =
         val validMap = new GameMap("/Maps/test.valid_map.txt")
         val enemy = new Enemy(BASIC_ENEMY_LOC, ENEMY_SIZE, 5, validMap.pathQueue, 100)
-        assert(enemy.health == 5)
-        assert(enemy.speed == 1.0)
-        assert(enemy.pathQueue == validMap.pathQueue)
-        assert(enemy.getGlobalCenter.x == ENEMY_SIZE / 2)
-        assert(enemy.getGlobalCenter.y == ENEMY_SIZE / 2)
-
-
+        enemy.health should be (100)
+        enemy.speed should be (5.0)
+        enemy.pathQueue should be (validMap.pathQueue)
+        enemy.getGlobalCenter.x should be (ENEMY_SIZE / 2)
+        enemy.getGlobalCenter.y should be (ENEMY_SIZE / 2)
+    
 end EnemyTest
