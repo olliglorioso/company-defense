@@ -33,6 +33,7 @@ import scalafx.application.JFXApp3.PrimaryStage
 import Util.State._
 import Util.HelperFunctions._
 import ujson.Obj
+import scala.collection.immutable.Vector
 
 sealed abstract class EnemyType(val value: Int)
 case object BasicEnemy extends EnemyType(1)
@@ -51,7 +52,7 @@ case object CamouflagedEnemy extends EnemyType(5)
 class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(screenWidth(), screenHeight()):
   lazy val mainmenuSceneLazy = mainmenuScene
   val mapInst: GameMap = new GameMap(getMap)
-  var waves: Array[Queue[EnemyType]] = generateWaves()
+  var waves = generateWaves()
   val map = createMap(UI_TILE_SIZE, mapInst.map)
   var enemiesOnMap = ArrayBuffer[Enemy]()
   var towersOnMap = ArrayBuffer[Tower]()
@@ -327,16 +328,16 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
     timer.start()
   end showMessage
 
-  /** Generate enemy waves Array based on a file.
+  /** Generate enemy waves array based on a file.
     *
     * @param fileLoc
     *   File location
     * @return
     */
-  private def generateWaves(): Array[Queue[EnemyType]] = 
+  private def generateWaves(): Vector[Queue[EnemyType]] = 
     try
       val lines = FileHandler().readLinesFromFile(getWaveData)
-      var helperArray: Array[Queue[EnemyType]] = Array()
+      var helperArray: Vector[Queue[EnemyType]] = Vector()
       for (i <- lines) {
         val stringArray = i.split("")
         var helperQueue: Queue[EnemyType] = Queue()
