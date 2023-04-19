@@ -15,6 +15,7 @@ import UI.BasicEnemy
 import UI.CamouflagedEnemy
 import UI.SplittingEnemy
 import UI.EnemyType
+import scala.collection.mutable.ArrayBuffer
 
 object HelperFunctions {
   def getTowerDisplayName(path: String) = 
@@ -46,10 +47,10 @@ object HelperFunctions {
       * @param y
       * @return
       */
-  def towerCanBePlaced(eventLoc: Point2D, towersOnMap: BufferProperty[Tower]): Boolean =
+  def towerCanBePlaced(eventLoc: Point2D, towersOnMap: ArrayBuffer[Tower]): Boolean =
     var broken = false
     breakable {
-      towersOnMap.value.forall( tower => {
+      towersOnMap.forall( tower => {
           // Euclidean distance
           val distance = tower.getGlobalCenter.distance(eventLoc)
           if (distance < (TOWER_SIDE / 2)) then 

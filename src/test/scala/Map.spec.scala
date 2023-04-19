@@ -1,10 +1,10 @@
-package Unit
+
 
 import collection.mutable.Buffer
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import Util.Constants._
-import Logic._
+import _root_.Logic._
 
 class MapTest extends AnyFlatSpec with Matchers:
 

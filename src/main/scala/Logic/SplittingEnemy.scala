@@ -19,7 +19,6 @@ class SplittingEnemy (pathQueue: Queue[PathTile]) extends Enemy(SPLITTING_ENEMY_
     }
 
     def split (): Seq[BasicEnemy] =
-        println(queue.length)
         val enemy1 = new BasicEnemy(queue)
         val enemy2 = new BasicEnemy(queue)
         val enemy3 = new BasicEnemy(queue)

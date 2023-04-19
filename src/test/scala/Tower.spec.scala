@@ -1,4 +1,4 @@
-package Unit
+
 
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
@@ -21,16 +21,7 @@ import scala.jdk.OptionConverters._
 import javafx.scene.Node
 import UI.MainMenuUI
 
-case class TowerExtended() extends Tower(SLOW_DOWN_TOWER_LOC, 100, 50, (_: Tower) => {}, (_: String, _: String, _: Int) => {}):
-  slowDown = 1
-  def canShootTowardsEnemy(enemy: Enemy): Boolean =
-      if (enemy.isInstanceOf[CamouflagedEnemy]) then return false
-      val towerLoc = localToScene(layoutBounds.getValue().getCenterX(), layoutBounds.getValue().getCenterY())
-      val distToEnemy = enemy.getDistanceToPoint(towerLoc)
-      if (distToEnemy <= 50) then true
-      else false
-  end canShootTowardsEnemy
-end TowerExtended
+
 
 @ExtendWith(Array(classOf[ApplicationExtension]))
 class TowerTest {
@@ -43,6 +34,17 @@ class TowerTest {
         stage.setScene(newGui)
         gui = Some(newGui)
         stage.show()
+  
+  case class TowerExtended() extends Tower(SLOW_DOWN_TOWER_LOC, 100, 50, (_: Tower) => {}, (_: String, _: String, _: Int) => {}):
+    slowDown = 1
+    def canShootTowardsEnemy(enemy: Enemy): Boolean =
+        if (enemy.isInstanceOf[CamouflagedEnemy]) then return false
+        val towerLoc = localToScene(layoutBounds.getValue().getCenterX(), layoutBounds.getValue().getCenterY())
+        val distToEnemy = enemy.getDistanceToPoint(towerLoc)
+        if (distToEnemy <= 50) then true
+        else false
+    end canShootTowardsEnemy
+  end TowerExtended
   
   @Test
   def testTowerInit(): Unit =

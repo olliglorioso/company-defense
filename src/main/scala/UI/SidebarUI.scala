@@ -24,10 +24,11 @@ import Logic._
 import scalafx.geometry.Pos
 import Util.HelperFunctions.labelStyle
 import Util.State._
+import scala.collection.mutable.ArrayBuffer
 class SidebarUI(
     pane: Pane,
     mapInst: GameMap,
-    towersOnMap: BufferProperty[Tower],
+    towersOnMap: ArrayBuffer[Tower],
     showMessage: (String, String, Int) => Unit,
     saveAndExit: () => Unit,
     exit: () => Unit
@@ -87,7 +88,7 @@ class SidebarUI(
         variates.setValue(variates.value.updated("money", variates.value("money") + tower.sellPrice))
         moneyLabel.text = variates.value("money").toInt.toString()
         pane.children.remove(tower)
-        towersOnMap.value -= tower
+        towersOnMap -= tower
         children = Seq(towers, infoLabels)
       }
     }

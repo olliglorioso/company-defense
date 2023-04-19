@@ -53,9 +53,9 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
   val mapInst: GameMap = new GameMap(getMap)
   var waves: Array[Queue[EnemyType]] = generateWaves()
   val map = createMap(UI_TILE_SIZE, mapInst.map)
-  var enemiesOnMap = Buffer[Enemy]()
-  var towersOnMap = BufferProperty[Tower](Seq())
-  var towersOnMapAfterWaveChange = BufferProperty[Tower](Seq())
+  var enemiesOnMap = ArrayBuffer[Enemy]()
+  var towersOnMap = ArrayBuffer[Tower]()
+  var towersOnMapAfterWaveChange = ArrayBuffer[Tower]()
   var variatesAfterWaveChange = ObjectProperty(variates.value)
   var bulletsOnMap = BufferProperty[Bullet](Seq())
   var timerStarted = false
@@ -90,7 +90,7 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
    */
   def saveAndExit(): Unit =
     val savedTowers = ArrayBuffer[Obj]()
-    for (tower <- towersOnMapAfterWaveChange.value) {
+    for (tower <- towersOnMapAfterWaveChange) {
       val towerType = tower match
         case _: RegularTower => "R"
         case _: SlowDownTower => "S"
@@ -141,8 +141,8 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
         newTower.y = y
         newTower.level.setValue(level)
         pane.children.add(newTower)
-        towersOnMap.setValue(towersOnMap.value :+ newTower)
-        towersOnMapAfterWaveChange.setValue(towersOnMapAfterWaveChange.value :+ newTower)
+        towersOnMap.addOne(newTower)
+        towersOnMapAfterWaveChange.addOne(newTower)
     }
   end initializeSavedGame
 
@@ -151,7 +151,7 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
    * @param time Current time in milliseconds
    */
   def editPriorityQueuesAndCreateBullets(time: Long) = 
-    for (tower <- towersOnMap.value) {
+    for (tower <- towersOnMap) {
       tower.clearPriorityQueue()  // Clear the whole priority queue every time (have to remove and reinsert enemies anyway)
       for (enemy <- enemiesOnMap) {
         tower.addEnemyToPriorityQueue(enemy)
@@ -226,7 +226,7 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
                   variates.setValue(variates.value.updated("waveNo", variates.value("waveNo") + 1))
                   // Give the player some money for completing the wave, in an sqrt function to make the money amount grow slowly
                   variates.setValue(variates.value.updated("money", variates.value("money") + math.round(25 * math.sqrt((variates.value("waveNo") + 1).toInt))))
-                  towersOnMapAfterWaveChange.setValue(towersOnMap.value)
+                  towersOnMapAfterWaveChange = towersOnMap
                   variatesAfterWaveChange.setValue(variates.value)
                   showMessage("Wave " + ((variates.value("waveNo") + 1).toInt.toString()), "info", 4)
               else 

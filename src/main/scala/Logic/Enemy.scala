@@ -82,7 +82,6 @@ case class Enemy(
       nextTile.coord._1 * UI_TILE_SIZE,
       nextTile.coord._2 * UI_TILE_SIZE
     )
-    val (vecY, vecX) = (currY - tileY, currX - tileX)
     val (dy, dx) = (nextTileY - currY, nextTileX - currX)
 
     val distance = math.sqrt(dx * dx + dy * dy)

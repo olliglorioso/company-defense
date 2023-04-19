@@ -14,6 +14,7 @@ import scalafx.scene.paint.Color
 import Util.HelperFunctions._
 import scalafx.geometry.Point2D
 import Util.State._
+import scala.collection.mutable.ArrayBuffer
 
 class TowerButtonUI(
     picLoc: String,
@@ -23,7 +24,7 @@ class TowerButtonUI(
     desc: String,
     pane: Pane,
     mapInst: GameMap,
-    towersOnMap: BufferProperty[Tower],
+    towersOnMap: ArrayBuffer[Tower],
     showMessage: (String, String, Int) => Unit,
     openUpgradeMenu: (Tower) => Unit
 ) extends Button {
@@ -103,7 +104,7 @@ class TowerButtonUI(
         case S_NAME => new SlowDownTower(openUpgradeMenu, showMessage)
         case B_NAME => new BombTower(openUpgradeMenu, showMessage)
       }
-      towersOnMap.value = towersOnMap.value :+ newTower
+      towersOnMap.addOne(newTower)
       newTower.x = towerX
       newTower.y = towerY
       // Return the button to its original position

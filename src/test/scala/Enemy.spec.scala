@@ -1,6 +1,4 @@
-package Unit
 
-package Logic
 
 import scalafx.scene.layout.Pane
 import scala.collection.immutable.Queue
@@ -26,37 +24,43 @@ import scala.jdk.OptionConverters._
 import javafx.scene.Node
 import UI._
 import org.scalatest.BeforeAndAfterEach
+import scalafx.geometry.Point2D
 
 @ExtendWith(Array(classOf[ApplicationExtension]))
-class EnemyTest extends AnyFlatSpec with Matchers with BeforeAndAfterEach:
+class EnemyTest:
 
-    var gui: Option[MainMenuUI] = None
-    var enemy: Enemy = null
-    var validMap: GameMap = null
+    /*var gui: Option[MainMenuUI] = None
 
     @Start
     def start(stage: Stage): Unit =
+        
         val newGui = MainMenuUI(null, null)
         stage.setScene(newGui)
         gui = Some(newGui)
-        stage.show()
-
-    override def beforeEach(): Unit =
-        validMap = new GameMap("/Maps/test.valid_map.txt")
-        enemy = new Enemy(BASIC_ENEMY_LOC, ENEMY_SIZE, 5, validMap.pathQueue, 100)
-
-    override def afterEach(): Unit =
-        enemy = null
-        validMap = null
+        stage.show()*/
 
     @Test
     def testEnemyInit(): Unit =
         val validMap = new GameMap("/Maps/test.valid_map.txt")
         val enemy = new Enemy(BASIC_ENEMY_LOC, ENEMY_SIZE, 5, validMap.pathQueue, 100)
-        enemy.health should be (100)
-        enemy.speed should be (5.0)
-        enemy.pathQueue should be (validMap.pathQueue)
-        enemy.getGlobalCenter.x should be (ENEMY_SIZE / 2)
-        enemy.getGlobalCenter.y should be (ENEMY_SIZE / 2)
+        assert(enemy.health == 100)
+        assert(enemy.speed == 5.0)
+        assert(enemy.pathQueue == validMap.pathQueue)
+        assert(enemy.getGlobalCenter.x == ENEMY_SIZE / 2)
+        assert(enemy.getGlobalCenter.y == ENEMY_SIZE / 2)
+    
+    @Test
+    def testGetHit(): Unit = 
+        val validMap = new GameMap("/Maps/test.valid_map.txt")
+        val enemy = new Enemy(BASIC_ENEMY_LOC, ENEMY_SIZE, 5, validMap.pathQueue, 100)
+        enemy.getHit(10, 1)
+        assert(enemy.health == 90)
+        assert(enemy.speed == 4.95)
+
+    @Test
+    def testGetDistanceToPoint(): Unit =
+        val validMap = new GameMap("/Maps/test.valid_map.txt")
+        val enemy = new Enemy(BASIC_ENEMY_LOC, ENEMY_SIZE, 5, validMap.pathQueue, 100)
+        assert(1 == 500)
     
 end EnemyTest
