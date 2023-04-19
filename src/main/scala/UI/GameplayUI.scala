@@ -57,7 +57,7 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
   var towersOnMap = ArrayBuffer[Tower]()
   var towersOnMapAfterWaveChange = ArrayBuffer[Tower]()
   var variatesAfterWaveChange = ObjectProperty(variates.value)
-  var bulletsOnMap = BufferProperty[Bullet](Seq())
+  var bulletsOnMap = ArrayBuffer[Bullet]()
   var timerStarted = false
   var startTime = 0L
   var lastTime = 0L
@@ -161,7 +161,7 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
       if (bullet != null) then 
         bullet.toFront()
         pane.children.add(bullet)
-        bulletsOnMap.value = bulletsOnMap.value :+ bullet
+        bulletsOnMap.addOne(bullet)
     }
   end editPriorityQueuesAndCreateBullets
 
@@ -171,12 +171,12 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
    */
   def moveBulletsAndCheckHits(): Unit = 
     val enemiesOnMapCopy = enemiesOnMap.clone()
-    val bulletsOnMapCopy = bulletsOnMap.value.clone()
+    val bulletsOnMapCopy = bulletsOnMap
     for (bullet <- bulletsOnMapCopy) {
       bullet.move()
       if (bullet.isOnTarget()) {
         pane.children.remove(bullet)
-        bulletsOnMap.value = bulletsOnMap.value.filter(_ != bullet)
+        bulletsOnMap = bulletsOnMap.filter(_ != bullet)
       }
       for (enemy <- enemiesOnMapCopy) {
         if (enemy.getDistanceToPoint(bullet.getGlobalCenter) <= (if (bullet.boundBox > 0) then bullet.boundBox else enemy.boundBox.toDouble)) then
