@@ -10,6 +10,7 @@ import _root_.Logic._
 import org.junit.jupiter.api.extension.ExtendWith
 import org.testfx.framework.junit5.ApplicationExtension
 import org.testfx.framework.junit5.Start
+import org.testfx.framework.junit5.Stop
 import javafx.stage.Stage
 import org.junit.jupiter.api.Test
 import org.testfx.api.FxRobot
@@ -20,31 +21,33 @@ import scala.jdk.CollectionConverters._
 import scala.jdk.OptionConverters._
 import javafx.scene.Node
 import UI.MainMenuUI
+import javafx.application.Platform
+import org.scalatest._
+import org.scalatest.funsuite.AnyFunSuite
+import UI.GameplayUI
 
-
+case class TowerExtended() extends Tower(SLOW_DOWN_TOWER_LOC, 100, 50, (_: Tower) => {}, (_: String, _: String, _: Int) => {}):
+  slowDown = 1
+  def canShootTowardsEnemy(enemy: Enemy): Boolean =
+      if (enemy.isInstanceOf[CamouflagedEnemy]) then return false
+      val towerLoc = localToScene(layoutBounds.getValue().getCenterX(), layoutBounds.getValue().getCenterY())
+      val distToEnemy = enemy.getDistanceToPoint(towerLoc)
+      if (distToEnemy <= 50) then true
+      else false
+  end canShootTowardsEnemy
+end TowerExtended
 
 @ExtendWith(Array(classOf[ApplicationExtension]))
-class TowerTest {
+class GUITests:
 
   var gui: Option[MainMenuUI] = None
   
   @Start
-    def start(stage: Stage): Unit =
-        val newGui = MainMenuUI(null, null)
-        stage.setScene(newGui)
-        gui = Some(newGui)
-        stage.show()
-  
-  case class TowerExtended() extends Tower(SLOW_DOWN_TOWER_LOC, 100, 50, (_: Tower) => {}, (_: String, _: String, _: Int) => {}):
-    slowDown = 1
-    def canShootTowardsEnemy(enemy: Enemy): Boolean =
-        if (enemy.isInstanceOf[CamouflagedEnemy]) then return false
-        val towerLoc = localToScene(layoutBounds.getValue().getCenterX(), layoutBounds.getValue().getCenterY())
-        val distToEnemy = enemy.getDistanceToPoint(towerLoc)
-        if (distToEnemy <= 50) then true
-        else false
-    end canShootTowardsEnemy
-  end TowerExtended
+  def start(stage: Stage): Unit =
+      val newGui = MainMenuUI(null, null)
+      stage.setScene(newGui)
+      gui = Some(newGui)
+      stage.show()
   
   @Test
   def testTowerInit(): Unit =
@@ -125,4 +128,30 @@ class TowerTest {
     assert(tower.getGlobalCenter.y == TOWER_SIDE / 2)
     assert(tower.canShootTowardsEnemy(enemy))
   end testTowerGlobalCoordinates
-}
+
+  @Test
+  def testEnemyInit(): Unit =
+      val validMap = new GameMap("/Maps/test.valid_map.txt")
+      val enemy = new Enemy(BASIC_ENEMY_LOC, ENEMY_SIZE, 5, validMap.pathQueue, 100)
+      assert(enemy.health == 100)
+      assert(enemy.speed == 5.0)
+      assert(enemy.pathQueue == validMap.pathQueue)
+      assert(enemy.getGlobalCenter.x == ENEMY_SIZE / 2)
+      assert(enemy.getGlobalCenter.y == ENEMY_SIZE / 2)
+  
+  @Test
+  def testGetHit(): Unit = 
+      val validMap = new GameMap("/Maps/test.valid_map.txt")
+      val enemy = new Enemy(BASIC_ENEMY_LOC, ENEMY_SIZE, 5, validMap.pathQueue, 100)
+      enemy.getHit(10, 1)
+      println(enemy.health)
+      assert(enemy.health == 90)
+      assert(enemy.speed == 4.95)
+
+  @Test
+  def testGetDistanceToPoint(): Unit =
+      val validMap = new GameMap("/Maps/test.valid_map.txt")
+      val enemy = new Enemy(BASIC_ENEMY_LOC, ENEMY_SIZE, 5, validMap.pathQueue, 100)
+      assert(1 == 1)
+  end testGetDistanceToPoint
+end GUITests
