@@ -6,7 +6,7 @@ import org.scalatest.matchers.should.Matchers
 import Util.Constants._
 import _root_.Logic._
 
-class MapTest extends AnyFlatSpec with Matchers:
+class LogicTests extends AnyFlatSpec with Matchers:
 
   val validMap = new GameMap("/Maps/test.valid_map.txt")
 
@@ -45,4 +45,4 @@ class MapTest extends AnyFlatSpec with Matchers:
     })
   }
 
-end MapTest
+end LogicTests
