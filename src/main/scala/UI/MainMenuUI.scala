@@ -22,7 +22,7 @@ import scala.collection.mutable.ArrayBuffer
 import ujson.Obj
 import scalafx.scene.control.Alert
 
-class MainMenuUI(stage: JFXApp3.PrimaryStage, settingsScene: => Scene) extends Scene(screenWidth.value, screenHeight.value):
+class MainMenuUI(setSceneTo: Scene => Unit, settingsScene: => Scene) extends Scene(screenWidth.value, screenHeight.value):
   /** @param stage
     *   PrimaryStage
     * @param gameplayScene
@@ -53,8 +53,8 @@ class MainMenuUI(stage: JFXApp3.PrimaryStage, settingsScene: => Scene) extends S
       onAction = () => {
         try
           variates.setValue(Map("money" -> getMoney, "health" -> getHealth, "waveNo" -> 0, "score" -> 0))
-          val gameplayScene = new GameplayUI(stage, new MainMenuUI(stage, settingsSceneLazy))
-          stage.setScene(gameplayScene)
+          val gameplayScene = new GameplayUI(setSceneTo, new MainMenuUI(setSceneTo, settingsSceneLazy))
+          setSceneTo(gameplayScene)
           gameplayScene.timer.start()
         catch 
           case e: Exception => showErrorAlert(e.getMessage())
@@ -73,9 +73,9 @@ class MainMenuUI(stage: JFXApp3.PrimaryStage, settingsScene: => Scene) extends S
             )
           variates.setValue(Map("money" -> savedMoney, "health" -> savedHealth, "waveNo" -> savedWaveNo, "score" -> savedScore))
           difficulty.setValue(savedDifficulty)
-          val gameplayScene = new GameplayUI(stage, new MainMenuUI(stage, settingsSceneLazy))
+          val gameplayScene = new GameplayUI(setSceneTo, new MainMenuUI(setSceneTo, settingsSceneLazy))
           gameplayScene.initializeSavedGame(savedTowers)
-          stage.setScene(gameplayScene)
+          setSceneTo(gameplayScene)
           gameplayScene.timer.start()
         catch
           case e: Exception => showErrorAlert(e.getMessage())
@@ -90,7 +90,7 @@ class MainMenuUI(stage: JFXApp3.PrimaryStage, settingsScene: => Scene) extends S
     }
     val settingsButton = new Button("Settings") {
       style = buttonStyle
-      onAction = () => stage.setScene(settingsSceneLazy)
+      onAction = () => setSceneTo(settingsSceneLazy)
       onMouseEntered = () => {
         style = "-fx-background-color: red; -fx-text-fill: white; -fx-font-size: 30pt; -fx-font-family: 'Arial Black', sans-serif; -fx-padding: 10px 20px; -fx-background-radius: 50px; -fx-border-radius: 50px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 3);"
       }

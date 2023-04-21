@@ -180,4 +180,26 @@ class GUITests:
       enemy.move(pane)
       assert(enemy.getGlobalCenter.x == startX * UI_TILE_SIZE + ENEMY_SIZE / 2)
       assert(enemy.getGlobalCenter.y == startY * UI_TILE_SIZE + ENEMY_SIZE / 2 + i * BASIC_ENEMY_SPEED)
+
+    // Input tests
+    @Test
+    def testButtonTexts(robot: FxRobot): Unit =
+      gui match
+        case Some(gui) =>
+          assert(
+            gui.settingsButton.text() == "Settings",
+            "The button should be called 'Settings'"
+          )
+          assert(
+            gui.startNewGameButton.text() == "Start new game",
+            "The button should be called 'Start new game'"
+          )
+          assert(
+            gui.continueSavedGameButton.text() == "Continue saved game",
+            "The button should be called 'Continue saved game'"
+          )
+        case None =>
+    end testButtonTexts
+
+      
 end GUITests

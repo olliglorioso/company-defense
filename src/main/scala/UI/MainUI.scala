@@ -13,16 +13,20 @@ import java.util.concurrent.TimeUnit
 import Util.State._
 import scalafx.stage.Screen
 class MainUI extends JFXApp3:
+
   override def start(): Unit =
     stage = new JFXApp3.PrimaryStage:
       title = "Company defense"
       resizable = false
-    
+
+    def setSceneTo(scene: Scene): Unit =
+      stage.setScene(scene)
+
     screenHeight.setValue(Screen.primary.visualBounds.getHeight())
     screenWidth.setValue(Screen.primary.visualBounds.getWidth())
 
-    lazy val mainmenuScene: Scene = MainMenuUI(stage, settingsScene)
-    lazy val settingsScene: Scene = SettingsUI(stage, mainmenuScene)
+    lazy val mainmenuScene: Scene = MainMenuUI(setSceneTo, settingsScene)
+    lazy val settingsScene: Scene = SettingsUI(setSceneTo, mainmenuScene)
 
     stage.scene = mainmenuScene
   end start

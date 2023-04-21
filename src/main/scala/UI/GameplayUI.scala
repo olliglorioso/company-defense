@@ -49,7 +49,7 @@ case object CamouflagedEnemy extends EnemyType(5)
   * @param h
   *   Scene height
   */
-class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(screenWidth(), screenHeight()):
+class GameplayUI(setSceneTo: Scene => Unit, mainmenuScene: => Scene) extends Scene(screenWidth(), screenHeight()):
   lazy val mainmenuSceneLazy = mainmenuScene
   val mapInst: GameMap = new GameMap(getMap)
   var waves = generateWaves()
@@ -83,7 +83,7 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
    */
   def exit(): Unit =
     timer.stop()
-    stage.setScene(mainmenuSceneLazy)
+    setSceneTo(mainmenuSceneLazy)
   end exit
 
   /**
@@ -117,7 +117,7 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
     ))
     timer.stop()
     FileHandler().writeLinesToJsonFile("Saved/LATEST_saved.json", savedGame) // Write the saved info to a file (and empty previous one)
-    stage.setScene(mainmenuSceneLazy)
+    setSceneTo(mainmenuSceneLazy)
   end saveAndExit
 
   /**
@@ -238,12 +238,10 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
           val newEnemies = new ArrayBuffer[Enemy](enemiesOnMap.length - 1)
           for (enemy <- enemiesOnMap) {
             val newEnemyInstance = enemy.move(pane)
-            println(newEnemyInstance.getGlobalCenter)
             if (variates.value("health") <= 0 && !gameOver) {
               gameOver = true
               showMessage("Game Over", "info", 20)
               new Dialog[String]() {
-                initOwner(stage)
                 resizable=false
                 title = "Game Over"
                 headerText = s"Your points: ${variates.value("score").toInt}"
@@ -252,7 +250,7 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
                 width_=(300)
                 onHidden = _ => {
                   timer.stop()
-                  stage.setScene(mainmenuSceneLazy)
+                  setSceneTo(mainmenuSceneLazy)
                 }
                 onShowing = _ => {
                   timer.stop()

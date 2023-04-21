@@ -15,7 +15,7 @@ import Util.State._
 import Util.HelperFunctions.labelStyle
 import Util.HelperFunctions.getDifficultyName
 
-class SettingsUI(stage: JFXApp3.PrimaryStage, mainmenuScene: => Scene) extends Scene(screenWidth.value, screenHeight.value) {
+class SettingsUI(setSceneTo: Scene => Unit, mainmenuScene: => Scene) extends Scene(screenWidth.value, screenHeight.value) {
 
   /** @param stage
     *   PrimaryStage
@@ -53,7 +53,7 @@ class SettingsUI(stage: JFXApp3.PrimaryStage, mainmenuScene: => Scene) extends S
       alignment = Pos.Center
       children = Seq(
         new Button("Main menu"):
-          onAction = () => stage.setScene(mainmenuSceneLazy)
+          onAction = () => setSceneTo(mainmenuSceneLazy)
           style = buttonStyle
           onMouseEntered = () => {
             style = "-fx-background-color: red; -fx-text-fill: white; -fx-font-size: 30pt; -fx-font-family: 'Arial Black', sans-serif; -fx-padding: 10px 20px; -fx-background-radius: 50px; -fx-border-radius: 50px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 3);"
