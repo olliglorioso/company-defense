@@ -27,6 +27,7 @@ import org.scalatest.funsuite.AnyFunSuite
 import UI.GameplayUI
 import scalafx.scene.layout.Pane
 import UI.MainUI
+import scalafx.scene.Scene
 
 case class TowerExtended() extends Tower(SLOW_DOWN_TOWER_LOC, 100, 50, (_: Tower) => {}, (_: String, _: String, _: Int) => {}):
   slowDown = 1
@@ -44,16 +45,20 @@ class GUITests:
 
   var gui: Option[MainMenuUI] = None
   val validMap = new GameMap("/Maps/test.valid_map.txt")
+  var stageForTests: Stage = null
   var enemy: Enemy = null
   var pane = new Pane:
   end pane
   
   @Start
   def start(stage: Stage): Unit =
-      val newGui = MainMenuUI(null, null)
+      def setSceneTo(sc: Scene) =
+        stage.setScene(sc)
+      val newGui = MainMenuUI(setSceneTo, null)
       stage.setScene(newGui)
       gui = Some(newGui)
       enemy = new BasicEnemy(validMap.pathQueue)
+      stageForTests = stage
       stage.show()
   
   @Test
@@ -181,7 +186,8 @@ class GUITests:
       assert(enemy.getGlobalCenter.x == startX * UI_TILE_SIZE + ENEMY_SIZE / 2)
       assert(enemy.getGlobalCenter.y == startY * UI_TILE_SIZE + ENEMY_SIZE / 2 + i * BASIC_ENEMY_SPEED)
 
-    // Input tests
+    // INPUT TESTS
+
     @Test
     def testButtonTexts(robot: FxRobot): Unit =
       gui match
@@ -200,6 +206,18 @@ class GUITests:
           )
         case None =>
     end testButtonTexts
+
+    @Test
+    def testSceneChanges(robot: FxRobot): Unit =
+      gui match
+        case Some(gui) =>
+          robot.clickOn(gui.startNewGameButton)
+          assert(
+            stageForTests.getScene().asInstanceOf[GameplayUI].enemiesOnMap.isEmpty,
+            "The scene should be changed to the game scene"
+          )
+        case None =>
+    end testSceneChanges
 
       
 end GUITests
