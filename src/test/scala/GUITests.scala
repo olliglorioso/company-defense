@@ -28,6 +28,8 @@ import UI.GameplayUI
 import scalafx.scene.layout.Pane
 import UI.MainUI
 import scalafx.scene.Scene
+import UI.SettingsUI
+import scalafx.scene.layout.BorderPane
 
 case class TowerExtended() extends Tower(SLOW_DOWN_TOWER_LOC, 100, 50, (_: Tower) => {}, (_: String, _: String, _: Int) => {}):
   slowDown = 1
@@ -185,39 +187,37 @@ class GUITests:
       enemy.move(pane)
       assert(enemy.getGlobalCenter.x == startX * UI_TILE_SIZE + ENEMY_SIZE / 2)
       assert(enemy.getGlobalCenter.y == startY * UI_TILE_SIZE + ENEMY_SIZE / 2 + i * BASIC_ENEMY_SPEED)
+  end testEnemyMovement
 
-    // INPUT TESTS
+  // BULLET GUI
 
-    @Test
-    def testButtonTexts(robot: FxRobot): Unit =
-      gui match
-        case Some(gui) =>
-          assert(
-            gui.settingsButton.text() == "Settings",
-            "The button should be called 'Settings'"
-          )
-          assert(
-            gui.startNewGameButton.text() == "Start new game",
-            "The button should be called 'Start new game'"
-          )
-          assert(
-            gui.continueSavedGameButton.text() == "Continue saved game",
-            "The button should be called 'Continue saved game'"
-          )
-        case None =>
-    end testButtonTexts
+  @Test
+  def testBullet(): Unit =
+    val bullet = new Bullet(BOMB_BULLET_LOC, enemy.getGlobalCenter, 5, 1, 1, enemy, 0)
+    for i <- 1 to 5000 do
+      bullet.move()
+    assert(bullet.getGlobalCenter.distance(enemy.getGlobalCenter) <= 50)
 
-    @Test
-    def testSceneChanges(robot: FxRobot): Unit =
-      gui match
-        case Some(gui) =>
-          robot.clickOn(gui.startNewGameButton)
-          assert(
-            stageForTests.getScene().asInstanceOf[GameplayUI].enemiesOnMap.isEmpty,
-            "The scene should be changed to the game scene"
-          )
-        case None =>
-    end testSceneChanges
+  // INPUT TESTS
+
+  @Test
+  def testButtonTexts(robot: FxRobot): Unit =
+    gui match
+      case Some(gui) =>
+        assert(
+          gui.settingsButton.text() == "Settings",
+          "The button should be called 'Settings'"
+        )
+        assert(
+          gui.startNewGameButton.text() == "Start new game",
+          "The button should be called 'Start new game'"
+        )
+        assert(
+          gui.continueSavedGameButton.text() == "Continue saved game",
+          "The button should be called 'Continue saved game'"
+        )
+      case None =>
+  end testButtonTexts
 
       
 end GUITests

@@ -74,6 +74,8 @@ class GameplayUI(setSceneTo: Scene => Unit, mainmenuScene: => Scene) extends Sce
   sidebar.toFront()
 
   root = new BorderPane:
+    id = "gameplayRoot"
+    id_=("gameplayRoot")
     center = new BorderPane: // Map area
       center = pane
     right = sidebar // Sidebar area

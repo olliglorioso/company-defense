@@ -27,6 +27,18 @@ class SettingsUI(setSceneTo: Scene => Unit, mainmenuScene: => Scene) extends Sce
     lazy val mainmenuSceneLazy = mainmenuScene
     val buttonStyle = "-fx-background-color: red; -fx-text-fill: black; -fx-font-size: 24pt; -fx-font-family: 'Arial Black', sans-serif; -fx-padding: 10px 20px; -fx-background-radius: 50px; -fx-border-radius: 50px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 3);"
 
+    val mainMenuButton = 
+      new Button("Main menu"):
+          onAction = () => setSceneTo(mainmenuSceneLazy)
+          style = buttonStyle
+          onMouseEntered = () => {
+            style = "-fx-background-color: red; -fx-text-fill: white; -fx-font-size: 30pt; -fx-font-family: 'Arial Black', sans-serif; -fx-padding: 10px 20px; -fx-background-radius: 50px; -fx-border-radius: 50px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 3);"
+          }
+
+          onMouseExited = () => {
+            style = buttonStyle
+          }
+
     root = new VBox {
       val difficultyInfoLabel = new Label("Difficulty: " + getDifficultyName):
         style = s"${labelStyle(30, "black")} -fx-background-color: red;"
@@ -52,17 +64,7 @@ class SettingsUI(setSceneTo: Scene => Unit, mainmenuScene: => Scene) extends Sce
       spacing = 20
       alignment = Pos.Center
       children = Seq(
-        new Button("Main menu"):
-          onAction = () => setSceneTo(mainmenuSceneLazy)
-          style = buttonStyle
-          onMouseEntered = () => {
-            style = "-fx-background-color: red; -fx-text-fill: white; -fx-font-size: 30pt; -fx-font-family: 'Arial Black', sans-serif; -fx-padding: 10px 20px; -fx-background-radius: 50px; -fx-border-radius: 50px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 3);"
-          }
-
-          onMouseExited = () => {
-            style = buttonStyle
-          }
-        ,
+        mainMenuButton,
         new MenuButton("Difficulty"):
           style = buttonStyle
           items = Seq(

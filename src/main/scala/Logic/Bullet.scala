@@ -19,6 +19,7 @@ class Bullet (fileLoc: String, val target: Point2D, speed: Int, val slowDown: Do
     end move
     def isOnTarget() = 
         val distToTarget = getGlobalCenter.distance(target)
+        println(distToTarget)
         distToTarget <= speed
     end isOnTarget
     def getGlobalCenter: Point2D = 

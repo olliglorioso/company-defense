@@ -60,6 +60,8 @@ class MainMenuUI(setSceneTo: Scene => Unit, settingsScene: => Scene) extends Sce
           case e: Exception => showErrorAlert(e.getMessage())
       }
     }
+
+    startNewGameButton.id = "startNewGameButton"
     val continueSavedGameButton = new Button("Continue saved game") {
       style = buttonStyle
       onAction = () => {

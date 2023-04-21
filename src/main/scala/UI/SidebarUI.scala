@@ -192,6 +192,8 @@ class SidebarUI(
     onAction = _ => exit()
   end exitButton
 
+  exitButton.id = "exitButton"
+
   padding = Insets(20)
   spacing = 10
   margin = Insets(0, 0, 30, 0)
