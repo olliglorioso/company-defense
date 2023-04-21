@@ -25,6 +25,7 @@ import javafx.application.Platform
 import org.scalatest._
 import org.scalatest.funsuite.AnyFunSuite
 import UI.GameplayUI
+import scalafx.scene.layout.Pane
 
 case class TowerExtended() extends Tower(SLOW_DOWN_TOWER_LOC, 100, 50, (_: Tower) => {}, (_: String, _: String, _: Int) => {}):
   slowDown = 1
@@ -41,12 +42,17 @@ end TowerExtended
 class GUITests:
 
   var gui: Option[MainMenuUI] = None
+  val validMap = new GameMap("/Maps/test.valid_map.txt")
+  var enemy: Enemy = null
+  var pane = new Pane:
+  end pane
   
   @Start
   def start(stage: Stage): Unit =
       val newGui = MainMenuUI(null, null)
       stage.setScene(newGui)
       gui = Some(newGui)
+      enemy = new BasicEnemy(validMap.pathQueue)
       stage.show()
   
   @Test
@@ -129,29 +135,32 @@ class GUITests:
     assert(tower.canShootTowardsEnemy(enemy))
   end testTowerGlobalCoordinates
 
-  @Test
-  def testEnemyInit(): Unit =
-      val validMap = new GameMap("/Maps/test.valid_map.txt")
-      val enemy = new Enemy(BASIC_ENEMY_LOC, ENEMY_SIZE, 5, validMap.pathQueue, 100)
-      assert(enemy.health == 100)
-      assert(enemy.speed == 5.0)
-      assert(enemy.pathQueue == validMap.pathQueue)
-      assert(enemy.getGlobalCenter.x == ENEMY_SIZE / 2)
-      assert(enemy.getGlobalCenter.y == ENEMY_SIZE / 2)
-  
-  @Test
-  def testGetHit(): Unit = 
-      val validMap = new GameMap("/Maps/test.valid_map.txt")
-      val enemy = new Enemy(BASIC_ENEMY_LOC, ENEMY_SIZE, 5, validMap.pathQueue, 100)
-      enemy.getHit(10, 1)
-      println(enemy.health)
-      assert(enemy.health == 90)
-      assert(enemy.speed == 4.95)
+  // ENEMY TESTS
 
   @Test
-  def testGetDistanceToPoint(): Unit =
-      val validMap = new GameMap("/Maps/test.valid_map.txt")
-      val enemy = new Enemy(BASIC_ENEMY_LOC, ENEMY_SIZE, 5, validMap.pathQueue, 100)
-      assert(1 == 1)
-  end testGetDistanceToPoint
+  def testEnemyInit(): Unit =
+    assert(enemy.health == BASIC_ENEMY_HEALTH)
+    assert(enemy.speed == BASIC_ENEMY_SPEED)
+    assert(enemy.pathQueue == validMap.pathQueue)
+    assert(enemy.getGlobalCenter.x == ENEMY_SIZE / 2)
+    assert(enemy.getGlobalCenter.y == ENEMY_SIZE / 2)
+  
+  @Test
+  def testEnemyGetHit(): Unit =
+    val origHealth = enemy.health
+    for i <- 1 to 9 do
+      enemy.getHit(10, 0)
+      assert(enemy.health == (origHealth - 10 * i))
+  end testEnemyGetHit
+
+  @Test
+  def testEnemyDistance(): Unit =
+    val newEnemy = BasicEnemy(validMap.pathQueue)
+    val values = (-100 to 100 by 10).toList
+    for x <- values do
+      for y <- values do
+        newEnemy.translateX = x
+        newEnemy.translateY = y
+        assert(enemy.getDistanceToPoint(newEnemy.getGlobalCenter) == math.sqrt(x*x + y*y))
+  end testEnemyDistance
 end GUITests
