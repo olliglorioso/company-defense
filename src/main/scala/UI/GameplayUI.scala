@@ -238,6 +238,7 @@ class GameplayUI(stage: PrimaryStage, mainmenuScene: => Scene) extends Scene(scr
           val newEnemies = new ArrayBuffer[Enemy](enemiesOnMap.length - 1)
           for (enemy <- enemiesOnMap) {
             val newEnemyInstance = enemy.move(pane)
+            println(newEnemyInstance.getGlobalCenter)
             if (variates.value("health") <= 0 && !gameOver) {
               gameOver = true
               showMessage("Game Over", "info", 20)

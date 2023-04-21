@@ -26,6 +26,7 @@ import org.scalatest._
 import org.scalatest.funsuite.AnyFunSuite
 import UI.GameplayUI
 import scalafx.scene.layout.Pane
+import UI.MainUI
 
 case class TowerExtended() extends Tower(SLOW_DOWN_TOWER_LOC, 100, 50, (_: Tower) => {}, (_: String, _: String, _: Int) => {}):
   slowDown = 1
@@ -163,4 +164,20 @@ class GUITests:
         newEnemy.translateY = y
         assert(enemy.getDistanceToPoint(newEnemy.getGlobalCenter) == math.sqrt(x*x + y*y))
   end testEnemyDistance
+
+  @Test
+  def testEnemyMovement(): Unit =
+    val startY =
+      if (validMap.startPoint.coord._1 == 0) then -1
+      else validMap.startPoint.coord._1
+    val startX =
+      if (validMap.startPoint.coord._2 == 0) then -1
+      else validMap.startPoint.coord._2
+    enemy.translateY = startY * UI_TILE_SIZE
+    enemy.translateX = startX * UI_TILE_SIZE
+
+    for i <- 1 to 20 do
+      enemy.move(pane)
+      assert(enemy.getGlobalCenter.x == startX * UI_TILE_SIZE + ENEMY_SIZE / 2)
+      assert(enemy.getGlobalCenter.y == startY * UI_TILE_SIZE + ENEMY_SIZE / 2 + i * BASIC_ENEMY_SPEED)
 end GUITests
