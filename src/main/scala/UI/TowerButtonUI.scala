@@ -129,7 +129,7 @@ class TowerButtonUI(
       translateY = newPos._2
       setBackgroundStyle(event, mapInst)
       val newRadius = getBgCircleRadius
-      backgroundCircle.style = "-fx-scale-x: " + newRadius + "; -fx-scale-y: " + newRadius + ";"
+      backgroundCircle.style = "-fx-scale-x: " + newRadius + "; -fx-scale-y: " + newRadius + ";" + "-fx-opacity: 0.5;"
     }
   }
 
