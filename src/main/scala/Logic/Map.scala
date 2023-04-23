@@ -141,8 +141,8 @@ class GameMap(path: String):
         // -> otherwise, try other tile.
         for (i <- searchValues) {
           val (editY, editX) = (y + i._1, x + i._2)
-          if ((editY, editX) == prevTile.coord) print("")
-          else if (editX < 0 || editY < 0 || editX > 19 || editY > 11) print("")
+          if ((editY, editX) == prevTile.coord) None
+          else if (editX < 0 || editY < 0 || editX > 19 || editY > 11) None
           else {
             val currTile2 = map(editY)(editX)
             if (currTile2.isInstanceOf[PathTile]) {
