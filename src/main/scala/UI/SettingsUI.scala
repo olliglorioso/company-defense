@@ -38,6 +38,28 @@ class SettingsUI(setSceneTo: Scene => Unit, mainmenuScene: => Scene) extends Sce
           onMouseExited = () => {
             style = buttonStyle
           }
+    
+    val selectDifficultyDropdown = new MenuButton("Difficulty"):
+      style = buttonStyle
+      items = Seq(
+        new MenuItem("Reijon Maansiirto Tmi"):
+          onAction = _ => {
+            difficulty.setValue(1)
+          },
+        new MenuItem("IBM & Cisco & BlackBerry"):
+          onAction = _ => {
+            difficulty.setValue(2)
+          },
+        new MenuItem("MAGAT"):
+          onAction = _ => {
+            difficulty.setValue(3)
+          },
+        new MenuItem("Nokia (Custom)"):
+          onAction = _ => {
+            difficulty.setValue(4)
+          },
+      )
+    end selectDifficultyDropdown
 
     root = new VBox {
       val difficultyInfoLabel = new Label("Difficulty: " + getDifficultyName):
@@ -65,27 +87,8 @@ class SettingsUI(setSceneTo: Scene => Unit, mainmenuScene: => Scene) extends Sce
       alignment = Pos.Center
       children = Seq(
         mainMenuButton,
-        new MenuButton("Difficulty"):
-          style = buttonStyle
-          items = Seq(
-            new MenuItem("Reijon Maansiirto Tmi"):
-              onAction = _ => {
-                difficulty.setValue(1)
-              },
-            new MenuItem("IBM & Cisco & BlackBerry"):
-              onAction = _ => {
-                difficulty.setValue(2)
-              },
-            new MenuItem("MAGAT"):
-              onAction = _ => {
-                difficulty.setValue(3)
-              },
-            new MenuItem("Nokia (Custom)"):
-              onAction = _ => {
-                difficulty.setValue(4)
-              },
-          ),
-          difficultyInfoLabel
+        difficultyInfoLabel,
+        selectDifficultyDropdown
       )
     }
 }
