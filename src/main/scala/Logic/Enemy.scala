@@ -72,6 +72,11 @@ case class Enemy(
 
   }
 
+  def roundToClosest90n(angle: Double) =
+    val roundedAngle = (Math.round(angle / 90.0) * 90).toInt
+    roundedAngle
+  end roundToClosest90n
+
   def move(pane: Pane): Enemy = 
     val (currY, currX) = (translateY.value, translateX.value)
     val (tileY, tileX) = (
@@ -106,7 +111,7 @@ case class Enemy(
       translateX.value += vx.toInt
       translateY.value += vy
       val angle = (math.atan2(dy, dx) * 180 / math.Pi).round.toInt
-      val roundedAngle = (Math.round(angle / 10.0) * 10).toInt
+      val roundedAngle = roundToClosest90n(angle)
       rotate = roundedAngle
       return this
     }

@@ -47,7 +47,3 @@ class FileHandler:
   end writeLinesToJsonFile
 
 end FileHandler
-
-@main def koira () =
-  val data = FileHandler().readLinesFromJsonFile("Saved/LATEST_saved.json")
-  println(FileHandler().writeLinesToJsonFile("Saved/LATEST_saved.json", data))
