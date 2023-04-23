@@ -23,15 +23,6 @@ import ujson.Obj
 import scalafx.scene.control.Alert
 
 class MainMenuUI(setSceneTo: Scene => Unit, settingsScene: => Scene) extends Scene(screenWidth.value, screenHeight.value):
-  /** @param stage
-    *   PrimaryStage
-    * @param gameplayScene
-    *   Gameplay-scene
-    * @param settingsScene
-    *   Settings-scene
-    * @return
-    *   Mainmenu-scene
-    */
 
     val buttonStyle = "-fx-background-color: red; -fx-text-fill: black; -fx-font-size: 24pt; -fx-font-family: 'Arial Black', sans-serif; -fx-padding: 10px 20px; -fx-background-radius: 50px; -fx-border-radius: 50px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 3);"
     lazy val settingsSceneLazy = settingsScene
