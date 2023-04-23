@@ -13,8 +13,8 @@ class Bullet (fileLoc: String, val target: Point2D, speed: Int, val slowDown: Do
             translateX.value += math.cos(angle) * speed
             translateY.value += math.sin(angle) * speed
         } else {
-            translateX = target.x
-            translateY = target.y
+            translateX = 0
+            translateY = 0
         }
     end move
     def isOnTarget() = 
