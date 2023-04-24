@@ -84,10 +84,6 @@ abstract class Tower(path: String, price: Int, range: Int, showUpgradeInfo: Towe
         (enemyPriority.nonEmpty && canShootTowardsEnemy(enemyPriority.head) && (lastBulletInit == 0L || time - lastBulletInit >= attackSpeed * 100000000L))
     end canInitNewBullet
 
-    def getGlobalCenter: Point2D =
-        val towerLoc = localToScene(layoutBounds.getValue().getCenterX(), layoutBounds.getValue().getCenterY())
-        towerLoc
-    end getGlobalCenter
 
     def initBullet(time: Long): Bullet = 
         if (canInitNewBullet(time, lastBulletInit)) then 

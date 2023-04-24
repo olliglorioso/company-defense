@@ -36,14 +36,11 @@ case class Enemy(
 
   def sellPrice(): Int = 0
 
-  def getDistanceToPoint (point: Point2D) = {
+  def getDistanceToPoint (point: Point2D): Double = {
     val enemyLoc = localToScene(layoutBounds.getValue().getCenterX(), layoutBounds.getValue().getCenterY())
     enemyLoc.distance(point)
   }
-  def getGlobalCenter: Point2D = {
-        val enemyLoc = localToScene(layoutBounds.getValue().getCenterX(), layoutBounds.getValue().getCenterY())
-        enemyLoc
-  }
+  
 
   def getHitFinal(damage: Double, slowDown: Double, image1: String, image2: String): Unit = {
       health = health - damage

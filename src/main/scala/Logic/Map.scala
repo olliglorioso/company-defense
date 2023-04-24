@@ -23,7 +23,7 @@ case object End extends Turn(5)
   * @param coord Coodinates
   * @param turn Where is the next PathTile.
   */
-class PathTile(coord: Tuple2[Int, Int], turn: Turn)
+class PathTile(coord: Tuple2[Int, Int], val turn: Turn)
     extends Tile(canBuildTower = false, coord = coord):
   override def toString = s"PathTile, c: ${coord}, t: ${turn}"
   def getTurn() = turn

@@ -18,7 +18,7 @@ import UI.EnemyType
 import scala.collection.mutable.ArrayBuffer
 
 object HelperFunctions {
-  def getTowerDisplayName(path: String) = 
+  def getTowerDisplayName(path: String): String = 
     path match
       case REGULAR_TOWER_LOC => R_NAME
       case SLOW_DOWN_TOWER_LOC => S_NAME
@@ -30,12 +30,12 @@ object HelperFunctions {
     currentScene.showMessage(message, title, blinks)
   
   def labelStyle(size: Int, color: String = "orange"): String = s"-fx-font: normal bold ${size} Langdon; -fx-base: #AE3522; " + s"-fx-text-fill: ${color};"
-  def getMap = features(difficulty.value)._4
-  def getWaveData = features(difficulty.value)._3
-  def getHealth = features(difficulty.value)._1
-  def getMoney = features(difficulty.value)._2
-  def anyToInteger(x: Any) = x.toString().toInt
-  def getDifficultyName = difficulty.value match
+  def getMap: String = features(difficulty.value)._4
+  def getWaveData: String = features(difficulty.value)._3
+  def getHealth: Int = features(difficulty.value)._1
+  def getMoney: Int = features(difficulty.value)._2
+  def anyToInteger(x: Any): Int = x.toString().toInt
+  def getDifficultyName: String = difficulty.value match
     case 1 => "Reijon Maansiirto Tmi"
     case 2 => "IBM & Cisco & BlackBerry"
     case 3 => "MAGAT"
