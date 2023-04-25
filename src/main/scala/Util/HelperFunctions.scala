@@ -39,7 +39,7 @@ object HelperFunctions {
   def getDifficultyName: String = difficulty.value match
     case 1 => "Reijon Maansiirto Tmi"
     case 2 => "IBM & Cisco & BlackBerry"
-    case 3 => "MAGAT"
+    case 3 => "MANGA"
     case _ => "Nokia (Custom)"
   /**
       * 

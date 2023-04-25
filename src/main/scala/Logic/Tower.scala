@@ -12,7 +12,7 @@ import scalafx.beans.property.IntegerProperty
 import javafx.scene.paint.ImagePattern
 import scalafx.scene.image.Image
 
-abstract class Tower(path: String, price: Int, range: Int, showUpgradeInfo: Tower => Unit, showMessage: (String, String, Int) => Unit)
+abstract class Tower(path: String, price: Int, val range: Int, showUpgradeInfo: Tower => Unit, showMessage: (String, String, Int) => Unit)
     extends GameObject(path, TOWER_SIDE):
     val boundBox = 0.0
     var attackSpeed = 3.0 // is a good basic speed. Adjusting between 0.5-5 is ok. The lower the better

@@ -64,7 +64,7 @@ object Constants {
   // Tower ranges
   val R_RANGE = 200 
   val S_RANGE = 200 
-  val B_RANGE = 200
+  val B_RANGE = 400
   // Tower damages
   val R_DAMAGE = 2
   val S_DAMAGE = 3

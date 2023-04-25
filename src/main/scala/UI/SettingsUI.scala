@@ -50,7 +50,7 @@ class SettingsUI(setSceneTo: Scene => Unit, mainmenuScene: => Scene) extends Sce
           onAction = _ => {
             difficulty.setValue(2)
           },
-        new MenuItem("MAGAT"):
+        new MenuItem("MANGA"):
           onAction = _ => {
             difficulty.setValue(3)
           },
