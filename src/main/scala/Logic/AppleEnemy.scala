@@ -12,7 +12,7 @@ class AppleEnemy (pathQueue: Queue[PathTile]) extends Enemy(APPLE_ENEMY_LOC, ENE
 
   override def getHit(damage: Double, slowDown: Double = 0) = {
         getHitFinal(damage, slowDown, APPLE_ENEMY_2_LOC, APPLE_ENEMY_3_LOC)
-        if (health >= 0 && health <= (origHealth / 5) && !imageChanged3) {
+        if (health >= 0 && health <= (origHealth / 6) && !imageChanged3) {
             imageChanged3 = true
             fill = new ImagePattern(new Image(APPLE_ENEMY_4_LOC))
         }
