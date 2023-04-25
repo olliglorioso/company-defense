@@ -16,6 +16,7 @@ import UI.CamouflagedEnemy
 import UI.SplittingEnemy
 import UI.EnemyType
 import scala.collection.mutable.ArrayBuffer
+import UI.AppleEnemy
 
 object HelperFunctions {
   def getTowerDisplayName(path: String): String = 
@@ -74,11 +75,12 @@ object HelperFunctions {
 
   def getRandomEnemyType: EnemyType = 
     val random = scala.util.Random
-    val enemyType = random.nextInt(3)
+    val enemyType = random.nextInt(4)
     enemyType match
       case 0 => BasicEnemy
       case 1 => CamouflagedEnemy
       case 2 => SplittingEnemy
+      case 3 => AppleEnemy
       case _ => BasicEnemy
   end getRandomEnemyType
 }

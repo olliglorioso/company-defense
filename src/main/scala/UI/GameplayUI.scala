@@ -15,7 +15,7 @@ import scalafx.beans.property.ObjectProperty
 import scalafx.scene.shape._
 import scalafx.scene.paint.Color
 import Util.Constants._
-import Logic.{BasicEnemy => BasicEnemyClass, CamouflagedEnemy => CamouflagedEnemyClass, SplittingEnemy => SplittingEnemyClass}
+import Logic.{AppleEnemy => AppleEnemyClass, BasicEnemy => BasicEnemyClass, CamouflagedEnemy => CamouflagedEnemyClass, SplittingEnemy => SplittingEnemyClass}
 import Logic._
 import scalafx.animation.AnimationTimer
 import java.util.concurrent.TimeUnit
@@ -39,7 +39,7 @@ sealed abstract class EnemyType(val value: Int)
 case object BasicEnemy extends EnemyType(1)
 case object SplittingEnemy extends EnemyType(2)
 case object TankEnemy extends EnemyType(3)
-case object FlockEnemy extends EnemyType(4)
+case object AppleEnemy extends EnemyType(4)
 case object CamouflagedEnemy extends EnemyType(5)
 
 /** Responsible for the main gameplay scene.
@@ -184,21 +184,29 @@ class GameplayUI(setSceneTo: Scene => Unit, mainmenuScene: => Scene) extends Sce
       for (enemy <- enemiesOnMapCopy) {
         if (enemy.getDistanceToPoint(bullet.getGlobalCenter) <= (if (bullet.boundBox > 0) then bullet.boundBox else enemy.boundBox.toDouble)) then
           enemy.getHit(bullet.damage, bullet.slowDown)
-          if (enemy.health <= 0 && enemy.isInstanceOf[SplittingEnemyClass]) then
+          if (enemy.health <= 0) then
             variates.setValue(variates.value.updated("money", variates.value("money") + enemy.moneyReward))
             variates.setValue(variates.value.updated("score", variates.value("score") + math.round(enemy.moneyReward/2)))
-            val newEnemies: Seq[BasicEnemy] = enemy.asInstanceOf[SplittingEnemyClass].split()
-            for (newEnemy <- newEnemies) {
-              pane.children.add(newEnemy)
-              enemiesOnMap += newEnemy
-            }
-            pane.children.remove(enemy)
-            enemiesOnMap = enemiesOnMap.filter(_ != enemy)
-          else if (enemy.health <= 0) then
-            variates.setValue(variates.value.updated("money", variates.value("money") + enemy.moneyReward))
-            variates.setValue(variates.value.updated("score", variates.value("score") + math.round(enemy.moneyReward/2)))
-            pane.children.remove(enemy)
-            enemiesOnMap = enemiesOnMap.filter(_ != enemy)
+          
+            if (enemy.isInstanceOf[SplittingEnemyClass]) then
+              val newEnemies: Seq[BasicEnemy] = enemy.asInstanceOf[SplittingEnemyClass].split()
+              for (newEnemy <- newEnemies) {
+                pane.children.add(newEnemy)
+                enemiesOnMap += newEnemy
+              }
+              pane.children.remove(enemy)
+              enemiesOnMap = enemiesOnMap.filter(_ != enemy)
+            else if (enemy.isInstanceOf[AppleEnemyClass]) then
+              val newEnemies: Seq[SplittingEnemy] = enemy.asInstanceOf[AppleEnemyClass].split()
+              for (newEnemy <- newEnemies) {
+                pane.children.add(newEnemy)
+                enemiesOnMap += newEnemy
+              }
+              pane.children.remove(enemy)
+              enemiesOnMap = enemiesOnMap.filter(_ != enemy)
+            else
+              pane.children.remove(enemy)
+              enemiesOnMap = enemiesOnMap.filter(_ != enemy)
       }
     }
   end moveBulletsAndCheckHits
@@ -348,7 +356,7 @@ class GameplayUI(setSceneTo: Scene => Unit, mainmenuScene: => Scene) extends Sce
             case "C"     => CamouflagedEnemy
             case "S"     => SplittingEnemy
             case "T"     => TankEnemy
-            case "F"     => FlockEnemy
+            case "A"     => AppleEnemy
             case default => throw new Exception("Invalid enemy type in wave data file.")
           helperQueue.enqueue(enemy)
         }
@@ -369,7 +377,7 @@ class GameplayUI(setSceneTo: Scene => Unit, mainmenuScene: => Scene) extends Sce
       case BasicEnemy => BasicEnemyClass(mapInst.pathQueue)
       case SplittingEnemy => SplittingEnemyClass(mapInst.pathQueue)
       case CamouflagedEnemy => CamouflagedEnemyClass(mapInst.pathQueue)
-      case FlockEnemy => BasicEnemyClass(mapInst.pathQueue)
+      case AppleEnemy => AppleEnemyClass(mapInst.pathQueue)
       case TankEnemy => BasicEnemyClass(mapInst.pathQueue)
     val startY =
       if (mapInst.startPoint.coord._1 == 0) then -1

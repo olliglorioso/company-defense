@@ -22,7 +22,10 @@ object Constants {
     "file:src/main/scala/Resources/Enemies/CamouflagedEnemy2.png"
   val CAMOUFLAGED_ENEMY_3_LOC =
     "file:src/main/scala/Resources/Enemies/CamouflagedEnemy3.png"
-  val SWARM_ENEMY_LOC = "file:src/main/scala/Resources/Enemies/SwarmEnemy.png"
+  val APPLE_ENEMY_LOC = "file:src/main/scala/Resources/Enemies/AppleEnemy.png"
+  val APPLE_ENEMY_2_LOC = "file:src/main/scala/Resources/Enemies/AppleEnemy2.png"
+  val APPLE_ENEMY_3_LOC = "file:src/main/scala/Resources/Enemies/AppleEnemy3.png"
+  val APPLE_ENEMY_4_LOC = "file:src/main/scala/Resources/Enemies/AppleEnemy4.png"
   val TANK_ENEMY_LOC = "file:src/main/scala/Resources/Enemies/TankEnemy.png"
   // Tower images locations
   val REGULAR_TOWER_LOC =
@@ -75,14 +78,17 @@ object Constants {
   val CAMOUFLAGED_ENEMY_HEALTH = 175
   val BASIC_ENEMY_HEALTH = 100
   val SPLITTING_ENEMY_HEALTH = 700
+  val APPLE_ENEMY_HEALTH = 1000
   // Seeds
   val CAMOUFLAGED_ENEMY_SPEED = 3
   val BASIC_ENEMY_SPEED = 3
   val SPLITTING_ENEMY_SPEED = 2.2
+  val APPLE_ENEMY_SPEED = 1.9
   // Money rewards
   val BASIC_ENEMY_MONEY = 2
-  val CAMOUFLAGED_ENEMY_MONEY = 14
-  val SPLITTING_ENEMY_MONEY = 7
+  val CAMOUFLAGED_ENEMY_MONEY = 8
+  val SPLITTING_ENEMY_MONEY = 6
+  val APPLE_ENEMY_MONEY = 10
   // Some locations
   val LATEST_SAVED_LOC = "Saved/LATEST_saved.json"
 }
