@@ -6,6 +6,9 @@ import org.scalatest.matchers.should.Matchers
 import Util.Constants._
 import _root_.Logic._
 import Util.FileHandler
+import Util.HelperFunctions
+import scalafx.geometry.Point2D
+import scala.collection.mutable.ArrayBuffer
 
 class LogicTests extends AnyFlatSpec with Matchers:
 
@@ -76,8 +79,6 @@ class LogicTests extends AnyFlatSpec with Matchers:
     }
     assert(lines(lines.length - 1) == "00000000000000003000")
   }
-
-  // Test helper functions
 
   
 

@@ -48,7 +48,7 @@ object HelperFunctions {
       * @param y
       * @return
       */
-  def towerCanBePlaced(eventLoc: Point2D, towersOnMap: ArrayBuffer[Tower]): Boolean =
+  def towerCanBePlaced[T<:Tower](eventLoc: Point2D, towersOnMap: ArrayBuffer[T]): Boolean =
     var broken = false
     breakable {
       towersOnMap.forall( tower => {

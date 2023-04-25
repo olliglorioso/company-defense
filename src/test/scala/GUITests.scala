@@ -30,6 +30,9 @@ import UI.MainUI
 import scalafx.scene.Scene
 import UI.SettingsUI
 import scalafx.scene.layout.BorderPane
+import scala.collection.mutable.ArrayBuffer
+import Util.HelperFunctions
+import scalafx.geometry.Point2D
 
 case class TowerExtended() extends Tower(SLOW_DOWN_TOWER_LOC, 100, 50, (_: Tower) => {}, (_: String, _: String, _: Int) => {}):
   slowDown = 1
@@ -220,5 +223,26 @@ class GUITests:
       case None =>
   end testButtonTexts
 
-      
+  // HELPER FUNCTIONS
+  
+  @Test
+  def testTowerCanBePlaced(): Unit = 
+    gui match
+      case Some(gui) =>
+        val regTower = new RegularTower(null, null) {
+          translateX = - TOWER_SIDE / 2
+          translateY = - TOWER_SIDE / 2
+        }
+        println(regTower.getGlobalCenter)
+        val towersOnMap = ArrayBuffer(regTower)
+        val result = HelperFunctions.towerCanBePlaced(Point2D(0, 0), towersOnMap)
+        assert(result == false)
+
+        regTower.translateX = TOWER_SIDE
+        regTower.translateY = TOWER_SIDE
+
+        val result2 = HelperFunctions.towerCanBePlaced(Point2D(0, 0), towersOnMap)
+        assert(result2 == true)
+      case None =>
+  end testTowerCanBePlaced
 end GUITests
