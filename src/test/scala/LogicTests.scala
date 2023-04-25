@@ -5,8 +5,11 @@ import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 import Util.Constants._
 import _root_.Logic._
+import Util.FileHandler
 
 class LogicTests extends AnyFlatSpec with Matchers:
+
+  // MAP TESTS
 
   val validMap = new GameMap("/Maps/test.valid_map.txt")
 
@@ -44,5 +47,38 @@ class LogicTests extends AnyFlatSpec with Matchers:
       idx += 1
     })
   }
+
+  // FILE HANDLER TESTS
+
+  val fh = new FileHandler()
+
+  "Filehandler" should "throw an exception if the file is not found." in {
+    assertThrows[Exception] {
+      fh.readLinesFromFile("/Maps/this_file_does_not_exist.txt")
+    }
+  }
+
+  "Filehandler" should "throw an exception if the file is not a valid JSON file." in {
+    assertThrows[Exception] {
+      fh.readLinesFromJsonFile("/Maps/test.valid_map.txt") // is not a json file even
+    }
+  }
+
+  "Filehandler" should "read txt file correctly." in {
+    val lines = fh.readLinesFromFile("/Maps/test.valid_map.txt")
+    assert(lines.length === 12)
+    for (i <- 0 until lines.length - 1) {
+      assert(lines(i).length === 20)
+    }
+    assert(lines(0) == "00000000000000002000")
+    for (i <- 1 until lines.length - 1) {
+      assert(lines(i) == "00000000000000001000")
+    }
+    assert(lines(lines.length - 1) == "00000000000000003000")
+  }
+
+  // Test helper functions
+
+  
 
 end LogicTests

@@ -63,6 +63,7 @@ class GUITests:
       stageForTests = stage
       stage.show()
   
+  // TOWER TESTS
   @Test
   def testTowerInit(): Unit =
     val tower = new TowerExtended()
@@ -189,7 +190,7 @@ class GUITests:
       assert(enemy.getGlobalCenter.y == startY * UI_TILE_SIZE + ENEMY_SIZE / 2 + i * BASIC_ENEMY_SPEED)
   end testEnemyMovement
 
-  // BULLET GUI
+  // BULLET TESTS
 
   @Test
   def testBullet(): Unit =
