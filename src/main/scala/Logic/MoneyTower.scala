@@ -8,9 +8,9 @@ import Util.State._
 
 class MoneyTower(showUpgradeInfo: Tower => Unit, showMessage: (String, String, Int) => Unit) extends Tower(MONEY_TOWER_LOC, M_COST, 0, showUpgradeInfo, showMessage):
     slowDown = 0
-    attackSpeed = 20
+    attackSpeed = 100
     damage = 0
-    var moneyIncrease = 3.0
+    var moneyIncrease = 1.0
     var startRotate = false
     fill = new ImagePattern(new Image(MONEY_TOWER_LOC) {
         width_=(100)
