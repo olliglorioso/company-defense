@@ -98,6 +98,7 @@ class GameplayUI(setSceneTo: Scene => Unit, mainmenuScene: => Scene) extends Sce
         case _: RegularTower => "R"
         case _: SlowDownTower => "S"
         case _: BombTower => "B"
+        case _: MoneyTower => "M"
         case _ => null
       val towerLevel = tower.level.value
       val towerLoc = tower.getGlobalCenter
@@ -139,6 +140,7 @@ class GameplayUI(setSceneTo: Scene => Unit, mainmenuScene: => Scene) extends Sce
           case "R" => new RegularTower(sidebar.openUpgradeMenu, showMessage)
           case "S" => new SlowDownTower(sidebar.openUpgradeMenu, showMessage)
           case "B" => new BombTower(sidebar.openUpgradeMenu, showMessage)
+          case "M" => new MoneyTower(sidebar.openUpgradeMenu, showMessage)
           case _ => null
         newTower.x = x
         newTower.y = y

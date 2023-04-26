@@ -6,7 +6,7 @@ import scalafx.scene.image._
 import scalafx.Includes._
 import javafx.scene.paint.ImagePattern
 
-class AppleEnemy (pathQueue: Queue[PathTile]) extends Enemy(APPLE_ENEMY_LOC, ENEMY_SIZE * 1.2, APPLE_ENEMY_SPEED, pathQueue, APPLE_ENEMY_HEALTH) {
+class AppleEnemy (pathQueue: Queue[PathTile]) extends Enemy(APPLE_ENEMY_LOC, ENEMY_SIZE, APPLE_ENEMY_SPEED, pathQueue, APPLE_ENEMY_HEALTH) {
   var imageChanged3 = false
   override val moneyReward: Int = APPLE_ENEMY_MONEY
 
