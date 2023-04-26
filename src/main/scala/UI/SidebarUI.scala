@@ -116,6 +116,7 @@ class SidebarUI(
         new Button(s"Up (${tower.upgradePrice})") {
           style = "-fx-base: green;"
           prefWidth = 100
+          disable_=(tower.level.value >= 5)
           onAction = _ => {
             val newMoney = tower.upgrade(variates.value("money"))
             variates.value = variates.value.updated("money", newMoney)
@@ -123,6 +124,9 @@ class SidebarUI(
             this.text = s"Up (${tower.upgradePrice})"
             levelLabel.text = s"Level: ${tower.level.value}"
             sellButton.text = s"Sell (${tower.sellPrice})"
+            if (tower.level.value >= 5) {
+              this.disable = true
+            }
           }
         },
         sellButton
