@@ -11,6 +11,7 @@ class MoneyTower(showUpgradeInfo: Tower => Unit, showMessage: (String, String, I
     attackSpeed = 20
     damage = 0
     var moneyIncrease = 3.0
+    var startRotate = false
     fill = new ImagePattern(new Image(MONEY_TOWER_LOC) {
         width_=(100)
         height_=(100)
@@ -26,6 +27,12 @@ class MoneyTower(showUpgradeInfo: Tower => Unit, showMessage: (String, String, I
         if ((lastBulletInit == 0L || time - lastBulletInit >= attackSpeed * 100000000L))
             variates.setValue(variates.value.updated("money", variates.value("money") + moneyIncrease))
             lastBulletInit = time
+            startRotate = true
+        if (startRotate) then
+            rotate.value += 15
+            if (rotate.value == 360) then
+                rotate.value = 0
+                startRotate = false
         null
     end initBullet
 
