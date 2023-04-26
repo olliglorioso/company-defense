@@ -19,7 +19,7 @@ case class Enemy(
     var speed: Double,
     pathQueue: Queue[PathTile],
     var health: Double
-) extends GameObject(path, size + 30) {
+) extends GameObject(path, size) {
   val origHealth = health
   var boundBox = 100
   var (nextTile, queue) =
