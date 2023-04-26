@@ -71,6 +71,19 @@ class SidebarUI(
     openUpgradeMenu
   )
 
+  val moneyTower = new TowerButtonUI(
+    MONEY_TOWER_LOC,
+    80,
+    M_NAME,
+    M_COST,
+    "Prints money from thin air.",
+    pane,
+    mapInst,
+    towersOnMap,
+    showMessage,
+    openUpgradeMenu
+  )
+
   /**
     * Opens the upgrade/sell menu for the given tower.
     *
@@ -157,7 +170,8 @@ class SidebarUI(
     children = Seq(
       regularTower,
       slowDownTower,
-      bombTower
+      bombTower,
+      moneyTower
     )
     spacing = 10
     style = "-fx-background-color: grey;"

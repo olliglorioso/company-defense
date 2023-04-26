@@ -24,6 +24,7 @@ object HelperFunctions {
       case REGULAR_TOWER_LOC => R_NAME
       case SLOW_DOWN_TOWER_LOC => S_NAME
       case BOMB_TOWER_LOC => B_NAME
+      case MONEY_TOWER_LOC => M_NAME
       case _ => "Unknown"
   
   def showMessage(message: String, title: String, blinks: Int, node: Node) = 

@@ -34,6 +34,7 @@ object Constants {
     "file:src/main/scala/Resources/Towers/SlowDownTower.png"
   val BOMB_TOWER_LOC =
     "file:src/main/scala/Resources/Towers/BombTower.png"
+  val MONEY_TOWER_LOC = "file:src/main/scala/Resources/Towers/MoneyTower.png"
   // Image locations of other stuff
   val HEALTH_ICON_LOC = "file:src/main/scala/Resources/Other/HealthIcon.png"
   val MONEY_ICON_LOC = "file:src/main/scala/Resources/Other/MoneyIcon.png"
@@ -57,10 +58,12 @@ object Constants {
   val R_COST = 10
   val S_COST = 15
   val B_COST = 20
+  val M_COST = 25
   // Tower names 
   val R_NAME = "Nerdinator" 
   val S_NAME = "Hacktivist" 
   val B_NAME = "Financebro"
+  val M_NAME = "Printer"
   // Tower ranges
   val R_RANGE = 200 
   val S_RANGE = 200 

@@ -85,6 +85,7 @@ class TowerButtonUI(
       case R_NAME => (R_RANGE - 1/2 * ENEMY_SIZE).toInt
       case S_NAME => (S_RANGE - 1/2 * ENEMY_SIZE).toInt
       case B_NAME => (B_RANGE - 1/2 * ENEMY_SIZE).toInt
+      case M_NAME => (1 * ENEMY_SIZE).toInt
     }
   }
 
@@ -103,6 +104,7 @@ class TowerButtonUI(
         case R_NAME => new RegularTower(openUpgradeMenu, showMessage)
         case S_NAME => new SlowDownTower(openUpgradeMenu, showMessage)
         case B_NAME => new BombTower(openUpgradeMenu, showMessage)
+        case M_NAME => new MoneyTower(openUpgradeMenu, showMessage)
       }
       towersOnMap.addOne(newTower)
       newTower.x = towerX
