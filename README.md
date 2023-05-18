@@ -4,6 +4,7 @@ A tower defense game made for the Programming Studio A course at Aalto Universit
 
 ## How to run
 
+First import build.sbt dependencies. Then run
 ```bash
 sbt run
 ```
