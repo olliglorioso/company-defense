@@ -1,6 +1,6 @@
 # Company defense
 
-[Documentation](https://github.com/olliglorioso/company-defense/blob/main/Company-Defense-Doc.pdf)
+A tower defense game made for the Programming Studio A course at Aalto University. [Documentation](https://github.com/olliglorioso/company-defense/blob/main/Company-Defense-Doc.pdf)
 
 ## How to run
 
